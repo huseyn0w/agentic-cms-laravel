@@ -197,6 +197,11 @@ When it finishes:
 
 Run `make help` to see all targets.
 
+> **Ports.** This repo lives beside sibling `cmstack-*` stacks. Host ports are deduplicated so
+> they can all run at once — this stack uses **app 8080 / MySQL 33060 / Vite 5173 / Mailpit
+> 8025 + 1025** (`WEB_PORT` / `DB_FORWARD_PORT` / `VITE_PORT` / `MAILPIT_*` in `.env`). See
+> [`../PORTS.md`](../PORTS.md) for the cross-stack allocation.
+
 ### Optional Docker services
 
 - **Mailpit** (catches local outgoing mail, UI on http://localhost:8025):

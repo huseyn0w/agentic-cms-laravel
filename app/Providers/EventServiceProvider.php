@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Events\CommentSubmitted;
+use App\Listeners\CaptureMediaMetadata;
 use App\Listeners\SendCommentNotification;
 use App\Listeners\SendVerificationNotificationIfEnabled;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use UniSharp\LaravelFilemanager\Events\FileWasUploaded;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         CommentSubmitted::class => [
             SendCommentNotification::class,
+        ],
+        // Per-asset media metadata capture on upload (FEATURE_MATRIX §7).
+        FileWasUploaded::class => [
+            CaptureMediaMetadata::class,
         ],
     ];
 

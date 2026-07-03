@@ -27,6 +27,19 @@ Route::get('/robots.txt', 'SeoController@robots')->name('robots');
 Route::get('/llms.txt', 'SeoController@llms')->name('llms');
 Route::get('/rss.xml', 'SeoController@rss')->name('rss');
 Route::get('/atom.xml', 'SeoController@atom')->name('atom');
+// Per-category syndication feeds (FEATURE_MATRIX §16).
+Route::get('/blog/category/{slug}/rss.xml', 'SeoController@categoryRss')->name('category_rss');
+Route::get('/blog/category/{slug}/atom.xml', 'SeoController@categoryAtom')->name('category_atom');
+
+/*
+|--------------------------------------------------------------------------
+| Health / readiness endpoints (FEATURE_MATRIX §15)
+|--------------------------------------------------------------------------
+| Liveness (/health) and readiness (/health/ready, with a DB probe). Kept
+| ahead of the front catch-all so the page router never swallows them.
+*/
+Route::get('/health', 'HealthController@live')->name('health');
+Route::get('/health/ready', 'HealthController@ready')->name('health_ready');
 
 /*
 |--------------------------------------------------------------------------
@@ -178,6 +191,9 @@ Route::prefix('cmstack-laravel-admin')->middleware(['auth', 'see_admin_panel'])-
     // (seeder + roles) and switch this guard to it.
     Route::prefix('media')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelMediaController@index')->name('cpanel_all_media');
+        // Per-asset media metadata (FEATURE_MATRIX §7): read + edit alt/title/caption.
+        Route::get('/metadata', 'CPanelMediaController@metadata')->name('cpanel_media_metadata');
+        Route::put('/metadata', 'CPanelMediaController@updateMetadata')->name('cpanel_update_media_metadata');
     });
 
 });

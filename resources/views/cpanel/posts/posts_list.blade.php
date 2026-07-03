@@ -48,15 +48,45 @@ $is_trash = $route_name == "cpanel_trashed_posts_list";
 
         <div class="overflow-hidden rounded-lg border border-border bg-surface">
             <form method="POST" action="{{ $is_trash ? route('cpanel_posts_bulk_action') : route('cpanel_posts_bulk_delete') }}"
-                  x-data="{ selected: 0 }"
-                  x-on:change="selected = $el.querySelectorAll('.posts-checkbox-input:checked').length">
+                  x-ref="bulkForm"
+                  x-data="{
+                      selected: 0,
+                      isTrash: {{ $is_trash ? 'true' : 'false' }},
+                      confirmed: false,
+                      pendingBody: '',
+                      currentAction() {
+                          return this.isTrash
+                              ? (this.$refs.bulkAction ? this.$refs.bulkAction.value : '')
+                              : 'delete';
+                      },
+                      onSubmit(e) {
+                          if (this.confirmed) { this.confirmed = false; return; }
+                          const action = this.currentAction();
+                          // Only destructive actions require the confirm dialog;
+                          // restore submits straight through.
+                          if (action === 'delete' || action === 'destroy') {
+                              e.preventDefault();
+                              this.pendingBody = action === 'destroy'
+                                  ? @json(__('cpanel/posts.bulk_confirm_destroy_body'))
+                                  : @json(__('cpanel/posts.bulk_confirm_delete_body'));
+                              window.dispatchEvent(new CustomEvent('open-modal', { detail: 'bulk-delete-posts' }));
+                          }
+                      },
+                      proceed() {
+                          window.dispatchEvent(new CustomEvent('close-modal', { detail: 'bulk-delete-posts' }));
+                          this.confirmed = true;
+                          this.$refs.bulkForm.submit();
+                      },
+                  }"
+                  x-on:change="selected = $el.querySelectorAll('.posts-checkbox-input:checked').length"
+                  x-on:submit="onSubmit($event)">
                 @csrf
                 @if($is_trash) @method('POST') @else @method('DELETE') @endif
 
                 {{-- Bulk-action bar (DESIGN_SYSTEM §5). Retains the .select-cover hook. --}}
                 <div class="select-cover flex flex-wrap items-center gap-3 border-b border-border bg-surface-2 px-5 py-3" aria-live="polite">
                     <span class="font-mono text-xs uppercase tracking-[0.08em] text-muted" x-text="selected > 0 ? selected + ' selected' : '@lang('cpanel/posts.bulk_action_label')'">@lang('cpanel/posts.bulk_action_label')</span>
-                    <select id="inputState" name="posts_action" required class="h-9 rounded-sm border border-strong bg-surface px-3 text-sm text-fg focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1">
+                    <select id="inputState" name="posts_action" x-ref="bulkAction" required class="h-9 rounded-sm border border-strong bg-surface px-3 text-sm text-fg focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1">
                         <option selected="selected">@lang('cpanel/posts.bulk_action_label')</option>
                         @if($is_trash)
                             <option value="destroy">@lang('cpanel/posts.bulk_action_destroy_label')</option>
@@ -118,6 +148,23 @@ $is_trash = $route_name == "cpanel_trashed_posts_list";
                         </tbody>
                     </table>
                 </div>
+
+                {{-- DESIGN_SYSTEM §5: destructive bulk actions confirm via Modal
+                     (destructive button + explicit consequence text) instead of
+                     window.confirm(). Lives inside the form's Alpine scope so the
+                     confirm button can call proceed() to submit. --}}
+                <x-modal name="bulk-delete-posts" :title="__('cpanel/posts.bulk_confirm_title')">
+                    <p class="text-sm text-muted" x-text="pendingBody"></p>
+
+                    <x-slot:footer>
+                        <x-button type="button" variant="ghost" x-on:click="$dispatch('close-modal', 'bulk-delete-posts')">
+                            @lang('cpanel/posts.bulk_confirm_cancel')
+                        </x-button>
+                        <x-button type="button" variant="destructive" x-on:click="proceed()" data-testid="bulk-delete-confirm">
+                            @lang('cpanel/posts.bulk_confirm_proceed')
+                        </x-button>
+                    </x-slot:footer>
+                </x-modal>
             </form>
             <div class="border-t border-border px-5 py-4">
                 <x-pagination :paginator="$posts_list" />

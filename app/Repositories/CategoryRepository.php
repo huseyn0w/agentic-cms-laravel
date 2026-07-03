@@ -68,6 +68,20 @@ class CategoryRepository extends BaseRepository
             ->limit(20)->get();
     }
 
+    /**
+     * Resolve a category by its slug in the given locale for the per-category
+     * syndication feeds (FEATURE_MATRIX §16). Returns the id/title/slug row, or
+     * null when no category matches. Locale-scoped so the feed names/matches the
+     * category in the feed's language.
+     */
+    public function findForFeedBySlug(string $slug, string $locale)
+    {
+        return CategoryTranslation::where('locale', $locale)
+            ->where('slug', $slug)
+            ->select('category_id', 'title', 'slug')
+            ->first();
+    }
+
     public function displayList(int $category_id, int $page = 1)
     {
         $this->locale = get_current_lang();

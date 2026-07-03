@@ -66,14 +66,25 @@ $languages = get_translation_links();
          through Vite (resources/css/fonts.css → public/build/assets/*.woff2).
          No Google Fonts / CDN requests; font-display: swap via fontsource.
 
-         Phase 8 font preload: the Vite manifest maps entry → hashed output
-         files. We cannot call Vite::asset() for sub-resources (woff2) that
-         are not entry points — they are emitted as content-addressed files
-         referenced only by the CSS. The stable approach is to let the browser
-         discover fonts via the CSS @font-face (swap prevents FOIT), and rely
-         on the browser's speculation rules / preload scanner to fetch them early.
-         An HTTP/2 Server Push or a CDN prefetch header is the CI-measurable
-         upgrade path; it is flagged here and tracked in Phase 8 follow-up. --}}
+         DESIGN_SYSTEM §3/§7: preload the two critical woff2 weights so the
+         browser fetches them before it parses the CSS @font-face rules, killing
+         layout shift on the LCP text. Vite content-hashes the woff2 output, so
+         we resolve the current filename from the build manifest via Vite::asset()
+         (keyed on the fontsource source path) rather than hardcoding the hash. --}}
+    @php
+        $criticalFonts = [
+            'node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2',
+            'node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
+        ];
+    @endphp
+    @foreach($criticalFonts as $fontSrc)
+        @php
+            try { $fontUrl = \Illuminate\Support\Facades\Vite::asset($fontSrc); } catch (\Throwable $e) { $fontUrl = null; }
+        @endphp
+        @if($fontUrl)
+    <link rel="preload" href="{{ $fontUrl }}" as="font" type="font/woff2" crossorigin>
+        @endif
+    @endforeach
 
     @stack('extrastyles')
 
@@ -236,7 +247,7 @@ $languages = get_translation_links();
         class="border-t border-[var(--border)] bg-[var(--bg)] px-5 pb-6 pt-2 sm:px-8 lg:hidden"
         role="dialog"
         aria-label="Navigation menu"
-        aria-modal="false"
+        aria-modal="true"
     >
         <nav class="flex flex-col gap-0.5 py-2" aria-label="Mobile primary" data-testid="mobile-nav">
             {!! $header_menu !!}

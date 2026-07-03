@@ -39,4 +39,14 @@ return [
     'js_error' => 'Some error occurred',
     'not_found' => 'No menus has been found',
 
+    // Accessible reorder controls (DESIGN_SYSTEM §5).
+    'reorder' => 'Reorder',
+    'move_up' => 'Move up',
+    'move_down' => 'Move down',
+    'reorder_moved' => 'moved to position',
+    'reorder_of' => 'of',
+    'reorder_at_top' => 'is already first.',
+    'reorder_at_bottom' => 'is already last.',
+    'reorder_item' => 'Item',
+
 ];

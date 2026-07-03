@@ -568,6 +568,29 @@
         @apply rounded-lg border-2 border-dashed border-brand-400 bg-brand-50;
     }
 
+    /* Accessible reorder controls (DESIGN_SYSTEM §5 — keyboard-first sortable). */
+    .theme-admin .menu-reorder-controls {
+        @apply mr-2 inline-flex shrink-0 items-center gap-1;
+    }
+    .theme-admin .menu-reorder-handle {
+        @apply inline-flex h-6 w-6 cursor-grab items-center justify-center rounded-md
+            text-ink-400 transition hover:bg-ink-100 hover:text-ink-600
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-1
+            active:cursor-grabbing;
+    }
+    .theme-admin .menu-reorder-btn {
+        @apply inline-flex h-6 w-6 items-center justify-center rounded-md border border-ink-200
+            bg-surface text-xs font-bold leading-none text-ink-500 transition
+            hover:border-brand-300 hover:text-ink-700
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-1;
+    }
+    .theme-admin .menu-reorder-dragging {
+        @apply opacity-60;
+    }
+    .theme-admin .menu-reorder-dragging > a {
+        @apply border-brand-400 shadow-md;
+    }
+
     /* Accordion (menu sidebar source lists). */
     .theme-admin .accordion .card {
         @apply mb-2 overflow-hidden rounded-lg border border-ink-200 shadow-none;

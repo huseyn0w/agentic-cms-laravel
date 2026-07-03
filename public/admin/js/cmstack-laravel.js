@@ -42,6 +42,24 @@ $(function(){
             ],
             toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
             relative_urls: false,
+            // DESIGN_SYSTEM §5/§8: give each editable region an accessible name so
+            // AT announces it as a labelled textbox. Prefer the associated <x-field>
+            // label text, falling back to a generic "Rich text editor" label.
+            init_instance_callback: function (ed) {
+                var body = ed.getBody();
+                if (!body) return;
+                var labelText = "Rich text editor";
+                // The <x-field> wrapper is the textarea's parent div, whose first
+                // child is the <label>. Read its text as the accessible name.
+                var wrapper = ed.getElement().parentNode;
+                var labelEl = wrapper && wrapper.querySelector("label");
+                if (labelEl && labelEl.textContent.trim()) {
+                    labelText = labelEl.textContent.trim();
+                }
+                body.setAttribute("aria-label", labelText);
+                body.setAttribute("role", "textbox");
+                body.setAttribute("aria-multiline", "true");
+            },
             file_browser_callback : function(field_name, url, type, win) {
                 var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
                 var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;

@@ -188,6 +188,7 @@ When it finishes:
 | `make setup` | First-time bootstrap (everything above)                     |
 | `make up`    | Start the Docker stack                                      |
 | `make down`  | Stop the stack (keeps the DB volume)                        |
+| `make kill`  | Release the stack's host port (:8080) — downs its own containers, warns on a foreign holder; runs automatically before `make up`/`make setup` |
 | `make fresh` | `migrate:fresh --seed` (rebuild the database)               |
 | `make test`  | Run the Pest suite inside the container                     |
 | `make build` | Build front-end assets (Vite production build)              |

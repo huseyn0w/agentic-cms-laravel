@@ -86,4 +86,48 @@ class SeoController extends Controller
 
         return Response::make($xml, 200, ['Content-Type' => 'application/atom+xml; charset=UTF-8']);
     }
+
+    /**
+     * Per-category RSS 2.0 feed (FEATURE_MATRIX §16): the category's most recent
+     * published posts, in the site's default locale. 404 for unknown slugs.
+     */
+    public function categoryRss(string $slug)
+    {
+        $category = $this->resolveCategory($slug);
+
+        $xml = Cache::remember('cmstack_laravel.rss.category.'.$category->category_id, now()->addHour(), function () use ($category) {
+            return $this->feeds->buildCategoryRss($category->category_id, $category->title, $category->slug);
+        });
+
+        return Response::make($xml, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
+    }
+
+    /**
+     * Per-category Atom 1.0 feed (FEATURE_MATRIX §16).
+     */
+    public function categoryAtom(string $slug)
+    {
+        $category = $this->resolveCategory($slug);
+
+        $xml = Cache::remember('cmstack_laravel.atom.category.'.$category->category_id, now()->addHour(), function () use ($category) {
+            return $this->feeds->buildCategoryAtom($category->category_id, $category->title, $category->slug);
+        });
+
+        return Response::make($xml, 200, ['Content-Type' => 'application/atom+xml; charset=UTF-8']);
+    }
+
+    /**
+     * Resolve a category by its slug (delegated to FeedService/the repository),
+     * or abort 404. Feeds are emitted in config('app.locale').
+     */
+    private function resolveCategory(string $slug)
+    {
+        $category = $this->feeds->resolveCategory($slug);
+
+        if (! $category) {
+            abort(404);
+        }
+
+        return $category;
+    }
 }

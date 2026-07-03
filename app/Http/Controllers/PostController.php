@@ -21,7 +21,9 @@ class PostController extends BaseController
             return $result;
         }
 
-        return view('default/posts/post', ['data' => $this->data]);
+        $related = $this->service->related($this->data->id);
+
+        return view('default/posts/post', ['data' => $this->data, 'related' => $related]);
     }
 
     public function handleLike(LikesRequest $request)

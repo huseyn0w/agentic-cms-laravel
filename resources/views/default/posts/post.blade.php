@@ -131,6 +131,24 @@
         @endif
     </div>
 
+    {{-- Related posts (FEATURE_MATRIX §1) — other published posts sharing a category/tag --}}
+    @if(!empty($related) && count($related) > 0)
+        <section class="mt-16 border-t border-border pt-12">
+            <h2 class="font-serif text-2xl text-fg">@lang('default/post.related_posts')</h2>
+            <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach($related as $related_post)
+                    <x-card.post
+                        :title="$related_post->title"
+                        :url="config('app.url').'/'.$current_lang.'posts/'.$related_post->slug"
+                        :excerpt="strip_tags($related_post->preview)"
+                        :date="Carbon\Carbon::parse($related_post->updated_at)->format('Y-m-d')"
+                        :image="image_src($related_post->thumbnail) ?: null"
+                    />
+                @endforeach
+            </div>
+        </section>
+    @endif
+
     {{-- Comments section --}}
     <section class="mt-16" x-data="commentThread({
         deleteUrl: '{{ route('delete_post_comments', ['id' => $data->id]) }}',

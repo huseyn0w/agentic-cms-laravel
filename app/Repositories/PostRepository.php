@@ -14,6 +14,7 @@ use App\Http\Models\Post;
 use App\Http\Models\PostTranslation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostRepository extends BaseRepository
 {
@@ -87,6 +88,37 @@ class PostRepository extends BaseRepository
     }
 
     /**
+     * Feed rows for a single category's syndication feed (FEATURE_MATRIX §16):
+     * the most recent PUBLISHED posts in the given locale that belong to the
+     * category, newest first. Same published-only / no-future-scheduled
+     * guarantees as feedEntries().
+     *
+     * @return Collection
+     */
+    public function feedEntriesForCategory(int $categoryId, string $locale, int $limit = 20)
+    {
+        return Post::join('post_translations', 'posts.id', '=', 'post_translations.post_id')
+            ->select(
+                'posts.id',
+                'post_translations.title',
+                'post_translations.slug',
+                'post_translations.preview',
+                'post_translations.content',
+                'post_translations.created_at',
+                'post_translations.updated_at',
+            )
+            ->where('post_translations.locale', $locale)
+            ->where('post_translations.status', Post::STATUS_PUBLISHED)
+            ->notScheduledForFuture()
+            ->whereHas('categories', function ($query) use ($categoryId) {
+                $query->where('category_id', $categoryId);
+            })
+            ->orderByDesc('post_translations.created_at')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
      * Restrict public single-post reads to PUBLISHED posts only, while also
      * hiding future-scheduled drafts (notScheduledForFuture). The two
      * constraints together mean:
@@ -104,6 +136,86 @@ class PostRepository extends BaseRepository
         return $query
             ->where('post_translations.status', '=', Post::STATUS_PUBLISHED)
             ->notScheduledForFuture();
+    }
+
+    /**
+     * Related posts for the given post (FEATURE_MATRIX §1): other PUBLISHED
+     * posts that share at least one category or tag with it, ranked by the
+     * number of shared terms (most-related first, newest as a tiebreak) and
+     * capped at $limit.
+     *
+     * Scoping rules (mirrors the ts canonical): the source post is excluded;
+     * drafts and future-scheduled posts never appear; results are scoped to the
+     * given locale so titles/slugs resolve in the reader's language.
+     *
+     * Returns an empty collection when the source post carries no taxonomy.
+     *
+     * @return Collection<int, PostTranslation>
+     */
+    public function getRelated(int $post_id, string $locale, int $limit = 4): Collection
+    {
+        $categoryIds = DB::table('category_post')->where('post_id', $post_id)->pluck('category_id')->all();
+        $tagIds = DB::table('post_tag')->where('post_id', $post_id)->pluck('tag_id')->all();
+
+        if (empty($categoryIds) && empty($tagIds)) {
+            return new Collection;
+        }
+
+        // Candidate ids that share ANY category or tag with the source post
+        // (OR-overlap), together with the count of shared terms for ranking.
+        $union = [];
+
+        if (! empty($categoryIds)) {
+            $union[] = DB::table('category_post')
+                ->select('post_id')
+                ->whereIn('category_id', $categoryIds);
+        }
+        if (! empty($tagIds)) {
+            $union[] = DB::table('post_tag')
+                ->select('post_id')
+                ->whereIn('tag_id', $tagIds);
+        }
+
+        $matches = array_shift($union);
+        foreach ($union as $next) {
+            $matches->unionAll($next);
+        }
+
+        // Aggregate shared-term counts per candidate post (excluding the source).
+        $scored = DB::query()
+            ->fromSub($matches, 'm')
+            ->select('m.post_id', DB::raw('COUNT(*) as shared'))
+            ->where('m.post_id', '!=', $post_id)
+            ->groupBy('m.post_id')
+            ->pluck('shared', 'post_id')
+            ->all();
+
+        if (empty($scored)) {
+            return new Collection;
+        }
+
+        // Fetch the published, locale-scoped translations for those candidates,
+        // hiding drafts and future-scheduled posts. Fetch a generous slice, then
+        // rank in PHP by shared-term count (recency tiebreak) and cap.
+        $rows = PostTranslation::query()
+            ->join('posts', 'posts.id', '=', 'post_translations.post_id')
+            ->whereNull('posts.deleted_at')
+            ->whereIn('post_translations.post_id', array_keys($scored))
+            ->where('post_translations.locale', $locale)
+            ->where('post_translations.status', Post::STATUS_PUBLISHED)
+            ->where(function ($q) {
+                $q->whereNull('post_translations.scheduled_at')
+                    ->orWhere('post_translations.scheduled_at', '<=', now());
+            })
+            ->select('post_translations.*')
+            ->orderByDesc('post_translations.created_at')
+            ->limit(max($limit, 1) * 4)
+            ->get();
+
+        return $rows
+            ->sortByDesc(fn ($row) => $scored[$row->post_id] ?? 0)
+            ->take(max($limit, 1))
+            ->values();
     }
 
     public function handleLike(int $post_id, int $user_id)

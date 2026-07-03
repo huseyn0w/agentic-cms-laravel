@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ValidateUploadBytes;
 use UniSharp\LaravelFilemanager\Handlers\ConfigHandler;
 
 return [
@@ -14,7 +15,10 @@ return [
 
     // Middlewares which should be applied to all package routes.
     // For laravel 5.1 and before, remove 'web' from the array.
-    'middlewares' => ['web', 'auth'],
+    // ValidateUploadBytes byte-inspects every uploaded file (magic-byte MIME
+    // sniff) before it reaches the upload controller, rejecting SVG and
+    // mislabeled polyglots (FEATURE_MATRIX §21 / §7).
+    'middlewares' => ['web', 'auth', ValidateUploadBytes::class],
 
     // The url to this package. Change it if necessary.
     'url_prefix' => 'filemanager',
@@ -36,6 +40,21 @@ return [
     // And set 'user_field' to App\Handler\ConfigHander::class
     // Ex: The private folder of user will be named as the user id.
     'user_field' => ConfigHandler::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Storage driver (FEATURE_MATRIX §7 — swappable storage)
+    |--------------------------------------------------------------------------
+    |
+    | Every media read/write routes through this filesystem disk (LFM resolves
+    | it via Storage::disk(config('lfm.disk'))). This is the single storage
+    | abstraction point: the default is the local-backed "public" disk, and
+    | setting MEDIA_DISK=s3 (with the AWS_* env vars) swaps all media to S3 /
+    | a CDN with no code change. The disk name must exist in
+    | config/filesystems.php.
+    |
+    */
+    'disk' => env('MEDIA_DISK', 'public'),
 
     /*
     |--------------------------------------------------------------------------
@@ -89,13 +108,16 @@ return [
     'should_validate_mime' => true,
 
     // available since v1.3.0
+    // NOTE: image/svg+xml is intentionally omitted — SVG is an XSS/polyglot
+    // vector and is rejected outright (see App\Support\SecureUpload and the
+    // ValidateUploadBytes middleware, FEATURE_MATRIX §21).
     'valid_image_mimetypes' => [
         'image/jpeg',
         'image/pjpeg',
         'image/jpg',
         'image/png',
         'image/gif',
-        'image/svg+xml',
+        'image/webp',
     ],
 
     // If true, image thumbnails would be created during upload
@@ -119,12 +141,14 @@ return [
 
     // available since v1.3.0
     // only when '/laravel-filemanager?type=Files'
+    // SVG omitted on purpose — see the note on valid_image_mimetypes above.
     'valid_file_mimetypes' => [
         'image/jpeg',
         'image/pjpeg',
         'image/png',
         'image/gif',
-        'image/svg+xml',
+        'image/webp',
+        'application/pdf',
     ],
 
     /*

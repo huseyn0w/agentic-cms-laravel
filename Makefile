@@ -18,15 +18,20 @@
 DC      := docker compose
 APP     := $(DC) exec -T app
 
+# Host port published by this Docker stack (web). `make kill` releases the stack's own
+# containers (so a re-`up` can rebind the port) and warns if a NON-Docker process is
+# squatting the port — it never kills foreign processes for you.
+HOST_PORTS := 8080
+
 .DEFAULT_GOAL := help
 
-.PHONY: help setup up down fresh test build shell logs key migrate seed link clean
+.PHONY: help setup up down fresh test build shell logs key migrate seed link clean kill
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
 
-setup: ## First-time bootstrap: bring up Docker, install deps, migrate+seed, build assets
+setup: kill ## First-time bootstrap: bring up Docker, install deps, migrate+seed, build assets
 	@test -f .env || cp .env.example .env
 	$(DC) up -d --build
 	$(APP) composer install
@@ -40,8 +45,17 @@ setup: ## First-time bootstrap: bring up Docker, install deps, migrate+seed, bui
 	@echo "  Admin panel:      http://localhost:8080/cmstack-laravel-admin"
 	@echo "  Login: admin / cmstackadmin123"
 
-up: ## Start the Docker stack
+up: kill ## Start the Docker stack
 	$(DC) up -d
+
+kill: ## Release this stack's host ports (down its own containers; warn on foreign holders)
+	@$(DC) down --remove-orphans 2>/dev/null || true
+	@for p in $(HOST_PORTS); do \
+	  pid=$$(lsof -ti:$$p -sTCP:LISTEN 2>/dev/null); \
+	  if [ -n "$$pid" ]; then \
+	    echo "⚠ port $$p still held by a non-Docker process (PID $$pid) — free it with: kill $$pid"; \
+	  fi; \
+	done
 
 down: ## Stop the Docker stack (keeps the DB volume)
 	$(DC) down

@@ -10,18 +10,16 @@
  *   - .menu-box / .menu-list / .sortable / #sortable — hooks for menu.js + jQuery UI sortable
  *   - .add_menu_item button type="button" — JS hook in menu.js
  *   - .create_menu on submit button
- *   - jQuery UI googleapis CDN link/script (sortable rework deferred — see report)
  *   - @include('cpanel.menus.partials.source-accordion') for the source panel
- *   - @push('extrascripts') + @push('finalscripts') for sortable + menu.js
- * NOTE: §5 keyboard-accessible sortable rework is DEFERRED (jQuery UI googleapis stays).
+ *   - @push('finalscripts') for menu.js
+ * DESIGN_SYSTEM §5/§7: the drag-only jQuery UI nestedSortable (loaded from a
+ * googleapis CDN) is replaced by self-hosted menu-reorder.js — keyboard move
+ * up/down + arrow keys with aria-live announcements, native HTML5 drag as a
+ * progressive enhancement. No CDN scripts remain on this screen.
  */
 ?>
 
 @extends('cpanel.core.index')
-
-@push('extrastyles')
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-@endpush
 
 @php
     $form_action = route('cpanel_save_new_menu');
@@ -74,10 +72,15 @@
                             <h2 class="text-sm font-semibold text-fg">@lang('cpanel/menus.list_headline')</h2>
                         </x-slot:header>
 
-                        {{-- .menu-box and #sortable/.menu-list/.sortable preserved for menu.js + jQuery UI --}}
-                        <div class="menu-box min-h-[200px] rounded-md border border-dashed border-border bg-surface-2 p-3">
+                        {{-- .menu-box and #sortable/.menu-list/.sortable preserved for menu.js.
+                             Reordering is keyboard-accessible via menu-reorder.js. --}}
+                        <div class="menu-box min-h-[200px] rounded-md border border-dashed border-border bg-surface-2 p-3"
+                             role="list"
+                             aria-label="@lang('cpanel/menus.list_headline')">
                             <ul class="menu-list sortable" id="sortable"></ul>
                         </div>
+                        {{-- Reorder announcements (DESIGN_SYSTEM §5). --}}
+                        <div id="menu-reorder-live" class="sr-only" role="status" aria-live="polite"></div>
                         <input type="hidden" name="content" id="menuContent">
 
                         <x-slot:footer>
@@ -95,11 +98,19 @@
     </div>
 @endsection
 
-@push('extrascripts')
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script src="{{asset('admin')}}/js/jquery.mjs.nestedSortable.js"></script>
-@endpush
-
 @push('finalscripts')
+    <script>
+        window.menuReorderStrings = {
+            reorder: @json(__('cpanel/menus.reorder')),
+            move_up: @json(__('cpanel/menus.move_up')),
+            move_down: @json(__('cpanel/menus.move_down')),
+            moved: @json(__('cpanel/menus.reorder_moved')),
+            of: @json(__('cpanel/menus.reorder_of')),
+            at_top: @json(__('cpanel/menus.reorder_at_top')),
+            at_bottom: @json(__('cpanel/menus.reorder_at_bottom')),
+            item: @json(__('cpanel/menus.reorder_item')),
+        };
+    </script>
     <script src="{{asset('admin')}}/js/menu.js"></script>
+    <script src="{{asset('admin')}}/js/menu-reorder.js"></script>
 @endpush

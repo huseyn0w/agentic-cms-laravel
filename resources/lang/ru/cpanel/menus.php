@@ -39,4 +39,14 @@ return [
     'js_error' => 'Произошла ошибка',
     'not_found' => 'Ни одного меню не было создано',
 
+    // Accessible reorder controls (DESIGN_SYSTEM §5).
+    'reorder' => 'Переместить',
+    'move_up' => 'Вверх',
+    'move_down' => 'Вниз',
+    'reorder_moved' => 'перемещён на позицию',
+    'reorder_of' => 'из',
+    'reorder_at_top' => 'уже первый.',
+    'reorder_at_bottom' => 'уже последний.',
+    'reorder_item' => 'Элемент',
+
 ];

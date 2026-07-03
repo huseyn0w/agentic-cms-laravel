@@ -20,6 +20,7 @@ return [
     'comments' => 'Comments',
     'comment' => 'Comment',
     'tags' => 'Tags',
+    'related_posts' => 'Related posts',
     'reply' => 'Reply',
     'edit' => 'Edit',
     'delete' => 'Delete',

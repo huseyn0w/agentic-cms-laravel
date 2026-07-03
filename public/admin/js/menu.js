@@ -54,8 +54,12 @@ $(function () {
 
 
 
-    if(sortable.length > 0)
-    {
+    // Legacy jQuery UI nestedSortable drag (loaded from a googleapis CDN) was
+    // removed for DESIGN_SYSTEM §5 (keyboard-first reordering) + §7 (no CDN).
+    // Reordering is now handled by the self-hosted, accessible menu-reorder.js
+    // (keyboard buttons/arrows + native HTML5 drag). This guard keeps the call
+    // harmless if the plugin ever loads again.
+    if (sortable.length > 0 && typeof sortable.nestedSortable === 'function') {
         sortable.nestedSortable({
             forcePlaceholderSize: true,
             items: 'li',

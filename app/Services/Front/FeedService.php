@@ -2,6 +2,7 @@
 
 namespace App\Services\Front;
 
+use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -20,15 +21,47 @@ class FeedService
     /** Maximum number of items in a feed. */
     private const ITEM_LIMIT = 20;
 
-    public function __construct(private PostRepository $posts) {}
+    public function __construct(
+        private PostRepository $posts,
+        private CategoryRepository $categories,
+    ) {}
+
+    /**
+     * Resolve a category by slug in the feed locale (config('app.locale')), or
+     * null when unknown — the controller turns null into a 404.
+     */
+    public function resolveCategory(string $slug)
+    {
+        return $this->categories->findForFeedBySlug($slug, config('app.locale'));
+    }
+
+    /**
+     * Build the RSS 2.0 feed of a single category's most recent published posts
+     * (FEATURE_MATRIX §16). Reuses the same rendering as the global feed; only
+     * the item set, channel title and self-link differ.
+     */
+    public function buildCategoryRss(int $categoryId, string $categoryTitle, string $categorySlug): string
+    {
+        return $this->buildRss($this->categoryContext($categoryId, $categoryTitle, $categorySlug));
+    }
+
+    /**
+     * Build the Atom 1.0 feed of a single category's most recent published posts.
+     */
+    public function buildCategoryAtom(int $categoryId, string $categoryTitle, string $categorySlug): string
+    {
+        return $this->buildAtom($this->categoryContext($categoryId, $categoryTitle, $categorySlug));
+    }
 
     /**
      * Build the RSS 2.0 feed of the most recent published posts.
+     *
+     * @param  array{0:string,1:string,2:string,3:string,4:Collection,5:string}|null  $context
      */
-    public function buildRss(): string
+    public function buildRss(?array $context = null): string
     {
-        [$base, $title, $description, $locale, $items] = $this->context();
-        $self = $base.'/rss.xml';
+        [$base, $title, $description, $locale, $items, $self] = $context ?? $this->context();
+        $self = $self ?: $base.'/rss.xml';
         $built = $this->latestTimestamp($items);
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -60,11 +93,13 @@ class FeedService
 
     /**
      * Build the Atom 1.0 feed of the most recent published posts.
+     *
+     * @param  array{0:string,1:string,2:string,3:string,4:Collection,5:string}|null  $context
      */
-    public function buildAtom(): string
+    public function buildAtom(?array $context = null): string
     {
-        [$base, $title, $description, $locale, $items] = $this->context();
-        $self = $base.'/atom.xml';
+        [$base, $title, $description, $locale, $items, $self] = $context ?? $this->context();
+        $self = $self ?: $base.'/atom.xml';
         $updated = $this->latestTimestamp($items);
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -94,9 +129,10 @@ class FeedService
     }
 
     /**
-     * Shared feed context: site URL, channel title/description, locale and rows.
+     * Shared feed context: site URL, channel title/description, locale, rows,
+     * and the feed's self-link (null → the builder uses the site-wide default).
      *
-     * @return array{0:string,1:string,2:string,3:string,4:Collection}
+     * @return array{0:string,1:string,2:string,3:string,4:Collection,5:?string}
      */
     private function context(): array
     {
@@ -106,7 +142,27 @@ class FeedService
         $description = get_general_settings('tagline') ?: $title;
         $items = $this->posts->feedEntries($locale, self::ITEM_LIMIT);
 
-        return [$base, $title, $description, $locale, $items];
+        return [$base, $title, $description, $locale, $items, null];
+    }
+
+    /**
+     * Feed context scoped to a single category (FEATURE_MATRIX §16): same site
+     * base/locale, but the channel title names the category, the item set is the
+     * category's published posts, and the self-link points at the category feed.
+     *
+     * @return array{0:string,1:string,2:string,3:string,4:Collection,5:string}
+     */
+    private function categoryContext(int $categoryId, string $categoryTitle, string $categorySlug): array
+    {
+        $base = rtrim(config('app.url'), '/');
+        $locale = config('app.locale');
+        $siteTitle = get_general_settings('website_name') ?: config('app.name');
+        $title = $siteTitle.' — '.$categoryTitle;
+        $description = get_general_settings('tagline') ?: $siteTitle;
+        $items = $this->posts->feedEntriesForCategory($categoryId, $locale, self::ITEM_LIMIT);
+        $self = $base.'/blog/category/'.ltrim($categorySlug, '/').'/rss.xml';
+
+        return [$base, $title, $description, $locale, $items, $self];
     }
 
     /**

@@ -25,4 +25,13 @@ class PostViewService extends BaseCrudService
     {
         return $this->repo->handleLike($postId, $userId);
     }
+
+    /**
+     * Related posts for the post-detail "Related posts" block (FEATURE_MATRIX
+     * §1): other published posts sharing a category/tag, in the current locale.
+     */
+    public function related(int $postId, ?string $locale = null, int $limit = 4)
+    {
+        return $this->repo->getRelated($postId, $locale ?? get_current_lang(), $limit);
+    }
 }

@@ -82,7 +82,8 @@
 @endsection
 
 @push('extrascripts')
-    <script src="https://cdn.tiny.cloud/1/4vyoa49f4irghhao6v5lpc7z5z2hvhgau8wsjj1y9g65ovse/tinymce/4/tinymce.min.js" referrerpolicy="origin"></script>
+    {{-- TinyMCE self-hosted (DESIGN_SYSTEM §7: no CDN). Copied to public/admin/js/vendor/tinymce; TinyMCE auto-derives its baseURL from this src so themes/plugins/skins load locally. --}}
+    <script src="{{asset('admin')}}/js/vendor/tinymce/tinymce.min.js"></script>
     <script src="{{ asset('') }}/vendor/laravel-filemanager/js/lfm.js"></script>
 @endpush
 

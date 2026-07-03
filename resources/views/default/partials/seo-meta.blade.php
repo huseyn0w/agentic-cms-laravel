@@ -96,6 +96,47 @@
 
     // --- Twitter handle ----------------------------------------------------
     $twitter = $seo->twitter_handle ?? null;
+
+    // --- OG article meta (§8: articles add published_time + author) --------
+    $articlePublishedTime = null;
+    $articleAuthor        = null;
+    if ($isPost && isset($entity)) {
+        if (!empty($entity->created_at)) {
+            $articlePublishedTime = \Carbon\Carbon::parse($entity->created_at)->toIso8601String();
+        }
+        if (isset($entity->author)) {
+            $articleAuthor = trim(($entity->author->name ?? '') . ' ' . ($entity->author->surname ?? '')) ?: null;
+        }
+    }
+
+    // --- OG image dimensions (§8: emit width/height when known) ------------
+    // Only resolvable for images stored locally under the public disk; remote
+    // URLs are left without dimensions rather than guessing.
+    $ogImageWidth  = null;
+    $ogImageHeight = null;
+    if (!empty($ogImage)) {
+        try {
+            $appHost   = parse_url($appUrl, PHP_URL_HOST);
+            $imageHost = parse_url($ogImage, PHP_URL_HOST);
+            $localPath = null;
+            if (empty($imageHost) || $imageHost === $appHost) {
+                $relative  = ltrim(parse_url($ogImage, PHP_URL_PATH) ?? $ogImage, '/');
+                $candidate = public_path($relative);
+                if (is_file($candidate)) {
+                    $localPath = $candidate;
+                }
+            }
+            if ($localPath) {
+                $size = @getimagesize($localPath);
+                if ($size !== false) {
+                    $ogImageWidth  = $size[0];
+                    $ogImageHeight = $size[1];
+                }
+            }
+        } catch (\Throwable $e) {
+            $ogImageWidth = $ogImageHeight = null;
+        }
+    }
 @endphp
 
 <title>{{ $pageTitle }}</title>
@@ -129,6 +170,17 @@
 @if($code !== $locale)<meta property="og:locale:alternate" content="{{ $code === 'ru' ? 'ru_RU' : 'en_US' }}">@endif
 @endforeach
 @if(!empty($ogImage))<meta property="og:image" content="{{ $ogImage }}">@endif
+@if(!empty($ogImageWidth) && !empty($ogImageHeight))
+<meta property="og:image:width" content="{{ $ogImageWidth }}">
+<meta property="og:image:height" content="{{ $ogImageHeight }}">
+@endif
+
+{{-- Article meta (§8): published time + author on article/post pages --}}
+@if($ogType === 'article')
+@if(!empty($articlePublishedTime))<meta property="article:published_time" content="{{ $articlePublishedTime }}">@endif
+@if(!empty($entity->updated_at))<meta property="article:modified_time" content="{{ \Carbon\Carbon::parse($entity->updated_at)->toIso8601String() }}">@endif
+@if(!empty($articleAuthor))<meta property="article:author" content="{{ $articleAuthor }}">@endif
+@endif
 
 {{-- Twitter Card --}}
 <meta name="twitter:card" content="summary_large_image">

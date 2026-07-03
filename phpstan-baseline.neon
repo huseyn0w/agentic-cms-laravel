@@ -283,6 +283,12 @@ parameters:
 			path: app/Repositories/CategoryRepository.php
 
 		-
+			message: '#^Relation ''categories'' is not found in App\\Http\\Models\\Post model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Repositories/PostRepository.php
+
+		-
 			message: '#^Variable \$data might not be defined\.$#'
 			identifier: variable.undefined
 			count: 1

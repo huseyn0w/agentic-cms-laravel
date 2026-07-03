@@ -50,6 +50,15 @@ class SeoMetaTest extends TestCase
         $this->assertMatchesRegularExpression('/"@type":\s*"BlogPosting"/', $html);
     }
 
+    public function test_post_page_renders_article_og_meta(): void
+    {
+        $html = $this->get('/posts/post-example')->assertStatus(200)->getContent();
+
+        // §8: articles must expose published time + author for Open Graph.
+        $this->assertStringContainsString('property="article:published_time"', $html);
+        $this->assertStringContainsString('property="article:author"', $html);
+    }
+
     public function test_sitemap_returns_valid_xml_with_post_slug(): void
     {
         $response = $this->get('/sitemap.xml')->assertStatus(200);

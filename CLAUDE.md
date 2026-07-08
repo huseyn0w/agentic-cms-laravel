@@ -10,8 +10,10 @@ Cmstack-Laravel — a modern, open-source multilingual CMS built on **Laravel 12
 
 ```bash
 # --- Local dev via Docker (recommended) ---
-make setup                       # docker up + composer install + key:generate + migrate --seed + storage:link + npm build
-make up / make down / make fresh # start / stop / rebuild-from-scratch the stack
+make dev                         # primary one-command entry: bootstrap the stack (= setup), then follow logs
+make setup                       # first-time bootstrap only: docker up + composer install + key:generate + migrate --seed + storage:link + npm build
+make up / make down / make reset # start / stop / wipe-and-rebootstrap the stack
+make fresh                       # rebuild the DB from scratch (migrate:fresh --seed)
 make test                        # run the suite inside the container
 # App: http://localhost:8080   Admin: http://localhost:8080/cmstack-laravel-admin
 

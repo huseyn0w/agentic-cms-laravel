@@ -14,7 +14,7 @@ class SiteOptionsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('site_options')->insert([
+        DB::table('site_options')->insertOrIgnore([
             [
                 'logo_url' => env('APP_URL').'/filemanager/images/5db423b7ed176.png',
                 'copyright' => 'Copyright ©2019 All rights reserved | This template is made with love by <a href="https://colorlib.com" target="_blank">Colorlib</a>',

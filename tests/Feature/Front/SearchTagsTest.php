@@ -51,8 +51,10 @@ class SearchTagsTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        // Nothing found — the empty-state component should be rendered.
-        $response->assertSee('search_nothing_found', false);
+        // Nothing found — the empty-state component should render the translated
+        // headline (previously this asserted the raw lang KEY, which only appeared
+        // because `@lang()` in a component attribute leaked its literal directive).
+        $response->assertSee(__('default/page.search_nothing_found'));
     }
 
     /** Paginated search route also works for filter=tag. */

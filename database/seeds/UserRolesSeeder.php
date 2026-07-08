@@ -28,7 +28,7 @@ class UserRolesSeeder extends Seeder
         $user_permissions_json = json_encode($user_permissions_array);
         $admin_permissions_json = json_encode($admin_permissions_array);
 
-        DB::table('user_roles')->insert(
+        DB::table('user_roles')->insertOrIgnore(
             [
                 ['name' => 'Administrator', 'permissions' => $admin_permissions_json],
                 ['name' => 'User', 'permissions' => $user_permissions_json],

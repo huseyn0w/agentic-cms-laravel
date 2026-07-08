@@ -116,13 +116,13 @@ class CPanelPostServiceTest extends TestCase
     {
         $service = app(CPanelPostService::class);
 
-        // Use the seeded post (slug 'post-example') as the row to update.
-        $existing = PostTranslation::where('slug', 'post-example')->where('locale', 'en')->firstOrFail();
+        // Use the seeded post (slug 'introducing-the-cms') as the row to update.
+        $existing = PostTranslation::where('slug', 'introducing-the-cms')->where('locale', 'en')->firstOrFail();
         $postId = $existing->post_id;
 
         $updatePayload = [
             'title' => 'Updated Title',
-            'slug' => 'post-example',
+            'slug' => 'introducing-the-cms',
             'content' => '<p>updated content</p>',
             'preview' => 'updated preview',
             'author_id' => $this->admin->id,

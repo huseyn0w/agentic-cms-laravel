@@ -44,7 +44,7 @@ class SeoMetaTest extends TestCase
 
     public function test_post_page_renders_article_meta_and_jsonld(): void
     {
-        $html = $this->get('/posts/post-example')->assertStatus(200)->getContent();
+        $html = $this->get('/posts/introducing-the-cms')->assertStatus(200)->getContent();
 
         $this->assertStringContainsString('property="og:type" content="article"', $html);
         $this->assertMatchesRegularExpression('/"@type":\s*"BlogPosting"/', $html);
@@ -52,7 +52,7 @@ class SeoMetaTest extends TestCase
 
     public function test_post_page_renders_article_og_meta(): void
     {
-        $html = $this->get('/posts/post-example')->assertStatus(200)->getContent();
+        $html = $this->get('/posts/introducing-the-cms')->assertStatus(200)->getContent();
 
         // §8: articles must expose published time + author for Open Graph.
         $this->assertStringContainsString('property="article:published_time"', $html);
@@ -71,7 +71,7 @@ class SeoMetaTest extends TestCase
         $this->assertNotFalse(simplexml_load_string($xml), 'Sitemap is not valid XML');
 
         $this->assertStringContainsString('<urlset', $xml);
-        $this->assertStringContainsString('post-example', $xml);
+        $this->assertStringContainsString('introducing-the-cms', $xml);
     }
 
     public function test_robots_txt_is_served(): void
@@ -96,11 +96,11 @@ class SeoMetaTest extends TestCase
 
     public function test_category_with_noindex_renders_noindex_in_head(): void
     {
-        CategoryTranslation::where('slug', 'parent_category')->where('locale', 'en')
+        CategoryTranslation::where('slug', 'announcements')->where('locale', 'en')
             ->update(['meta_noindex' => true]);
         Cache::flush();
 
-        $html = $this->get('/category/parent_category')->assertStatus(200)->getContent();
+        $html = $this->get('/category/announcements')->assertStatus(200)->getContent();
 
         $this->assertStringContainsString('noindex', $html);
     }

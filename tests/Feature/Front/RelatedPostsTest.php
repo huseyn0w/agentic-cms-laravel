@@ -18,7 +18,7 @@ use Tests\TestCase;
  * current post excluded, PUBLISHED-only (no drafts / future-scheduled leaks),
  * locale-scoped, ranked by number of shared terms (recency tiebreak), capped.
  *
- * Seeded fixtures: post id 1 ("post-example") in category 1.
+ * Seeded fixtures: post id 1 ("introducing-the-cms") in category 1.
  */
 class RelatedPostsTest extends TestCase
 {
@@ -34,6 +34,16 @@ class RelatedPostsTest extends TestCase
         $this->seed(DatabaseSeeder::class);
         $this->admin = User::where('username', 'admin')->firstOrFail();
         $this->repo = app(PostRepository::class);
+
+        // The demo seed now ships a full set of interlinked posts (post 1 shares
+        // categories/tags with several siblings). These tests assert on their own
+        // freshly-created siblings, so isolate post 1: drop the other seeded posts
+        // and every taxonomy link except post 1's category-1 membership, restoring
+        // the "post 1 alone in category 1" fixture the assertions assume.
+        DB::table('posts')->where('id', '!=', 1)->delete();
+        DB::table('post_tag')->delete();
+        DB::table('category_post')->where('post_id', '!=', 1)->delete();
+        DB::table('category_post')->where('post_id', 1)->where('category_id', '!=', 1)->delete();
     }
 
     /**
@@ -80,7 +90,7 @@ class RelatedPostsTest extends TestCase
 
         $slugs = collect($result)->pluck('slug')->all();
         $this->assertContains('sibling', $slugs);
-        $this->assertNotContains('post-example', $slugs, 'The current post must be excluded.');
+        $this->assertNotContains('introducing-the-cms', $slugs, 'The current post must be excluded.');
     }
 
     public function test_related_excludes_drafts_and_future_scheduled(): void
@@ -147,7 +157,7 @@ class RelatedPostsTest extends TestCase
     {
         $this->makePost('rendered-sibling', categoryIds: [1]);
 
-        $html = $this->get('/posts/post-example')->getContent();
+        $html = $this->get('/posts/introducing-the-cms')->getContent();
 
         $this->assertStringContainsString('rendered-sibling', $html);
     }

@@ -25,7 +25,7 @@ class ReadingTimeRenderTest extends TestCase
 
     public function test_reading_time_absent_when_plugin_disabled(): void
     {
-        $html = $this->get('/posts/post-example')->assertOk()->getContent();
+        $html = $this->get('/posts/introducing-the-cms')->assertOk()->getContent();
         $this->assertStringNotContainsString('min read', $html);
     }
 
@@ -33,7 +33,7 @@ class ReadingTimeRenderTest extends TestCase
     {
         app(CPanelPluginRepository::class)->setEnabled('reading-time', true);
 
-        $html = $this->get('/posts/post-example')->assertOk()->getContent();
+        $html = $this->get('/posts/introducing-the-cms')->assertOk()->getContent();
         $this->assertStringContainsString('min read', $html);
     }
 }

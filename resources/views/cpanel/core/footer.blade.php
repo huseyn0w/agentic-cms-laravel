@@ -12,7 +12,7 @@
         @lang('cpanel/nav/bottom.made')
         <a href="https://www.linkedin.com/in/huseyn0w/" class="font-medium text-primary hover:opacity-80">Huseyn0w</a>
         <span class="text-subtle">&middot;</span>
-        Developed by
+        @lang('cpanel/nav/bottom.developed_by')
         <a href="https://elman.group" target="_blank" rel="noopener" class="font-medium text-primary hover:opacity-80">Elman Group</a>
     </p>
 </footer>

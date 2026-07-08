@@ -31,6 +31,8 @@ class TagRepositoryTest extends TestCase
 
     public function test_sync_creates_new_tags_with_slugs_and_attaches_them(): void
     {
+        // The demo seed attaches tags to post 1; syncToPost is authoritative and
+        // replaces them, so the post ends with exactly the synced pair.
         $post = Post::findOrFail(1);
 
         $this->repo()->syncToPost($post, ['Laravel', 'PHP 8']);
@@ -43,12 +45,19 @@ class TagRepositoryTest extends TestCase
     public function test_sync_reuses_existing_tags_instead_of_duplicating(): void
     {
         $post = Post::findOrFail(1);
+        // Baseline includes the demo-seeded tags; assert against a delta so this
+        // stays a pure "no duplicate on reuse" check independent of the seed.
+        $baseline = Tag::count();
         $this->repo()->syncToPost($post, ['Laravel']);
+        $afterFirst = Tag::count();
 
         $this->repo()->syncToPost($post, ['Laravel', 'Testing']);
 
         $this->assertSame(2, $post->tags()->count());
-        $this->assertSame(2, Tag::count(), 'Laravel must not be duplicated');
+        // One new tag on the first sync (Laravel), one on the second (Testing);
+        // Laravel is reused, not duplicated.
+        $this->assertSame($baseline + 1, $afterFirst);
+        $this->assertSame($baseline + 2, Tag::count(), 'Laravel must not be duplicated');
     }
 
     public function test_sync_detaches_removed_tags_and_ignores_blanks(): void

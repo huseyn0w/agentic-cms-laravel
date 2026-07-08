@@ -11,8 +11,8 @@ use Tests\TestCase;
  * public user profiles and the localized route variants. All read-only and
  * available to guests. Seeded fixtures (see CPanel*Seeder) provide:
  *   page  "/" (home), page "contact"
- *   post  "post-example"
- *   category "parent_category" / "about"
+ *   post  "introducing-the-cms"
+ *   category "announcements" / "about"
  *   user  "admin"
  */
 class PublicPagesTest extends TestCase
@@ -63,7 +63,7 @@ class PublicPagesTest extends TestCase
 
     public function test_single_post_renders(): void
     {
-        $this->get('/posts/post-example')->assertStatus(200);
+        $this->get('/posts/introducing-the-cms')->assertStatus(200);
     }
 
     public function test_missing_post_returns_404(): void
@@ -73,12 +73,12 @@ class PublicPagesTest extends TestCase
 
     public function test_category_archive_renders(): void
     {
-        $this->get('/category/parent_category')->assertStatus(200);
+        $this->get('/category/announcements')->assertStatus(200);
     }
 
     public function test_category_paginated_page_renders(): void
     {
-        $this->get('/category/parent_category/page/1')->assertStatus(200);
+        $this->get('/category/announcements/page/1')->assertStatus(200);
     }
 
     public function test_public_user_profile_renders(): void
@@ -89,11 +89,11 @@ class PublicPagesTest extends TestCase
     public function test_localized_post_route_renders(): void
     {
         // {locale?}/posts/{slug}; en is the default locale.
-        $this->get('/en/posts/post-example')->assertStatus(200);
+        $this->get('/en/posts/introducing-the-cms')->assertStatus(200);
     }
 
     public function test_localized_category_route_renders(): void
     {
-        $this->get('/en/category/parent_category')->assertStatus(200);
+        $this->get('/en/category/announcements')->assertStatus(200);
     }
 }

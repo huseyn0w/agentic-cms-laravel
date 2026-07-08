@@ -36,16 +36,16 @@ class PostViewServiceTest extends TestCase
     {
         $service = app(PostViewService::class);
 
-        $result = $service->resolveBySlug('post-example');
+        $result = $service->resolveBySlug('introducing-the-cms');
 
         $this->assertNotNull($result);
-        $this->assertSame('post-example', $result->slug);
+        $this->assertSame('introducing-the-cms', $result->slug);
     }
 
     /** Front route responds 200 for a published seeded post. */
     public function test_public_route_returns_200_for_published_post(): void
     {
-        $this->get('/posts/post-example')->assertOk();
+        $this->get('/posts/introducing-the-cms')->assertOk();
     }
 
     /**

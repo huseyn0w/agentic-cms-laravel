@@ -15,7 +15,7 @@
                     <thead class="bg-surface-2">
                         <tr>
                             <th class="px-4 py-3"><x-eyebrow>@lang('cpanel/plugins.headline')</x-eyebrow></th>
-                            <th class="px-4 py-3"><x-eyebrow>Status</x-eyebrow></th>
+                            <th class="px-4 py-3"><x-eyebrow>@lang('cpanel/plugins.status')</x-eyebrow></th>
                             <th class="px-4 py-3 text-right"></th>
                         </tr>
                     </thead>

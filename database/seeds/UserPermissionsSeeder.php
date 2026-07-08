@@ -14,7 +14,7 @@ class UserPermissionsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('user_permissions')->insert(
+        DB::table('user_permissions')->insertOrIgnore(
             [
                 ['name' => 'manage_general_settings'],
                 ['name' => 'manage_users'],

@@ -45,7 +45,7 @@
             <x-pagination :paginator="$category_posts" />
         </div>
     @else
-        <x-empty-state headline="@lang('default/category.not_found')" icon="search">
+        <x-empty-state headline="{{ __('default/category.not_found') }}" icon="search">
             @lang('default/category.not_found')
         </x-empty-state>
     @endif

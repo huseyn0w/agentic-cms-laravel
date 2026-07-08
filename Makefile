@@ -4,9 +4,11 @@
 # The Docker stack is a LOCAL DEV convenience only; production deploys to
 # Hostinger / a VPS without Docker (see README "Deployment").
 #
-#   make setup   one-shot bootstrap: up + composer + key + migrate/seed + build
+#   make dev     one-shot bootstrap (= setup) then follow logs — the primary entry
+#   make setup   first-time bootstrap: up + composer + key + migrate/seed + build
 #   make up      start the Docker stack (detached)
 #   make down    stop the stack (keeps the database volume)
+#   make reset   wipe the DB volume and re-bootstrap from scratch
 #   make fresh   rebuild the DB from scratch (migrate:fresh --seed)
 #   make test    run the PHPUnit suite inside the container
 #   make build   build front-end assets on the host (Vite)
@@ -25,11 +27,14 @@ HOST_PORTS := 8080
 
 .DEFAULT_GOAL := help
 
-.PHONY: help setup up down fresh test build shell logs key migrate seed link clean kill
+.PHONY: help dev up down reset logs seed migrate test kill clean setup fresh build key link shell dusk
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
+
+dev: setup ## One-shot local dev: bootstrap the stack, then follow container logs
+	$(DC) logs -f
 
 setup: kill ## First-time bootstrap: bring up Docker, install deps, migrate+seed, build assets
 	@test -f .env || cp .env.example .env
@@ -59,6 +64,10 @@ kill: ## Release this stack's host ports (down its own containers; warn on forei
 
 down: ## Stop the Docker stack (keeps the DB volume)
 	$(DC) down
+
+reset: ## Wipe the DB volume and re-bootstrap from scratch
+	$(DC) down -v
+	$(MAKE) dev
 
 fresh: ## Drop and rebuild the database, then reseed
 	$(APP) php artisan migrate:fresh --seed

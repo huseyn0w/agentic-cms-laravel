@@ -43,7 +43,7 @@
             {!! $data->content !!}
         </div>
     @else
-        <x-empty-state icon="file-text" headline="@lang('default/page.no_content')" />
+        <x-empty-state icon="file-text" headline="{{ __('default/page.no_content') }}" />
     @endif
 </article>
 

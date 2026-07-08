@@ -37,7 +37,7 @@
             <x-card>
                 <div class="space-y-4">
                     {{-- Logo: LFM image-picker trigger + text input (field names preserved) --}}
-                    <x-field label="@lang('cpanel/settings.logo')" name="logo_url">
+                    <x-field label="{{ __('cpanel/settings.logo') }}" name="logo_url">
                         <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                             <a id="lfm" data-input="thumbnail" data-preview="holder"
                                class="choose-image inline-flex items-center gap-1.5 rounded-md border border-strong bg-surface-2 px-3 py-2 text-sm text-fg transition-colors hover:bg-surface cursor-pointer shrink-0">
@@ -48,15 +48,15 @@
                         </div>
                     </x-field>
 
-                    <x-field label="@lang('cpanel/settings.footer_copyright')" name="copyright" :required="true">
+                    <x-field label="{{ __('cpanel/settings.footer_copyright') }}" name="copyright" :required="true">
                         <input type="text" id="copyright" required name="copyright" class="form-control w-full" value="{{ old('copyright', $copyright) }}">
                     </x-field>
 
-                    <x-field label="@lang('cpanel/settings.linkedin_url')" name="linkedin_url" :required="true">
+                    <x-field label="{{ __('cpanel/settings.linkedin_url') }}" name="linkedin_url" :required="true">
                         <input type="text" id="linkedin_url" required name="linkedin_url" class="form-control w-full" value="{{ old('linkedin_url', $linkedin_url) }}">
                     </x-field>
 
-                    <x-field label="@lang('cpanel/settings.github_url')" name="github_url" :required="true">
+                    <x-field label="{{ __('cpanel/settings.github_url') }}" name="github_url" :required="true">
                         <input type="text" id="github_url" required name="github_url" class="form-control w-full" value="{{ old('github_url', $github_url) }}">
                     </x-field>
                 </div>

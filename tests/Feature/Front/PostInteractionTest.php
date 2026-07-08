@@ -13,7 +13,7 @@ use Tests\TestCase;
 /**
  * Authenticated front-end post interactions: liking a post and the comment
  * store / update / delete AJAX routes. All require auth and enforce ownership.
- * Seeded post id 1 has slug "post-example".
+ * Seeded post id 1 has slug "introducing-the-cms".
  */
 class PostInteractionTest extends TestCase
 {

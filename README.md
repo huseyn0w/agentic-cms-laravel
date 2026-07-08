@@ -163,10 +163,12 @@ The fastest path. The Docker stack (nginx + PHP 8.3-FPM with imagick + MySQL 8) 
 
 ```bash
 git clone <your-repo-url> cmstack-laravel && cd cmstack-laravel
-make setup
+make dev
 ```
 
-`make setup` does everything end-to-end:
+**`make dev` is the single command to launch this stack — the same entry point as every
+other `cmstack-*` stack.** It bootstraps everything end-to-end, then follows the container
+logs (Ctrl-C stops following; the stack keeps running in the background):
 
 1. copies `.env.example` → `.env` (if missing),
 2. builds and starts the Docker stack (`docker compose up -d --build`),
@@ -174,27 +176,36 @@ make setup
 4. `php artisan key:generate`,
 5. `php artisan migrate --seed`,
 6. `php artisan storage:link`,
-7. `npm install && npm run build` (assets, on the host).
+7. `npm install && npm run build` (assets, on the host),
+8. follows the container logs.
 
-When it finishes:
+When it is up:
 
 - **App:** http://localhost:8080
 - **Admin:** http://localhost:8080/cmstack-laravel-admin (see [credentials](#admin-credentials))
 
 ### Available `make` targets
 
+Every `cmstack-*` stack shares the same core commands — `make dev`, `up`, `down`, `reset`,
+`logs`, `seed`, `migrate`, `test`, `clean`, `kill` — so you launch and manage them all the
+same way. Laravel-specific extras are listed below the shared ones.
+
 | Target       | Description                                                 |
 | ------------ | ----------------------------------------------------------- |
-| `make setup` | First-time bootstrap (everything above)                     |
-| `make up`    | Start the Docker stack                                      |
+| `make dev`   | **One-command launch** (the primary entry): bootstrap the stack, then follow logs |
+| `make up`    | Start the Docker stack (already bootstrapped)               |
 | `make down`  | Stop the stack (keeps the DB volume)                        |
-| `make kill`  | Release the stack's host port (:8080) — downs its own containers, warns on a foreign holder; runs automatically before `make up`/`make setup` |
-| `make fresh` | `migrate:fresh --seed` (rebuild the database)               |
+| `make reset` | Wipe the DB volume and re-bootstrap from scratch            |
+| `make logs`  | Tail container logs                                         |
+| `make seed`  | Run database seeders                                        |
+| `make migrate` | Run database migrations                                   |
 | `make test`  | Run the Pest suite inside the container                     |
+| `make clean` | Stop the stack **and remove the DB volume** (destroys data) |
+| `make kill`  | Release the stack's host port (:8080) — downs its own containers, warns on a foreign holder; runs automatically before `make up`/`make dev` |
+| `make setup` | Bootstrap only, without following logs (`make dev` runs this then tails logs) |
+| `make fresh` | `migrate:fresh --seed` (rebuild the database)               |
 | `make build` | Build front-end assets (Vite production build)              |
 | `make shell` | Open a shell in the app container                           |
-| `make logs`  | Tail container logs                                         |
-| `make clean` | Stop the stack **and remove the DB volume** (destroys data) |
 
 Run `make help` to see all targets.
 
@@ -525,7 +536,7 @@ You have two options on a VPS:
 
 ```bash
 git clone <repo> && cd cmstack-laravel
-make setup            # or: docker compose up -d ...
+make dev              # single-command launch (or: docker compose up -d ...)
 ```
 
 Then put your real reverse proxy / TLS in front (or expose port 8080 behind one).
@@ -582,7 +593,7 @@ Make sure `storage/` and `bootstrap/cache/` are writable by the php-fpm user.
 
 ### Is it ready to deploy?
 
-**Yes.** Cmstack-Laravel runs cleanly **locally** (Docker via `make setup`, or fully manual), and
+**Yes.** Cmstack-Laravel runs cleanly **locally** (Docker via `make dev`, or fully manual), and
 deploys to both **Hostinger shared hosting** and a **VPS** with no required background
 services. A clean Docker bring-up was verified end to end: migrations + seeders succeed
 against a fresh `cmstack_laravel` MySQL database, the home page returns `200`, `/cmstack-laravel-admin`

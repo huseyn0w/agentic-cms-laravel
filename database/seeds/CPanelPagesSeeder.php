@@ -168,68 +168,73 @@ class CPanelPagesSeeder extends Seeder
             ],
         ];
 
-        DB::table('pages')->insert([
+        DB::table('pages')->insertOrIgnore([
             ['id' => 1],
             ['id' => 2],
+            ['id' => 3],
         ]);
 
-        DB::table('page_translations')->insert([
-            [
-                'title' => 'Homepage',
-                'locale' => 'en',
+        // The German homepage reuses the English hero custom_fields (cosmetic)
+        // with a localized title/meta, so the homepage exists in all three
+        // locales like every other seeded page.
+        $home_page_custom_fields['de'] = $home_page_custom_fields['en'];
+
+        // Homepage (page 1) — one row per locale (en/de/ru).
+        $home_meta = [
+            'en' => ['title' => 'Homepage', 'keywords' => 'page, homepage', 'description' => 'This is homepage of CMS Cmstack-Laravel'],
+            'de' => ['title' => 'Startseite', 'keywords' => 'seite, startseite', 'description' => 'Dies ist die Startseite des CMS Cmstack-Laravel'],
+            'ru' => ['title' => 'Главная страница', 'keywords' => 'страница, главная', 'description' => 'Это главная страница CMS Cmstack-Laravel'],
+        ];
+
+        $homeRows = [];
+        foreach (DemoContent::LOCALES as $locale) {
+            $homeRows[] = [
+                'title' => $home_meta[$locale]['title'],
+                'locale' => $locale,
                 'page_id' => 1,
                 'slug' => '/',
                 'author_id' => 1,
                 'status' => 1,
-                'meta_keywords' => 'page, homepage',
-                'meta_description' => 'This is homepage of CMS Cmstack-Laravel',
-                'custom_fields' => json_encode($home_page_custom_fields['en']),
+                'meta_keywords' => $home_meta[$locale]['keywords'],
+                'meta_description' => $home_meta[$locale]['description'],
+                'custom_fields' => json_encode($home_page_custom_fields[$locale]),
                 'template' => 'home',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-            ],
-            [
-                'title' => 'Главная страница',
-                'locale' => 'ru',
-                'page_id' => 1,
-                'slug' => '/',
-                'author_id' => 1,
-                'status' => 1,
-                'meta_keywords' => 'страница, главная',
-                'meta_description' => 'Это главная страница CMS Cmstack-Laravel',
-                'custom_fields' => json_encode($home_page_custom_fields['ru']),
-                'template' => 'home',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'title' => 'Contact',
-                'slug' => 'contact',
-                'locale' => 'en',
-                'page_id' => 2,
-                'author_id' => 1,
-                'status' => 1,
-                'meta_keywords' => 'page, contact',
-                'meta_description' => 'Contact page',
-                'template' => 'contacts',
-                'custom_fields' => json_encode([]),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'title' => 'Контакты',
-                'slug' => 'kontakti',
-                'locale' => 'ru',
-                'page_id' => 2,
-                'author_id' => 1,
-                'status' => 1,
-                'meta_keywords' => 'страница, контакты',
-                'meta_description' => 'Контактная страница',
-                'template' => 'contacts',
-                'custom_fields' => json_encode([]),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-        ]);
+            ];
+        }
+        DB::table('page_translations')->insertOrIgnore($homeRows);
+
+        // Content pages from the canonical dataset: Contact (page 2) and About
+        // (page 3), one row per locale, slug shared across locales. Inserted in
+        // their own batch because they carry the `content` column the Homepage
+        // rows omit (a single batch insert needs a uniform column set).
+        $pages = DemoContent::pagesBySlug();
+        $pageMap = [
+            2 => ['data' => $pages['contact'], 'template' => 'contacts'],
+            3 => ['data' => $pages['about'], 'template' => 'page'],
+        ];
+
+        $contentRows = [];
+        foreach ($pageMap as $pageId => $meta) {
+            foreach (DemoContent::LOCALES as $locale) {
+                $contentRows[] = [
+                    'title' => $meta['data']['title'][$locale],
+                    'slug' => $meta['data']['slug'],
+                    'locale' => $locale,
+                    'page_id' => $pageId,
+                    'author_id' => 1,
+                    'status' => 1,
+                    'meta_keywords' => $meta['data']['slug'].', cmstack, cms',
+                    'meta_description' => mb_substr(strip_tags($meta['data']['content'][$locale]), 0, 200),
+                    'template' => $meta['template'],
+                    'content' => $meta['data']['content'][$locale],
+                    'custom_fields' => json_encode([]),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+            }
+        }
+        DB::table('page_translations')->insertOrIgnore($contentRows);
     }
 }

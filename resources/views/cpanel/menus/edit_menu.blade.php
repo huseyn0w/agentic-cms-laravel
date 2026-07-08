@@ -56,11 +56,11 @@
                         <div class="space-y-4">
                             @include('cpanel.core.translation')
 
-                            <x-field label="@lang('cpanel/menus.menu_name')" name="title" :required="true">
+                            <x-field label="{{ __('cpanel/menus.menu_name') }}" name="title" :required="true">
                                 <input type="text" id="menu_title" required class="form-control w-full" name="title" value="{{ old('title',$entity->title) }}">
                             </x-field>
 
-                            <x-field label="@lang('cpanel/menus.menu_slug')" name="slug" :required="true">
+                            <x-field label="{{ __('cpanel/menus.menu_slug') }}" name="slug" :required="true">
                                 <input type="text" id="cpanel_slug" required class="form-control w-full" name="slug" value="{{ old('slug', $entity->slug) }}">
                             </x-field>
 
@@ -84,7 +84,7 @@
                              Reordering is keyboard-accessible via menu-reorder.js. --}}
                         <div class="menu-box min-h-[200px] rounded-md border border-dashed border-border bg-surface-2 p-3"
                              role="list"
-                             aria-label="@lang('cpanel/menus.list_headline')">
+                             aria-label="{{ __('cpanel/menus.list_headline') }}">
                             @if($existing_menu)
                                 {!! $existing_menu !!}
                             @else

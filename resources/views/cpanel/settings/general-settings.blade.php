@@ -39,15 +39,15 @@
             @csrf
             <x-card>
                 <div class="space-y-4">
-                    <x-field label="@lang('cpanel/settings.website_name')" name="website_name" :required="true">
+                    <x-field label="{{ __('cpanel/settings.website_name') }}" name="website_name" :required="true">
                         <input type="text" id="website_name" required name="website_name" class="form-control w-full" value="{{ old('website_name', $website_name) }}">
                     </x-field>
 
-                    <x-field label="@lang('cpanel/settings.tagline')" name="tagline" :required="true" help="@lang('cpanel/settings.tagline_content')">
+                    <x-field label="{{ __('cpanel/settings.tagline') }}" name="tagline" :required="true" help="{{ __('cpanel/settings.tagline_content') }}">
                         <textarea rows="3" required name="tagline" id="tagline" class="form-control w-full">{{ old('tagline', $tagline) }}</textarea>
                     </x-field>
 
-                    <x-field label="@lang('cpanel/settings.contact_email')" name="contact_email" :required="true">
+                    <x-field label="{{ __('cpanel/settings.contact_email') }}" name="contact_email" :required="true">
                         <input type="email" id="contact_email" required name="contact_email" class="form-control w-full" value="{{ old('contact_email', $email) }}">
                     </x-field>
 
@@ -62,7 +62,7 @@
                         </label>
                     </div>
 
-                    <x-field label="@lang('cpanel/settings.active_template')" name="active_template_name" :required="true">
+                    <x-field label="{{ __('cpanel/settings.active_template') }}" name="active_template_name" :required="true">
                         <select id="active_template_name" name="active_template_name" required class="form-control w-full">
                             @forelse($directories as $key => $value)
                                 <option value="{{$value}}" {{ $value === $active_template_name ? 'selected' : '' }}>{{$value}}</option>
@@ -73,10 +73,10 @@
                     </x-field>
 
                     <div class="grid grid-cols-1 gap-x-5 sm:grid-cols-2">
-                        <x-field label="@lang('cpanel/settings.posts_per_page')" name="posts_per_page" :required="true">
+                        <x-field label="{{ __('cpanel/settings.posts_per_page') }}" name="posts_per_page" :required="true">
                             <input type="number" min="1" required id="posts_per_page" name="posts_per_page" class="form-control w-full" value="{{ old('posts_per_page', $posts_per_page) }}">
                         </x-field>
-                        <x-field label="@lang('cpanel/settings.comments_per_page')" name="comments_per_page" :required="true">
+                        <x-field label="{{ __('cpanel/settings.comments_per_page') }}" name="comments_per_page" :required="true">
                             <input type="number" min="1" required id="comments_per_page" name="comments_per_page" class="form-control w-full" value="{{ old('comments_per_page', $comments_per_page) }}">
                         </x-field>
                     </div>

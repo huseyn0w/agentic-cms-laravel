@@ -16,7 +16,7 @@ class CPanelServicesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('services')->insert([
+        DB::table('services')->insertOrIgnore([
             ['id' => 1, 'sort_order' => 1],
             ['id' => 2, 'sort_order' => 2],
             ['id' => 3, 'sort_order' => 3],
@@ -64,6 +64,6 @@ class CPanelServicesSeeder extends Seeder
             }
         }
 
-        DB::table('service_translations')->insert($inserts);
+        DB::table('service_translations')->insertOrIgnore($inserts);
     }
 }

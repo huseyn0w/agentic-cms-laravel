@@ -47,6 +47,13 @@ trait CreatesApplication
         $config->set('cache.default', 'array');
         $config->set('session.driver', 'array');
         $config->set('queue.default', 'sync');
+        // Pin mail to the array transport so queued notifications that run inline
+        // under the sync queue (e.g. the comment-submitted email) never attempt a
+        // real SMTP send. The Docker dev container injects MAIL_MAILER=smtp via
+        // $_SERVER, which would otherwise override phpunit.xml's <env> and make
+        // any mail-sending test hang/500 on the unreachable SMTP host.
+        $config->set('mail.default', 'array');
+        $config->set('mail.driver', 'array');
         $config->set('laravel-model-caching.enabled', false);
 
         return $app;

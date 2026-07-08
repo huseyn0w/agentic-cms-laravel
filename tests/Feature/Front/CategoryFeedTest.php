@@ -12,7 +12,7 @@ use Tests\TestCase;
  * FEATURE_MATRIX §16 — per-category RSS/Atom feeds
  * (/blog/category/{slug}/rss.xml and .../atom.xml). Reuses FeedService,
  * published-only, locale-aware. Seeded fixtures: category slug "category-one"
- * (id 1) contains the published post "post-example".
+ * (id 1) contains the published post "introducing-the-cms".
  */
 class CategoryFeedTest extends TestCase
 {
@@ -55,7 +55,7 @@ class CategoryFeedTest extends TestCase
 
         $xml = $response->getContent();
         $this->assertStringContainsString('<rss', $xml);
-        $this->assertStringContainsString('posts/post-example', $xml);
+        $this->assertStringContainsString('posts/introducing-the-cms', $xml);
         $this->assertInstanceOf(\SimpleXMLElement::class, simplexml_load_string($xml));
     }
 

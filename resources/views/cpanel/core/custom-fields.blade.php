@@ -184,13 +184,13 @@ if(isset ($entity->custom_fields)  && !empty($entity->custom_fields)){
                     <div class="row inputRow">
                         <div class="form-group custom-form-group">
                             <label>{{$item->admin_label}}</label>
-                            <label>Link Label</label>
+                            <label>@lang('cpanel/custom-fields.link_label')</label>
                             <input type="text" class="form-control" name="custom_fields[{{$key}}][value][label]" value="{{$item->value->label}}">
-                            <label>Link URL</label>
+                            <label>@lang('cpanel/custom-fields.link_url')</label>
                             <input type="text" class="form-control" name="custom_fields[{{$key}}][value][url]" value="{{$item->value->url}}">
                             <label class="mt-2 flex cursor-pointer items-center gap-2.5 text-sm text-[var(--text-muted)]" for="{{$key}}">
                                 <input type="checkbox" id="{{$key}}" class="form-check-input exist-input-checkbox pages-checkbox-input form-tab" {{$item->value->target === "1" ? "checked" : null}}>
-                                Open in new tab
+                                @lang('cpanel/custom-fields.open_in_new_tab')
                             </label>
                             <input name="custom_fields[{{$key}}][value][target]" type="hidden" class="checkbox-link-value" value="{{$item->value->target}}">
                             <input type="hidden" name="custom_fields[{{$key}}][type]" value="link">

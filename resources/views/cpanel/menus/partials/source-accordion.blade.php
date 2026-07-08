@@ -102,10 +102,10 @@
         </div>
         <div id="custom_link_tap" class="collapse border-t border-border">
             <div class="space-y-3 p-3">
-                <x-field label="@lang('cpanel/menus.custom_link_label')" name="link_label">
+                <x-field label="{{ __('cpanel/menus.custom_link_label') }}" name="link_label">
                     <input type="text" id="link_label" class="form-control menu_item w-full" name="link_label">
                 </x-field>
-                <x-field label="@lang('cpanel/menus.custom_link_url')" name="link_url">
+                <x-field label="{{ __('cpanel/menus.custom_link_url') }}" name="link_url">
                     <input type="text" id="link_url" class="form-control menu_item w-full" name="link_url">
                 </x-field>
             </div>

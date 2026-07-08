@@ -10,15 +10,22 @@ class CPanelPostCategorySeeder extends Seeder
     /**
      * Run the database seeds.
      *
+     * Links each demo post to its category from the canonical dataset
+     * (post.categorySlug). Announcements gets Introducing + Manage-with-AI,
+     * Guides gets SEO + Build-a-theme, Engineering gets Plugins + Comments.
+     *
      * @return void
      */
     public function run()
     {
-        DB::table('category_post')->insert([
-            [
-                'category_id' => 1,
-                'post_id' => 1,
-            ],
-        ]);
+        $rows = [];
+        foreach (DemoContent::posts() as $post) {
+            $rows[] = [
+                'category_id' => DemoContent::CATEGORY_IDS[$post['categorySlug']],
+                'post_id' => $post['id'],
+            ];
+        }
+
+        DB::table('category_post')->insertOrIgnore($rows);
     }
 }

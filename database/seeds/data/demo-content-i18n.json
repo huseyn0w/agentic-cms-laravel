@@ -1,0 +1,183 @@
+{
+  "_note": "Canonical trilingual (en/de/ru) demo content for ALL cmstack stacks. Replace Cmstack-Laravel with the stack product name (Cmstack-TS / Cmstack-Laravel / Cmstack-Django). Bodies are framework-neutral so they fit every stack. Slugs are stable and NOT translated. Seed every post/page/category/tag with ALL THREE locale rows.",
+  "locales": ["en", "de", "ru"],
+  "categories": [
+    {
+      "slug": "announcements",
+      "name": { "en": "Announcements", "de": "Ankündigungen", "ru": "Анонсы" },
+      "description": {
+        "en": "Product news and releases.",
+        "de": "Produktneuigkeiten und Releases.",
+        "ru": "Новости продукта и релизы."
+      }
+    },
+    {
+      "slug": "guides",
+      "name": { "en": "Guides", "de": "Anleitungen", "ru": "Руководства" },
+      "description": {
+        "en": "How-tos and tutorials.",
+        "de": "Anleitungen und Tutorials.",
+        "ru": "Инструкции и туториалы."
+      }
+    },
+    {
+      "slug": "engineering",
+      "name": { "en": "Engineering", "de": "Technik", "ru": "Разработка" },
+      "description": {
+        "en": "How Cmstack-Laravel is built under the hood.",
+        "de": "Wie Cmstack-Laravel unter der Haube aufgebaut ist.",
+        "ru": "Как Cmstack-Laravel устроен изнутри."
+      }
+    }
+  ],
+  "tags": [
+    { "slug": "cms", "name": { "en": "CMS", "de": "CMS", "ru": "CMS" } },
+    { "slug": "seo", "name": { "en": "SEO", "de": "SEO", "ru": "SEO" } },
+    { "slug": "themes", "name": { "en": "Themes", "de": "Themes", "ru": "Темы" } },
+    { "slug": "plugins", "name": { "en": "Plugins", "de": "Plugins", "ru": "Плагины" } },
+    { "slug": "ai", "name": { "en": "AI", "de": "KI", "ru": "ИИ" } },
+    { "slug": "content", "name": { "en": "Content", "de": "Inhalte", "ru": "Контент" } }
+  ],
+  "posts": [
+    {
+      "slug": "introducing-the-cms",
+      "categorySlug": "announcements",
+      "tagSlugs": ["cms", "content"],
+      "title": {
+        "en": "Introducing Cmstack-Laravel",
+        "de": "Cmstack-Laravel stellt sich vor",
+        "ru": "Знакомьтесь: Cmstack-Laravel"
+      },
+      "excerpt": {
+        "en": "An open-source CMS that is light, fast, and SEO-first.",
+        "de": "Ein Open-Source-CMS, das leicht, schnell und SEO-orientiert ist.",
+        "ru": "Открытая CMS: лёгкая, быстрая и с приоритетом на SEO."
+      },
+      "content": {
+        "en": "<p>Cmstack-Laravel brings the familiarity of a traditional CMS to a modern, cleanly built stack. It is light, fast, and SEO-first.</p><p>This post was created by the demo seed so the site has something to show right away.</p>",
+        "de": "<p>Cmstack-Laravel verbindet die Vertrautheit eines klassischen CMS mit einem modernen, sauber gebauten Stack. Es ist leicht, schnell und SEO-orientiert.</p><p>Dieser Beitrag wurde vom Demo-Seed erstellt, damit die Website sofort etwas anzeigt.</p>",
+        "ru": "<p>Cmstack-Laravel сочетает привычность классической CMS с современным, аккуратно построенным стеком. Он лёгкий, быстрый и ориентирован на SEO.</p><p>Этот пост создан демо-сидером, чтобы на сайте сразу был контент.</p>"
+      }
+    },
+    {
+      "slug": "seo-first-class",
+      "categorySlug": "guides",
+      "tagSlugs": ["seo"],
+      "title": {
+        "en": "Why SEO is first-class in Cmstack-Laravel",
+        "de": "Warum SEO in Cmstack-Laravel erstklassig ist",
+        "ru": "Почему SEO в Cmstack-Laravel — первоклассное"
+      },
+      "excerpt": {
+        "en": "Server-rendered pages, structured data, sitemaps, and an llms.txt feed out of the box.",
+        "de": "Serverseitig gerenderte Seiten, strukturierte Daten, Sitemaps und ein llms.txt-Feed von Haus aus.",
+        "ru": "Серверный рендеринг, структурированные данные, карты сайта и llms.txt из коробки."
+      },
+      "content": {
+        "en": "<p>Every public page is server-rendered for indexability, with Open Graph and JSON-LD metadata.</p><h2>Built for discovery</h2><p>Sitemaps, robots, and an llms.txt feed mean both search engines and AI assistants can read and cite your content.</p>",
+        "de": "<p>Jede öffentliche Seite wird für die Indexierung serverseitig gerendert, mit Open-Graph- und JSON-LD-Metadaten.</p><h2>Für Auffindbarkeit gebaut</h2><p>Sitemaps, robots und ein llms.txt-Feed sorgen dafür, dass sowohl Suchmaschinen als auch KI-Assistenten Ihre Inhalte lesen und zitieren können.</p>",
+        "ru": "<p>Каждая публичная страница рендерится на сервере для индексации, с метаданными Open Graph и JSON-LD.</p><h2>Создано для обнаружения</h2><p>Карты сайта, robots и лента llms.txt позволяют и поисковикам, и ИИ-ассистентам читать и цитировать ваш контент.</p>"
+      }
+    },
+    {
+      "slug": "build-your-first-theme",
+      "categorySlug": "guides",
+      "tagSlugs": ["themes", "content"],
+      "title": {
+        "en": "Build your first Cmstack-Laravel theme",
+        "de": "Erstellen Sie Ihr erstes Cmstack-Laravel-Theme",
+        "ru": "Создайте свою первую тему для Cmstack-Laravel"
+      },
+      "excerpt": {
+        "en": "Themes are swappable template sets resolved at runtime. Here is how to add one.",
+        "de": "Themes sind austauschbare Template-Sätze, die zur Laufzeit aufgelöst werden. So fügen Sie eines hinzu.",
+        "ru": "Темы — это сменные наборы шаблонов, разрешаемые во время выполнения. Вот как добавить свою."
+      },
+      "content": {
+        "en": "<p>A Cmstack-Laravel theme is a small set of templates resolved at runtime from the active-theme setting, so switching the look of the whole public site is a single click in the admin.</p><h2>Anatomy of a theme</h2><p>A theme scopes its own styling so it never touches the admin. Drop in a new theme, register it, and activate it — no redeploy needed.</p>",
+        "de": "<p>Ein Cmstack-Laravel-Theme ist ein kleiner Satz von Templates, der zur Laufzeit aus der Aktives-Theme-Einstellung aufgelöst wird, sodass ein Wechsel des Looks der gesamten öffentlichen Website ein einziger Klick im Admin ist.</p><h2>Aufbau eines Themes</h2><p>Ein Theme kapselt sein eigenes Styling und berührt nie den Admin-Bereich. Neues Theme ablegen, registrieren, aktivieren — kein erneutes Deployment nötig.</p>",
+        "ru": "<p>Тема Cmstack-Laravel — это небольшой набор шаблонов, разрешаемый во время выполнения из настройки активной темы, так что смена облика всего публичного сайта — это один клик в админке.</p><h2>Устройство темы</h2><p>Тема изолирует собственные стили и никогда не затрагивает админку. Добавьте новую тему, зарегистрируйте и активируйте — без повторного деплоя.</p>"
+      }
+    },
+    {
+      "slug": "extending-with-plugins",
+      "categorySlug": "engineering",
+      "tagSlugs": ["plugins", "cms"],
+      "title": {
+        "en": "Extending Cmstack-Laravel with plugins",
+        "de": "Cmstack-Laravel mit Plugins erweitern",
+        "ru": "Расширяем Cmstack-Laravel плагинами"
+      },
+      "excerpt": {
+        "en": "A typed hook and event registry lets you extend the CMS without forking it.",
+        "de": "Eine typisierte Hook- und Event-Registry erweitert das CMS, ohne es zu forken.",
+        "ru": "Типизированный реестр хуков и событий расширяет CMS без форка."
+      },
+      "content": {
+        "en": "<p>Cmstack-Laravel is extensible through a hook and event registry rather than arbitrary code injection. Plugins receive a small, constrained API.</p><h2>Filters and actions</h2><p>Filters transform a value as it passes through (for example, the HTML of a post before it renders), while actions are fire-and-forget events such as \"a post was published\". The bundled reading-time plugin adds an estimated read time to every post.</p>",
+        "de": "<p>Cmstack-Laravel ist über eine Hook- und Event-Registry erweiterbar statt über beliebige Code-Injektion. Plugins erhalten eine kleine, eingeschränkte API.</p><h2>Filter und Aktionen</h2><p>Filter transformieren einen Wert im Durchlauf (zum Beispiel das HTML eines Beitrags vor dem Rendern), während Aktionen Fire-and-Forget-Ereignisse sind wie \"ein Beitrag wurde veröffentlicht\". Das mitgelieferte Lesezeit-Plugin ergänzt jeden Beitrag um eine geschätzte Lesedauer.</p>",
+        "ru": "<p>Cmstack-Laravel расширяется через реестр хуков и событий, а не через произвольное внедрение кода. Плагины получают небольшой ограниченный API.</p><h2>Фильтры и действия</h2><p>Фильтры преобразуют значение по мере прохождения (например, HTML поста перед рендерингом), а действия — это события «выстрелил и забыл», такие как «пост опубликован». Встроенный плагин времени чтения добавляет к каждому посту оценку времени прочтения.</p>"
+      }
+    },
+    {
+      "slug": "manage-with-ai-over-mcp",
+      "categorySlug": "announcements",
+      "tagSlugs": ["ai", "cms"],
+      "title": {
+        "en": "Manage your CMS with AI over MCP",
+        "de": "Verwalten Sie Ihr CMS mit KI über MCP",
+        "ru": "Управляйте CMS с помощью ИИ через MCP"
+      },
+      "excerpt": {
+        "en": "Connect an AI assistant through scoped, permission-checked MCP tools.",
+        "de": "Verbinden Sie einen KI-Assistenten über abgegrenzte, berechtigungsgeprüfte MCP-Tools.",
+        "ru": "Подключите ИИ-ассистента через ограниченные инструменты MCP с проверкой прав."
+      },
+      "content": {
+        "en": "<p>Cmstack-Laravel ships a Model Context Protocol server so assistants like Claude can manage your content through tools instead of guesswork.</p><h2>Safe by design</h2><p>Every tool calls the same API a human would, authenticated as a service account, so the same permission checks apply. There is no raw database access and no code execution: an assistant can draft, publish, and moderate, but only within the role you give it.</p>",
+        "de": "<p>Cmstack-Laravel liefert einen Model-Context-Protocol-Server, damit Assistenten wie Claude Ihre Inhalte über Tools verwalten können statt per Raterei.</p><h2>Sicher durch Design</h2><p>Jedes Tool ruft dieselbe API auf wie ein Mensch, authentifiziert als Dienstkonto, sodass dieselben Berechtigungsprüfungen gelten. Es gibt keinen direkten Datenbankzugriff und keine Codeausführung: Ein Assistent kann entwerfen, veröffentlichen und moderieren, aber nur innerhalb der Rolle, die Sie ihm geben.</p>",
+        "ru": "<p>Cmstack-Laravel поставляется с сервером Model Context Protocol, чтобы ассистенты вроде Claude управляли вашим контентом через инструменты, а не наугад.</p><h2>Безопасно по устройству</h2><p>Каждый инструмент вызывает тот же API, что и человек, аутентифицируясь как сервисный аккаунт, поэтому действуют те же проверки прав. Нет прямого доступа к базе и выполнения кода: ассистент может писать черновики, публиковать и модерировать, но только в рамках выданной ему роли.</p>"
+      }
+    },
+    {
+      "slug": "comments-and-spam",
+      "categorySlug": "engineering",
+      "tagSlugs": ["cms", "content"],
+      "title": {
+        "en": "Moderating comments and fighting spam",
+        "de": "Kommentare moderieren und Spam bekämpfen",
+        "ru": "Модерация комментариев и борьба со спамом"
+      },
+      "excerpt": {
+        "en": "Threaded comments with a moderation queue, rate limiting, and optional reCAPTCHA.",
+        "de": "Verschachtelte Kommentare mit Moderationswarteschlange, Rate-Limiting und optionalem reCAPTCHA.",
+        "ru": "Древовидные комментарии с очередью модерации, ограничением частоты и опциональным reCAPTCHA."
+      },
+      "content": {
+        "en": "<p>Readers can leave threaded comments, but nothing appears publicly until an editor approves it.</p><h2>Layers of defense</h2><p>Submissions are rate limited per client, and reCAPTCHA can be switched on with a single pair of keys. The moderation queue in the admin lets you approve, mark as spam, or trash each comment.</p>",
+        "de": "<p>Leser können verschachtelte Kommentare hinterlassen, aber nichts erscheint öffentlich, bevor ein Redakteur es freigibt.</p><h2>Verteidigungsschichten</h2><p>Einreichungen sind pro Client ratenbegrenzt, und reCAPTCHA lässt sich mit einem einzigen Schlüsselpaar aktivieren. Die Moderationswarteschlange im Admin erlaubt es, jeden Kommentar freizugeben, als Spam zu markieren oder zu löschen.</p>",
+        "ru": "<p>Читатели могут оставлять древовидные комментарии, но публично ничего не появится, пока редактор не одобрит.</p><h2>Слои защиты</h2><p>Отправки ограничены по частоте для каждого клиента, а reCAPTCHA включается одной парой ключей. Очередь модерации в админке позволяет одобрить, пометить как спам или удалить любой комментарий.</p>"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "slug": "about",
+      "title": { "en": "About", "de": "Über uns", "ru": "О проекте" },
+      "content": {
+        "en": "<p>Cmstack-Laravel is an open-source CMS: light, fast, SEO-first, and easy to read and extend.</p><p>It pairs a server-rendered public site with a runtime theme system, a typed plugin registry, and first-class SEO and GEO so both search engines and AI assistants can find your content.</p>",
+        "de": "<p>Cmstack-Laravel ist ein Open-Source-CMS: leicht, schnell, SEO-orientiert und leicht zu lesen und zu erweitern.</p><p>Es kombiniert eine serverseitig gerenderte öffentliche Website mit einem Laufzeit-Theme-System, einer typisierten Plugin-Registry und erstklassigem SEO und GEO, damit sowohl Suchmaschinen als auch KI-Assistenten Ihre Inhalte finden.</p>",
+        "ru": "<p>Cmstack-Laravel — это открытая CMS: лёгкая, быстрая, с приоритетом SEO, удобная для чтения и расширения.</p><p>Она сочетает серверный рендеринг публичного сайта с системой тем во время выполнения, типизированным реестром плагинов и первоклассными SEO и GEO, чтобы ваш контент находили и поисковики, и ИИ-ассистенты.</p>"
+      }
+    },
+    {
+      "slug": "contact",
+      "title": { "en": "Contact", "de": "Kontakt", "ru": "Контакты" },
+      "content": {
+        "en": "<p>Want to get in touch? This is a seeded demo page. Replace it with your own contact details, a form, or links to your channels from the admin panel.</p>",
+        "de": "<p>Möchten Sie Kontakt aufnehmen? Dies ist eine Demo-Seite aus dem Seed. Ersetzen Sie sie im Admin-Bereich durch Ihre eigenen Kontaktdaten, ein Formular oder Links zu Ihren Kanälen.</p>",
+        "ru": "<p>Хотите связаться? Это демонстрационная страница из сидера. Замените её в админке своими контактами, формой или ссылками на ваши каналы.</p>"
+      }
+    }
+  ]
+}

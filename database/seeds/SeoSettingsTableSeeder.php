@@ -19,7 +19,7 @@ class SeoSettingsTableSeeder extends Seeder
             return;
         }
 
-        DB::table('seo_settings')->insert([
+        DB::table('seo_settings')->insertOrIgnore([
             'title_separator' => '—',
             'default_meta_description' => 'Cmstack-Laravel — a fast, lightweight Laravel content platform.',
             'default_og_image' => null,

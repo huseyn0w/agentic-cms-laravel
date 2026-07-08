@@ -44,17 +44,17 @@
                 <div class="lg:col-span-2">
                     <x-card>
                         <div class="grid grid-cols-1 gap-x-5 md:grid-cols-2">
-                            <x-field label="@lang('cpanel/posts.title')" name="cpanel_title">
+                            <x-field label="{{ __('cpanel/posts.title') }}" name="cpanel_title">
                                 <input type="text" id="cpanel_title" required class="form-control w-full" name="title" value="{{ old('title', $entity->title) }}">
                             </x-field>
-                            <x-field label="@lang('cpanel/posts.slug')" name="cpanel_slug">
+                            <x-field label="{{ __('cpanel/posts.slug') }}" name="cpanel_slug">
                                 <input type="text" id="cpanel_slug" required class="form-control w-full" name="slug" value="{{ old('slug',$entity->slug) }}">
                             </x-field>
                         </div>
-                        <x-field label="@lang('cpanel/posts.preview')">
+                        <x-field label="{{ __('cpanel/posts.preview') }}">
                             <textarea name="preview" id="editor" class="my-editor form-control w-full">{{old('preview',$entity->preview)}}</textarea>
                         </x-field>
-                        <x-field label="@lang('cpanel/posts.content')">
+                        <x-field label="{{ __('cpanel/posts.content') }}">
                             <textarea name="content" id="editor" class="my-editor form-control w-full">{{old('content',$entity->content)}}</textarea>
                         </x-field>
                         @include('cpanel.core.seo')
@@ -64,36 +64,36 @@
                 <div class="lg:col-span-1 space-y-5">
                     <x-card>
                         @include('cpanel.core.translation')
-                        <x-field label="@lang('cpanel/posts.category')">
+                        <x-field label="{{ __('cpanel/posts.category') }}">
                             <select name="category[]" multiple class="form-control category_list multiple_list" id="post_category">
                                 @foreach($categories_list as $category)
                                     <option value="{{$category->category_id}}" {{ in_array($category->category_id, $categories_ids) ? 'selected': null}}>{{$category->title}}</option>
                                 @endforeach
                             </select>
                         </x-field>
-                        <x-field label="@lang('cpanel/posts.tags')">
-                            <input type="text" name="tags" class="form-control w-full" id="post_tags" value="{{ old('tags', $tags_value) }}" placeholder="@lang('cpanel/posts.tags_hint')">
+                        <x-field label="{{ __('cpanel/posts.tags') }}">
+                            <input type="text" name="tags" class="form-control w-full" id="post_tags" value="{{ old('tags', $tags_value) }}" placeholder="{{ __('cpanel/posts.tags_hint') }}">
                         </x-field>
-                        <x-field label="@lang('cpanel/posts.author')">
+                        <x-field label="{{ __('cpanel/posts.author') }}">
                             <select name="author_id" id="author_id" class="form-control">
                                 @foreach($users_list as $user)
                                     <option value="{{$user->id}}" {{$user->id === $entity->author_id ? 'selected' : ''}}>{{$user->username}}</option>
                                 @endforeach
                             </select>
                         </x-field>
-                        <x-field label="@lang('cpanel/posts.publish_date')">
+                        <x-field label="{{ __('cpanel/posts.publish_date') }}">
                             <input class="form-control w-full" value="{{old('updated_at', $entity->updated_at)}}" autocomplete="off" name="updated_at" required id="date_time_picker" type="text" />
                         </x-field>
-                        <x-field label="@lang('cpanel/posts.status')">
+                        <x-field label="{{ __('cpanel/posts.status') }}">
                             <select name="status" id="user_role" class="form-control">
                                 <option value="0" {{$entity->status === 0 ? 'selected' :null}}>@lang('cpanel/posts.status_private')</option>
                                 <option value="1" {{$entity->status === 1 ? 'selected' :null}}>@lang('cpanel/posts.status_published')</option>
                             </select>
                         </x-field>
-                        <x-field label="@lang('cpanel/posts.schedule')" help="@lang('cpanel/posts.schedule_hint')">
+                        <x-field label="{{ __('cpanel/posts.schedule') }}" help="{{ __('cpanel/posts.schedule_hint') }}">
                             <input class="form-control w-full" type="datetime-local" name="scheduled_at" value="{{ old('scheduled_at', optional($entity->scheduled_at)->format('Y-m-d\TH:i')) }}">
                         </x-field>
-                        <x-field label="@lang('cpanel/posts.thumbnail')" name="custom_input_image">
+                        <x-field label="{{ __('cpanel/posts.thumbnail') }}" name="custom_input_image">
                             <span class="input-group-btn">
                                 <a id="lfm" data-input="thumbnail" data-preview="holder" class="choose-image">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m21 16-5-5L5 19"/></svg>

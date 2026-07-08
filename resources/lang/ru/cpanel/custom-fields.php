@@ -25,6 +25,7 @@ return [
     'link_cpanel_label' => 'Лейбл CPanel',
     'link_url' => 'URL',
     'link_target' => 'Открыть на новой вкладке?',
+    'open_in_new_tab' => 'Открыть в новой вкладке',
     'text_label' => 'Лейбл',
     'text_name' => 'Название',
     'textarea_label' => 'Лейбл',

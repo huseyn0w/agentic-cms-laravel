@@ -42,14 +42,14 @@
                     </div>
                 @endif
 
-                <x-field name="comment" label="@lang('default/post.comment')" :error="$errors->first('comment')">
+                <x-field name="comment" label="{{ __('default/post.comment') }}" :error="$errors->first('comment')">
                     <textarea
                         x-ref="field"
                         id="comment"
                         name="comment"
                         rows="5"
                         required
-                        placeholder="@lang('default/post.comment')"
+                        placeholder="{{ __('default/post.comment') }}"
                         class="w-full resize-y bg-surface border border-border-strong rounded-sm px-3 py-2.5 text-fg placeholder:text-subtle focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/30 font-sans text-base"
                         @if($errors->has('comment')) aria-invalid="true" aria-describedby="comment-error" @endif
                     ></textarea>

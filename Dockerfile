@@ -44,7 +44,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
         zip \
         bcmath \
         exif \
-        intl
+        intl \
+        sockets
 
 # Install the imagick PECL extension.
 # Pin a stable release that builds against PHP 8.3 reliably.

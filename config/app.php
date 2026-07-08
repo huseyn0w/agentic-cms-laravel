@@ -188,6 +188,7 @@ return [
 
     'languages_list' => [
         'en' => ['title' => 'English', 'icon' => env('APP_URL').'/admin/img/flags/en.png'],
+        'de' => ['title' => 'Deutsch', 'icon' => env('APP_URL').'/admin/img/flags/de.png'],
         'ru' => ['title' => 'Русский', 'icon' => env('APP_URL').'/admin/img/flags/ru.png'],
     ],
 

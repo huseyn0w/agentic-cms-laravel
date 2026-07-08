@@ -43,10 +43,10 @@
                     <x-eyebrow>@lang('cpanel/settings.geo_identity_section')</x-eyebrow>
                 </x-slot:header>
                 <div class="space-y-4">
-                    <x-field label="@lang('cpanel/settings.geo_business_name')" name="business_name">
+                    <x-field label="{{ __('cpanel/settings.geo_business_name') }}" name="business_name">
                         <input type="text" id="business_name" name="business_name" class="form-control w-full" value="{{ old('business_name', $geo_settings->business_name) }}" data-testid="geo-business-name">
                     </x-field>
-                    <x-field label="@lang('cpanel/settings.geo_business_type')" name="business_type">
+                    <x-field label="{{ __('cpanel/settings.geo_business_type') }}" name="business_type">
                         @php $type = old('business_type', $geo_settings->business_type ?? 'Organization'); @endphp
                         <select id="business_type" name="business_type" class="form-control w-full" data-testid="geo-business-type">
                             <option value="Organization" @selected($type === 'Organization')>@lang('cpanel/settings.geo_type_organization')</option>
@@ -55,10 +55,10 @@
                             <option value="Person" @selected($type === 'Person')>@lang('cpanel/settings.geo_type_person')</option>
                         </select>
                     </x-field>
-                    <x-field label="@lang('cpanel/settings.geo_description')" name="description">
+                    <x-field label="{{ __('cpanel/settings.geo_description') }}" name="description">
                         <textarea rows="3" id="description" name="description" class="form-control w-full" data-testid="geo-description">{{ old('description', $geo_settings->description) }}</textarea>
                     </x-field>
-                    <x-field label="@lang('cpanel/settings.geo_founder_name')" name="founder_name">
+                    <x-field label="{{ __('cpanel/settings.geo_founder_name') }}" name="founder_name">
                         <input type="text" id="founder_name" name="founder_name" class="form-control w-full" value="{{ old('founder_name', $geo_settings->founder_name) }}">
                     </x-field>
                 </div>
@@ -70,10 +70,10 @@
                     <x-eyebrow>@lang('cpanel/settings.geo_services_section')</x-eyebrow>
                 </x-slot:header>
                 <div class="space-y-4">
-                    <x-field label="@lang('cpanel/settings.geo_services')" name="services" help="@lang('cpanel/settings.geo_services_help')">
+                    <x-field label="{{ __('cpanel/settings.geo_services') }}" name="services" help="{{ __('cpanel/settings.geo_services_help') }}">
                         <textarea rows="5" id="services" name="services" class="form-control w-full" placeholder="Laravel development&#10;Custom CMS&#10;AI / MCP integration" data-testid="geo-services">{{ old('services', $geo_settings->services) }}</textarea>
                     </x-field>
-                    <x-field label="@lang('cpanel/settings.geo_service_area')" name="service_area" help="@lang('cpanel/settings.geo_service_area_help')">
+                    <x-field label="{{ __('cpanel/settings.geo_service_area') }}" name="service_area" help="{{ __('cpanel/settings.geo_service_area_help') }}">
                         <input type="text" id="service_area" name="service_area" class="form-control w-full" value="{{ old('service_area', $geo_settings->service_area) }}" data-testid="geo-service-area">
                     </x-field>
                 </div>
@@ -85,13 +85,13 @@
                     <x-eyebrow>@lang('cpanel/settings.geo_contact_section')</x-eyebrow>
                 </x-slot:header>
                 <div class="space-y-4">
-                    <x-field label="@lang('cpanel/settings.geo_contact_email')" name="contact_email">
+                    <x-field label="{{ __('cpanel/settings.geo_contact_email') }}" name="contact_email">
                         <input type="email" id="contact_email" name="contact_email" class="form-control w-full" value="{{ old('contact_email', $geo_settings->contact_email) }}">
                     </x-field>
-                    <x-field label="@lang('cpanel/settings.geo_contact_phone')" name="contact_phone">
+                    <x-field label="{{ __('cpanel/settings.geo_contact_phone') }}" name="contact_phone">
                         <input type="text" id="contact_phone" name="contact_phone" class="form-control w-full" value="{{ old('contact_phone', $geo_settings->contact_phone) }}">
                     </x-field>
-                    <x-field label="@lang('cpanel/settings.geo_address')" name="address">
+                    <x-field label="{{ __('cpanel/settings.geo_address') }}" name="address">
                         <input type="text" id="address" name="address" class="form-control w-full" value="{{ old('address', $geo_settings->address) }}">
                     </x-field>
                 </div>
@@ -103,7 +103,7 @@
                     <x-eyebrow>@lang('cpanel/settings.geo_authority_section')</x-eyebrow>
                 </x-slot:header>
                 <div class="space-y-4">
-                    <x-field label="@lang('cpanel/settings.geo_same_as')" name="same_as" help="@lang('cpanel/settings.geo_same_as_help')">
+                    <x-field label="{{ __('cpanel/settings.geo_same_as') }}" name="same_as" help="{{ __('cpanel/settings.geo_same_as_help') }}">
                         <textarea rows="4" id="same_as" name="same_as" class="form-control w-full" placeholder="https://linkedin.com/in/...&#10;https://github.com/...">{{ old('same_as', $geo_settings->same_as) }}</textarea>
                     </x-field>
                 </div>
@@ -115,7 +115,7 @@
                     <x-eyebrow>@lang('cpanel/settings.geo_faq_section')</x-eyebrow>
                 </x-slot:header>
                 <div class="space-y-4">
-                    <x-field label="@lang('cpanel/settings.geo_faq')" name="faq" help="@lang('cpanel/settings.geo_faq_help')">
+                    <x-field label="{{ __('cpanel/settings.geo_faq') }}" name="faq" help="{{ __('cpanel/settings.geo_faq_help') }}">
                         <textarea rows="5" id="faq" name="faq" class="form-control w-full" placeholder="Do you work remotely? | Yes, with clients across the EU and worldwide.">{{ old('faq', $geo_settings->faq) }}</textarea>
                     </x-field>
                 </div>

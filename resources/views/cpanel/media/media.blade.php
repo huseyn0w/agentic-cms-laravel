@@ -61,7 +61,7 @@
                     name="upload[]"
                     multiple
                     class="sr-only"
-                    aria-label="@lang('cpanel/media.dropzone_input_label')"
+                    aria-label="{{ __('cpanel/media.dropzone_input_label') }}"
                     @change="onSelect($event)"
                     data-testid="media-file-input"
                 >
@@ -94,7 +94,7 @@
                 src="/filemanager"
                 class="block w-full border-0"
                 style="height: 70vh; min-height: 500px;"
-                title="@lang('cpanel/media.headline')"
+                title="{{ __('cpanel/media.headline') }}"
             ></iframe>
         </div>
     </div>

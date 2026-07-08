@@ -10,52 +10,36 @@ class CPanelCategorySeeder extends Seeder
     /**
      * Run the database seeds.
      *
+     * Seeds the three demo categories (Announcements, Guides, Engineering) from
+     * the canonical trilingual dataset, one category_translations row per locale
+     * (en/de/ru). Slugs are shared across locales. Owned by admin (author id 1).
+     *
      * @return void
      */
     public function run()
     {
-        DB::table('categories')->insert([
-            ['id' => 1], ['id' => 2],
-        ]);
+        $categoryRows = [];
+        foreach (DemoContent::CATEGORY_IDS as $id) {
+            $categoryRows[] = ['id' => $id];
+        }
+        DB::table('categories')->insertOrIgnore($categoryRows);
 
-        DB::table('category_translations')->insert([
-            [
-                'category_id' => 1,
-                'locale' => 'en',
-                'title' => 'Main parent category',
-                'slug' => 'parent_category',
-                'description' => 'This is main category',
-                'meta_description' => 'Main parent category',
-                'meta_keywords' => 'main category, category, parent category',
-            ],
-            [
-                'category_id' => 1,
-                'locale' => 'ru',
-                'title' => 'Родительская категория',
-                'slug' => 'roditelskaya_kateqoriya',
-                'description' => 'Описание родительской категории',
-                'meta_description' => 'Главная родительская категория',
-                'meta_keywords' => 'главная категория, категория, родительская категория',
-            ],
-            [
-                'category_id' => 2,
-                'locale' => 'en',
-                'title' => 'About',
-                'slug' => 'about',
-                'description' => 'Here is news from About category',
-                'meta_description' => 'About category',
-                'meta_keywords' => 'about, category',
-            ],
-            [
-                'category_id' => 2,
-                'locale' => 'ru',
-                'title' => 'О проекте',
-                'slug' => 'o_proyekte',
-                'description' => 'Тут распологаются новости проекта',
-                'meta_description' => 'О проекте',
-                'meta_keywords' => 'о проекте, категория',
-            ],
-        ]);
-
+        $translationRows = [];
+        foreach (DemoContent::categories() as $category) {
+            $id = DemoContent::CATEGORY_IDS[$category['slug']];
+            foreach (DemoContent::LOCALES as $locale) {
+                $translationRows[] = [
+                    'category_id' => $id,
+                    'author_id' => 1,
+                    'locale' => $locale,
+                    'title' => $category['name'][$locale],
+                    'slug' => $category['slug'],
+                    'description' => $category['description'][$locale],
+                    'meta_description' => $category['description'][$locale],
+                    'meta_keywords' => $category['slug'],
+                ];
+            }
+        }
+        DB::table('category_translations')->insertOrIgnore($translationRows);
     }
 }

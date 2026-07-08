@@ -28,7 +28,7 @@
             @csrf
             @method('PUT')
             <x-card>
-                <x-field label="@lang('cpanel/roles.role_name')" name="name">
+                <x-field label="{{ __('cpanel/roles.role_name') }}" name="name">
                     <input type="text" id="name" required class="form-control w-full" name="name" value="{{ old('name', $role->name) }}">
                 </x-field>
 

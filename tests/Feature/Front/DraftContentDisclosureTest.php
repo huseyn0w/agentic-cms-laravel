@@ -57,12 +57,12 @@ class DraftContentDisclosureTest extends TestCase
 
     /**
      * A PUBLISHED post (status=1) MUST be accessible (no regression).
-     * Uses the seeded 'post-example' fixture which has full data required by
+     * Uses the seeded 'introducing-the-cms' fixture which has full data required by
      * the post template (categories, etc.) to avoid 500s from missing relations.
      */
     public function test_published_post_returns_200_for_guest(): void
     {
-        $this->get('/posts/post-example')->assertStatus(200);
+        $this->get('/posts/introducing-the-cms')->assertStatus(200);
     }
 
     /**

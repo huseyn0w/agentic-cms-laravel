@@ -10,8 +10,8 @@ use Tests\TestCase;
 /**
  * Phase 7 (SEO/GEO): public head meta, sitemap.xml, robots.txt and llms.txt.
  *
- * Seeded fixtures: page "/" (home) + "contact", post "post-example",
- * category "parent_category".
+ * Seeded fixtures: page "/" (home) + "contact", post "introducing-the-cms",
+ * category "announcements".
  */
 class SeoMetaTest extends TestCase
 {
@@ -42,7 +42,7 @@ class SeoMetaTest extends TestCase
 
     public function test_post_has_article_jsonld_and_og_tags(): void
     {
-        $html = $this->get('/posts/post-example')->assertStatus(200)->getContent();
+        $html = $this->get('/posts/introducing-the-cms')->assertStatus(200)->getContent();
 
         $this->assertStringContainsString('property="og:title"', $html);
         $this->assertStringContainsString('property="og:type" content="article"', $html);
@@ -53,7 +53,7 @@ class SeoMetaTest extends TestCase
 
     public function test_legacy_addthis_script_is_gone_from_posts(): void
     {
-        $html = $this->get('/posts/post-example')->getContent();
+        $html = $this->get('/posts/introducing-the-cms')->getContent();
         $this->assertStringNotContainsString('addthis', $html);
     }
 
@@ -84,7 +84,7 @@ class SeoMetaTest extends TestCase
 
         $xml = $response->getContent();
         $this->assertStringContainsString('<urlset', $xml);
-        $this->assertStringContainsString('posts/post-example', $xml);
+        $this->assertStringContainsString('posts/introducing-the-cms', $xml);
         $this->assertStringContainsString('xhtml:link', $xml);
 
         // Well-formed XML.

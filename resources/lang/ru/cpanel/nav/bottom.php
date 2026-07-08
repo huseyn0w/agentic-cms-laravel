@@ -9,4 +9,5 @@
 
 return [
     'made' => 'Автор ',
+    'developed_by' => 'Разработано',
 ];

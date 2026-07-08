@@ -9,4 +9,5 @@
 
 return [
     'made' => 'Made with love by ',
+    'developed_by' => 'Developed by',
 ];

@@ -16,7 +16,7 @@ use Tests\TestCase;
  * future-scheduled draft), are well-formed XML, lightly cached, and registered
  * before the front catch-all. Mirrors the sitemap pattern.
  *
- * Seeded fixtures include the published post "post-example".
+ * Seeded fixtures include the published post "introducing-the-cms".
  */
 class FeedTest extends TestCase
 {
@@ -57,7 +57,7 @@ class FeedTest extends TestCase
         $xml = $response->getContent();
         $this->assertStringContainsString('<rss', $xml);
         $this->assertStringContainsString('<channel>', $xml);
-        $this->assertStringContainsString('posts/post-example', $xml);
+        $this->assertStringContainsString('posts/introducing-the-cms', $xml);
         $this->assertStringContainsString('<item>', $xml);
 
         // Well-formed XML.
@@ -83,7 +83,7 @@ class FeedTest extends TestCase
         $xml = $response->getContent();
         $this->assertStringContainsString('<feed', $xml);
         $this->assertStringContainsString('xmlns="http://www.w3.org/2005/Atom"', $xml);
-        $this->assertStringContainsString('posts/post-example', $xml);
+        $this->assertStringContainsString('posts/introducing-the-cms', $xml);
         $this->assertStringContainsString('<entry>', $xml);
 
         $this->assertInstanceOf(\SimpleXMLElement::class, simplexml_load_string($xml));

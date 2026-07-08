@@ -40,7 +40,7 @@ $is_trash = $route_name == "cpanel_trashed_services_list";
         @endif
 
         {{-- Status filter tabs: all vs trashed (DESIGN_SYSTEM §5 / Tabs) --}}
-        <nav aria-label="@lang('cpanel/services.general_services')" class="mb-4 flex gap-1 border-b border-border">
+        <nav aria-label="{{ __('cpanel/services.general_services') }}" class="mb-4 flex gap-1 border-b border-border">
             <a href="{{route('cpanel_services_list')}}" @if(!$is_trash) aria-current="page" @endif class="-mb-px border-b-2 px-4 py-2.5 text-sm font-sans transition-colors duration-[var(--dur-fast)] {{ !$is_trash ? 'border-primary font-medium text-fg' : 'border-transparent text-muted hover:text-fg' }}">@lang('cpanel/services.general_services')</a>
             <a href="{{route('cpanel_trashed_services_list')}}" @if($is_trash) aria-current="page" @endif class="-mb-px border-b-2 px-4 py-2.5 text-sm font-sans transition-colors duration-[var(--dur-fast)] {{ $is_trash ? 'border-primary font-medium text-fg' : 'border-transparent text-muted hover:text-fg' }}">@lang('cpanel/services.trashed_services')</a>
         </nav>

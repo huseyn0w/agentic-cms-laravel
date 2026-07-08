@@ -39,7 +39,7 @@ $current_lang = get_current_lang_prefix();
                         id="query"
                         required
                         value="{{ isset($searchData['query']) ? $searchData['query'] : '' }}"
-                        placeholder="@lang('default/page.search_placeholder')"
+                        placeholder="{{ __('default/page.search_placeholder') }}"
                         @if($errors->has('query')) aria-invalid="true" aria-describedby="query-error" @endif
                         class="field-input !rounded-full !py-4 pl-12 pr-36 text-lg"
                     >
@@ -162,7 +162,7 @@ $current_lang = get_current_lang_prefix();
         </div>
 
     @elseif(isset($searchData) && $searchData['result']->total() === 0)
-        <x-empty-state icon="search" headline="@lang('default/page.search_nothing_found')" />
+        <x-empty-state icon="search" headline="{{ __('default/page.search_nothing_found') }}" />
     @endif
 
 </section>

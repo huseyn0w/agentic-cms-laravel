@@ -31,7 +31,7 @@
             </x-slot:header>
 
             @if($posts->isEmpty())
-                <x-empty-state icon="info" headline="@lang('cpanel/home.no_posts')" class="py-8" />
+                <x-empty-state icon="info" headline="{{ __('cpanel/home.no_posts') }}" class="py-8" />
             @else
                 <ul class="divide-y divide-border">
                     @foreach($posts as $post)
@@ -58,7 +58,7 @@
             </x-slot:header>
 
             @if($comments->isEmpty())
-                <x-empty-state icon="info" headline="@lang('cpanel/home.no_comments')" class="py-8" />
+                <x-empty-state icon="info" headline="{{ __('cpanel/home.no_comments') }}" class="py-8" />
             @else
                 <ul class="divide-y divide-border">
                     @foreach($comments as $comment)
@@ -82,7 +82,7 @@
             </x-slot:header>
 
             @if($users->isEmpty())
-                <x-empty-state icon="info" headline="@lang('cpanel/home.no_users')" class="py-8" />
+                <x-empty-state icon="info" headline="{{ __('cpanel/home.no_users') }}" class="py-8" />
             @else
                 <ul class="divide-y divide-border">
                     @foreach($users as $user)

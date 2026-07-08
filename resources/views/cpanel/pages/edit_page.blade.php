@@ -42,14 +42,14 @@
                 <div class="lg:col-span-2">
                     <x-card>
                         <div class="grid grid-cols-1 gap-x-5 md:grid-cols-2">
-                            <x-field label="@lang('cpanel/pages.title')" name="cpanel_title">
+                            <x-field label="{{ __('cpanel/pages.title') }}" name="cpanel_title">
                                 <input type="text" id="cpanel_title" required class="form-control w-full" name="title" value="{{ old('title', $entity->title) }}">
                             </x-field>
-                            <x-field label="@lang('cpanel/pages.slug')" name="cpanel_slug">
+                            <x-field label="{{ __('cpanel/pages.slug') }}" name="cpanel_slug">
                                 <input type="text" id="cpanel_slug" required class="form-control w-full" name="slug" value="{{ old('slug',$entity->slug) }}">
                             </x-field>
                         </div>
-                        <x-field label="@lang('cpanel/pages.content')">
+                        <x-field label="{{ __('cpanel/pages.content') }}">
                             <textarea name="content" id="editor" class="my-editor form-control w-full">{{old('content',$entity->content)}}</textarea>
                         </x-field>
                         @include('cpanel.core.seo')
@@ -60,24 +60,24 @@
                 <div class="lg:col-span-1">
                     <x-card>
                         @include('cpanel.core.translation')
-                        <x-field label="@lang('cpanel/pages.author')">
+                        <x-field label="{{ __('cpanel/pages.author') }}">
                             <select name="author_id" id="author_id" class="form-control">
                                 @foreach($users_list as $user)
                                     <option value="{{$user->id}}" {{$user->id === $entity->author_id ? 'selected' : ''}}>{{$user->username}}</option>
                                 @endforeach
                             </select>
                         </x-field>
-                        <x-field label="@lang('cpanel/pages.publish_date')">
+                        <x-field label="{{ __('cpanel/pages.publish_date') }}">
                             <input class="form-control w-full" value="{{old('updated_at', $entity->updated_at)}}" autocomplete="off" name="updated_at" required id="date_time_picker" type="text" />
                         </x-field>
-                        <x-field label="@lang('cpanel/pages.status')">
+                        <x-field label="{{ __('cpanel/pages.status') }}">
                             <select name="status" id="user_role" class="form-control">
                                 <option value="0" {{$entity->status === 0 ? 'selected' :null}}>@lang('cpanel/pages.status_private')</option>
                                 <option value="1" {{$entity->status === 1 ? 'selected' :null}}>@lang('cpanel/pages.status_published')</option>
                             </select>
                         </x-field>
                         @if(!empty($page_templates) && $page_templates)
-                            <x-field label="@lang('cpanel/pages.page_template')">
+                            <x-field label="{{ __('cpanel/pages.page_template') }}">
                                 <select name="template" class="form-control">
                                     @foreach($page_templates as $file_name => $template_header)
                                         <option value="{{$file_name}}" {{$entity->template === $file_name ? 'selected' : null}}>{{$template_header}}</option>

@@ -25,11 +25,11 @@ class CPanelMenusSeeder extends Seeder
             ],
         ];
 
-        DB::table('menus')->insert(
+        DB::table('menus')->insertOrIgnore(
             ['slug' => 'header_menu']
         );
 
-        DB::table('menu_translations')->insert([
+        DB::table('menu_translations')->insertOrIgnore([
             [
                 'title' => 'Header Menu',
                 'locale' => 'en',

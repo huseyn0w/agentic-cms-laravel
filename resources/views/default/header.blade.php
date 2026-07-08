@@ -134,7 +134,7 @@ $languages = get_translation_links();
         <a
             href="{{config('app.url')}}"
             class="flex shrink-0 items-center gap-2.5"
-            aria-label="@lang('default/header.homepage_title')"
+            aria-label="{{ __('default/header.homepage_title') }}"
             data-testid="header-wordmark"
         >
             @if($logo_url)
@@ -155,7 +155,7 @@ $languages = get_translation_links();
             <a
                 href="{{route('get_search_page')}}"
                 class="nav-link inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
-                aria-label="@lang('default/header.search')"
+                aria-label="{{ __('default/header.search') }}"
                 data-testid="header-search"
             >
                 <x-icon name="search" width="18" height="18" />

@@ -1,0 +1,89 @@
+<?php
+
+/**
+ * Cmstack-Laravel
+ * File: settings.php
+ * Created by Elman (https://linkedin.com/in/huseyn0w)
+ * Date: 19.11.2019
+ */
+
+return [
+
+    'general_settings_headline' => 'Website-Einstellungen',
+    'site_options_headline' => 'Website-Optionen',
+    'general_settings_updates_success' => 'Einstellungen wurden aktualisiert',
+    'site_options_updates_success' => 'Optionen wurden aktualisiert',
+    'website_name' => 'Website-Name',
+    'tagline' => 'Slogan',
+    'tagline_content' => 'Erklären Sie in wenigen Worten, worum es auf dieser Website geht.',
+    'contact_email' => 'Kontakt-E-Mail',
+    'membership' => 'Mitgliedschaft',
+    'email_verification' => 'E-Mail-Bestätigung für neue Mitglieder erforderlich',
+    'active_template' => 'Name der aktiven Vorlage',
+    'no_template' => 'Keine Vorlagen',
+    'posts_per_page' => 'Beiträge pro Seite',
+    'comments_per_page' => 'Kommentare pro Seite',
+    'update_button_label' => 'Einstellungen aktualisieren',
+    'logo' => 'Logo',
+    'choose_image' => 'Bild auswählen',
+    'footer_copyright' => 'Fußzeilen-Copyright',
+    'linkedin_url' => 'LinkedIn-URL',
+    'github_url' => 'GitHub-URL',
+
+    // Phase 7 (SEO/GEO)
+    'seo_settings_headline' => 'SEO-Einstellungen',
+    'seo_settings_updates_success' => 'SEO-Einstellungen wurden aktualisiert',
+    'seo_meta_section' => 'Meta-Standardwerte',
+    'seo_title_separator' => 'Titeltrennzeichen',
+    'seo_default_description' => 'Standard-Meta-Beschreibung',
+    'seo_default_og_image' => 'Standard-URL für Social-/OG-Bild',
+    'seo_social_section' => 'Soziale Netzwerke',
+    'seo_og_site_name' => 'OG-Website-Name',
+    'seo_twitter_handle' => 'Twitter-Handle',
+    'seo_verification_section' => 'Suchmaschinen-Verifizierung',
+    'seo_google_verification' => 'Google Search Console',
+    'seo_bing_verification' => 'Bing',
+    'seo_analytics_section' => 'Analytics (optional)',
+    'seo_analytics_help' => 'Leer lassen, um kein Analytics-Skript zu laden. Wenn gesetzt, wird es asynchron/verzögert geladen.',
+    'seo_ga4_id' => 'Google-Analytics-4-ID',
+    'seo_gtm_id' => 'Google-Tag-Manager-ID',
+    'seo_indexing_section' => 'Indexierung, robots & Sitemap',
+    'seo_discourage' => 'Suchmaschinen von der Indexierung dieser Website abhalten',
+    'seo_discourage_help' => 'Fügt ein websiteweites noindex und Disallow: / in der robots.txt hinzu. Nur für Staging verwenden.',
+    'seo_sitemap_enabled' => 'sitemap.xml aktivieren',
+    'seo_robots_extra' => 'Zusätzliche Zeilen für robots.txt',
+    'seo_robots_extra_help' => 'Wird der generierten robots.txt wörtlich angehängt (eine Direktive pro Zeile).',
+
+    // GEO (Generative Engine Optimization) — what AI assistants read to cite you
+    'geo_settings_headline' => 'GEO-Einstellungen (KI-Sichtbarkeit)',
+    'geo_intro' => 'Teilen Sie generativen Engines (ChatGPT, Perplexity, Gemini, Google AI) mit, wer Sie sind und was Sie anbieten. Diese Antworten werden automatisch in maschinenlesbares JSON-LD und llms.txt umgewandelt. Hinweis: Dadurch wird Ihre Website zitierfähig — es garantiert jedoch nicht von sich aus, dass KI-Assistenten Sie empfehlen (dafür sind außerdem externe Erwähnungen und Bewertungen erforderlich).',
+    'geo_settings_updates_success' => 'GEO-Einstellungen wurden aktualisiert',
+    'geo_identity_section' => 'Identität',
+    'geo_business_name' => 'Unternehmens-/Markenname (exakte Schreibweise für Zitate)',
+    'geo_business_type' => 'Entitätstyp',
+    'geo_type_organization' => 'Organisation',
+    'geo_type_localbusiness' => 'Lokales Unternehmen (hat eine physische Adresse)',
+    'geo_type_professionalservice' => 'Professionelle Dienstleistung',
+    'geo_type_person' => 'Person / Einzelunternehmer',
+    'geo_description' => 'Kurzbeschreibung — was Sie tun und wen Sie bedienen',
+    'geo_founder_name' => 'Name des Gründers / Experten',
+    'geo_services_section' => 'Leistungen & Reichweite',
+    'geo_services' => 'Angebotene Leistungen (eine pro Zeile)',
+    'geo_services_help' => 'Diese werden zu den Schlüsselwörtern, die die KI mit Ihnen verknüpft. Verwenden Sie genau die Worte, die ein Kunde sagen würde.',
+    'geo_service_area' => 'Einzugsgebiet / Region',
+    'geo_service_area_help' => 'z. B. „Baku, Aserbaidschan; Remote, EU“.',
+    'geo_contact_section' => 'Kontakt',
+    'geo_contact_email' => 'Kontakt-E-Mail',
+    'geo_contact_phone' => 'Kontakttelefon',
+    'geo_address' => 'Adresse (für lokale Unternehmen)',
+    'geo_authority_section' => 'Autorität & Zitate',
+    'geo_same_as' => 'Profil-/Social-URLs (eine pro Zeile)',
+    'geo_same_as_help' => 'LinkedIn, GitHub, Crunchbase, Verzeichnisse, Bewertungen — starke Signale, die die KI nutzt, um Ihnen zu vertrauen und Sie zu zitieren.',
+    'geo_faq_section' => 'FAQ (von KI-Assistenten zitiert)',
+    'geo_faq' => 'Fragen & Antworten — eine „Frage | Antwort“ pro Zeile',
+    'geo_faq_help' => 'Wird als FAQPage-strukturierte Daten dargestellt, die generative Engines direkt zitieren.',
+    'geo_output_section' => 'Ausgabe',
+    'geo_emit_jsonld' => 'JSON-LD-strukturierte Daten auf der Startseite ausgeben',
+    'geo_include_in_llms' => 'Dies in /llms.txt aufnehmen',
+
+];

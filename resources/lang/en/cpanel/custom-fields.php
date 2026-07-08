@@ -25,6 +25,7 @@ return [
     'link_cpanel_label' => 'CPanel label',
     'link_url' => 'URL',
     'link_target' => 'Open in tab?',
+    'open_in_new_tab' => 'Open in new tab',
     'text_label' => 'Label',
     'text_name' => 'Name',
     'textarea_label' => 'Label',

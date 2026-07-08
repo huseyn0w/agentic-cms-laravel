@@ -32,35 +32,35 @@
                                 <label class="field-label">@lang('cpanel/users.username')</label>
                                 <p class="rounded-lg bg-surface-2 px-3.5 py-2.5 text-sm font-medium text-fg">{{$user->username}}</p>
                             </div>
-                            <x-field label="@lang('cpanel/users.email')" name="email">
+                            <x-field label="{{ __('cpanel/users.email') }}" name="email">
                                 <input type="email" id="email" class="form-control w-full" name="email" value="{{ old('email', $user->email) }}">
                             </x-field>
-                            <x-field label="@lang('cpanel/users.new_password')" name="password">
+                            <x-field label="{{ __('cpanel/users.new_password') }}" name="password">
                                 <input type="password" id="password" class="form-control w-full" name="password" value="">
                             </x-field>
-                            <x-field label="@lang('cpanel/users.new_password_confirmation')" name="confirm_password">
+                            <x-field label="{{ __('cpanel/users.new_password_confirmation') }}" name="confirm_password">
                                 <input type="password" id="confirm_password" class="form-control w-full" name="password_confirmation" value="">
                             </x-field>
-                            <x-field label="@lang('cpanel/users.name')" name="name">
+                            <x-field label="{{ __('cpanel/users.name') }}" name="name">
                                 <input type="text" class="form-control w-full" id="name" name="name" value="{{ old('name', $user->name) }}">
                             </x-field>
-                            <x-field label="@lang('cpanel/users.surname')" name="surname">
+                            <x-field label="{{ __('cpanel/users.surname') }}" name="surname">
                                 <input type="text" class="form-control w-full" id="surname" name="surname" value="{{ old('surname', $user->surname) }}">
                             </x-field>
-                            <x-field label="@lang('cpanel/users.country')">
+                            <x-field label="{{ __('cpanel/users.country') }}">
                                 <select name="country" id="country" class="form-control">
                                     @foreach($countries as $country)
                                         <option value="{{$country['name']}}" {{$country['name'] === $user->country ? 'selected' : ''}}>{{$country['name']}}</option>
                                     @endforeach
                                 </select>
                             </x-field>
-                            <x-field label="@lang('cpanel/users.city')">
+                            <x-field label="{{ __('cpanel/users.city') }}">
                                 <input type="text" name="city" class="form-control w-full" value="{{ old('city', $user->city) }}">
                             </x-field>
                         </div>
 
                         @if (Auth::user()->can('manage_users', 'App\Http\Models\UserRoles'))
-                            <x-field label="@lang('cpanel/users.status')">
+                            <x-field label="{{ __('cpanel/users.status') }}">
                                 <select name="role_id" id="user_role" class="form-control">
                                     @foreach($user_roles as $role)
                                         <option value="{{$role->id}}" {{$user->role->name === $role->name ? 'selected' : ''}}>{{$role->name}}</option>
@@ -69,29 +69,29 @@
                             </x-field>
                         @endif
 
-                        <x-field label="@lang('cpanel/users.about')">
+                        <x-field label="{{ __('cpanel/users.about') }}">
                             <textarea rows="4" class="form-control w-full" name="about_me">{{ old('about_me', $user->about_me) }}</textarea>
                         </x-field>
 
                         <fieldset class="mt-2 rounded-lg border border-border p-4">
-                            <legend class="px-1 text-xs font-semibold uppercase tracking-wide text-muted">Social profiles</legend>
+                            <legend class="px-1 text-xs font-semibold uppercase tracking-wide text-muted">@lang('cpanel/users.social_profiles')</legend>
                             <div class="grid grid-cols-1 gap-x-5 md:grid-cols-2">
-                                <x-field label="@lang('cpanel/users.facebook')">
+                                <x-field label="{{ __('cpanel/users.facebook') }}">
                                     <input type="text" class="form-control w-full" name="facebook_url" placeholder="https://" value="{{ old('facebook_url', $user->facebook_url) }}">
                                 </x-field>
-                                <x-field label="@lang('cpanel/users.google')">
+                                <x-field label="{{ __('cpanel/users.google') }}">
                                     <input type="text" class="form-control w-full" name="google_url" placeholder="https://" value="{{ old('google_url', $user->google_url) }}">
                                 </x-field>
-                                <x-field label="@lang('cpanel/users.twitter')">
+                                <x-field label="{{ __('cpanel/users.twitter') }}">
                                     <input type="text" class="form-control w-full" name="twitter_url" placeholder="https://" value="{{ old('twitter_url', $user->twitter_url) }}">
                                 </x-field>
-                                <x-field label="@lang('cpanel/users.instagram')">
+                                <x-field label="{{ __('cpanel/users.instagram') }}">
                                     <input type="text" class="form-control w-full" name="instagram_url" placeholder="https://" value="{{ old('instagram_url', $user->instagram_url) }}">
                                 </x-field>
-                                <x-field label="@lang('cpanel/users.linkedin')">
+                                <x-field label="{{ __('cpanel/users.linkedin') }}">
                                     <input type="text" class="form-control w-full" name="linkedin_url" placeholder="https://" value="{{ old('linkedin_url', $user->linkedin_url) }}">
                                 </x-field>
-                                <x-field label="@lang('cpanel/users.xing')">
+                                <x-field label="{{ __('cpanel/users.xing') }}">
                                     <input type="text" class="form-control w-full" name="xing_url" placeholder="https://" value="{{ old('xing_url', $user->xing_url) }}">
                                 </x-field>
                             </div>
@@ -101,10 +101,10 @@
                             <span class="field-label">@lang('cpanel/users.gender')</span>
                             <div class="flex flex-wrap gap-6">
                                 <label class="flex cursor-pointer items-center gap-2.5 text-sm text-fg">
-                                    <input class="form-check-input" type="radio" name="gender" {{$user->gender === "male" ? 'checked' : null}} value="male" id="male"> Male
+                                    <input class="form-check-input" type="radio" name="gender" {{$user->gender === "male" ? 'checked' : null}} value="male" id="male"> @lang('cpanel/users.gender_male')
                                 </label>
                                 <label class="flex cursor-pointer items-center gap-2.5 text-sm text-fg">
-                                    <input class="form-check-input" type="radio" name="gender" {{$user->gender === "female" ? 'checked' : null}} value="female" id="female"> Female
+                                    <input class="form-check-input" type="radio" name="gender" {{$user->gender === "female" ? 'checked' : null}} value="female" id="female"> @lang('cpanel/users.gender_female')
                                 </label>
                             </div>
                         </div>

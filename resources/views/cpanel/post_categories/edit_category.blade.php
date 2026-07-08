@@ -27,15 +27,15 @@
                 @include('cpanel.core.translation')
 
                 <div class="grid grid-cols-1 gap-x-5 md:grid-cols-2">
-                    <x-field label="@lang('cpanel/categories.title')" name="cpanel_title" help="@lang('cpanel/categories.title_desc')">
+                    <x-field label="{{ __('cpanel/categories.title') }}" name="cpanel_title" help="{{ __('cpanel/categories.title_desc') }}">
                         <input type="text" id="cpanel_title" required class="form-control w-full" name="title" value="{{ old('title', $entity->title) }}">
                     </x-field>
-                    <x-field label="@lang('cpanel/categories.slug')" name="cpanel_slug" help="@lang('cpanel/categories.slug_desc')">
+                    <x-field label="{{ __('cpanel/categories.slug') }}" name="cpanel_slug" help="{{ __('cpanel/categories.slug_desc') }}">
                         <input type="text" id="cpanel_slug" required class="form-control w-full" name="slug" value="{{ old('slug', $entity->slug) }}">
                     </x-field>
                 </div>
 
-                <x-field label="@lang('cpanel/categories.parent_category')" help="@lang('cpanel/categories.parent_category_desc')">
+                <x-field label="{{ __('cpanel/categories.parent_category') }}" help="{{ __('cpanel/categories.parent_category_desc') }}">
                     <select name="parent_category_id" class="form-control">
                         <option value="">@lang('cpanel/categories.no_parent_category')</option>
                         @foreach($parent_options as $option)
@@ -44,7 +44,7 @@
                     </select>
                 </x-field>
 
-                <x-field label="@lang('cpanel/categories.description')" help="@lang('cpanel/categories.description_content')">
+                <x-field label="{{ __('cpanel/categories.description') }}" help="{{ __('cpanel/categories.description_content') }}">
                     <textarea name="description" class="form-control w-full">{{ old('description', $entity->description) }}</textarea>
                 </x-field>
 

@@ -1,7 +1,7 @@
-# cmstack-laravel — Refactor & Parity Plan
+# agentic-cms-laravel — Refactor & Parity Plan
 
 > Master plan coordinating the architecture refactor, feature-parity work, unified UI,
-> tooling, and tests required to bring `cmstack-laravel` to the cmstack canon
+> tooling, and tests required to bring `agentic-cms-laravel` to the agentic-cms canon
 > (`../FEATURE_MATRIX.md`, `../DESIGN_SYSTEM.md`). Detailed, executable per-slice plans
 > live under `docs/superpowers/plans/`.
 
@@ -48,7 +48,7 @@ external-integration concern here that justifies them. Adding them would be over
 
 ---
 
-## 2. Feature-parity gaps for cmstack-laravel (from FEATURE_MATRIX §"cmstack-laravel needs")
+## 2. Feature-parity gaps for agentic-cms-laravel (from FEATURE_MATRIX §"cmstack-laravel needs")
 
 Ordered by value/independence. Each becomes its own TDD slice with characterization +
 feature tests. **None may silently drop existing behavior.**

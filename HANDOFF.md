@@ -1,4 +1,4 @@
-# cmstack-laravel — HANDOFF
+# agentic-cms-laravel — HANDOFF
 
 > Living handoff for the canon-convergence effort. Read this + `REFACTOR_PLAN.md` +
 > `../FEATURE_MATRIX.md` + `../DESIGN_SYSTEM.md` before continuing. Last updated 2026-06-26.
@@ -328,7 +328,7 @@ Service -> Event -> Listener/Observer   (for side effects of writes)
 ## How to run
 
 ```bash
-# in cmstack-laravel/
+# in agentic-cms-laravel/
 php artisan test                       # full suite TODAY (PHPUnit; in-memory SQLite; never MySQL)
 # P10 TARGET runner (after migration): ./vendor/bin/pest --coverage  + Pest browser suite
 composer lint                          # pint --test

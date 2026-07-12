@@ -1,14 +1,14 @@
-# Cmstack-Laravel MCP server (AI connector)
+# Agentic CMS for Laravel MCP server (AI connector)
 
-Cmstack-Laravel ships a built-in **Model Context Protocol (MCP) server** so an AI client
-such as **Claude** (Claude Code CLI, the VS Code extension, or claude.ai) can manage
-your **live** site — posts, pages, categories, users, settings, and theme templates —
-through scoped, authenticated tools.
+Agentic CMS for Laravel ships a built-in **Model Context Protocol (MCP) server** so an AI
+client such as **Claude** (Claude Code CLI, the VS Code extension, or claude.ai) can manage
+your **live** site (posts, pages, categories, users, settings, and theme templates) through
+scoped, authenticated tools instead of the admin panel UI.
 
 It is built on the official [`laravel/mcp`](https://laravel.com/docs/12.x/mcp) package
 and runs **inside the Laravel app itself** (no separate Node service). Every tool runs
-as the OAuth-authenticated admin and is gated by that account's existing Cmstack-Laravel
-permissions. There is **no raw code-execution tool** — the only "code" surface is
+as the OAuth-authenticated admin and is gated by that account's existing Agentic CMS
+permissions. There is **no raw code-execution tool**: the only "code" surface is
 editing Blade templates inside the active theme, with strict path allow-listing.
 
 - **Endpoint:** `POST https://<your-site>/mcp/cmstack-laravel`
@@ -20,7 +20,7 @@ editing Blade templates inside the active theme, with strict path allow-listing.
 ## What the AI can do (tools)
 
 All tools validate their inputs and return structured results. "Requires X" is the
-Cmstack-Laravel permission the connected account must hold, or the tool returns
+Agentic CMS for Laravel permission the connected account must hold, or the tool returns
 *Permission denied*.
 
 | Domain | Tools | Permission |
@@ -85,7 +85,7 @@ authenticate with.
 ## Connect from Claude
 
 When the client first calls the server it performs the OAuth flow: your browser
-opens to Cmstack-Laravel, you **log in as the admin** and **approve** the connection, and
+opens to Agentic CMS for Laravel, you **log in as the admin** and **approve** the connection, and
 the client stores the token. Tokens expire (15 days by default; see
 `AppServiceProvider`) and refresh automatically.
 

@@ -1,13 +1,26 @@
 <p align="center">
-<img alt="Cmstack-Laravel Logo" src="https://raw.githubusercontent.com/huseyn0w/cmstack-laravel/master/public/front/default/img/readme.png">
+<img alt="Agentic CMS for Laravel Logo" src="https://raw.githubusercontent.com/huseyn0w/agentic-cms-laravel/master/public/front/default/img/readme.png">
 </p>
 
-# Cmstack-Laravel
+# Agentic CMS for Laravel
 
-**Cmstack-Laravel — a modern, open-source CMS built on Laravel.** A multilingual, SEO/GEO-ready
-content management system built on **Laravel 12 / PHP 8.3**, with a Tailwind + Vite
-front-end and a first-class admin panel. It plays the same role as a traditional content
-management system, but on a clean, testable Laravel codebase that developers actually enjoy extending.
+**The CMS your AI runs.** Agentic CMS is an open-source, AI-first CMS with a built-in MCP
+server: Claude Desktop, ChatGPT, or any MCP client can manage your whole site (content,
+media, roles, moderation, SEO) through a typed, permissioned interface, by chat instead of
+clicking through an admin panel. Write and edit content, moderate comments, run semantic
+search, or get RAG-ready answers over your own content, all from your AI assistant.
+
+This edition, **Agentic CMS for Laravel**, is a multilingual, SEO/GEO-ready content
+management system built on **Laravel 12 / PHP 8.3**, with a Tailwind + Vite front-end and a
+first-class admin panel, fast and native to the Laravel stack. It's a clean, testable
+codebase that developers actually enjoy extending.
+
+Agentic CMS is open source (GPL-3.0) and ships as a family of editions, one native app per
+stack:
+
+- **Landing page:** https://elman.group/agentic-cms/
+- **Family repo:** https://github.com/huseyn0w/agentic-cms
+- **This repo:** https://github.com/huseyn0w/agentic-cms-laravel
 
 Built and maintained by **[Elman Group](https://elman.group)**.
 
@@ -73,7 +86,7 @@ Built and maintained by **[Elman Group](https://elman.group)**.
 
 ## Architecture
 
-Cmstack-Laravel enforces **strict layering** throughout the codebase:
+Agentic CMS for Laravel enforces **strict layering** throughout the codebase:
 
 ```
 HTTP request → Controller → Service → Repository → Model
@@ -96,7 +109,7 @@ These rules are **machine-enforced** by Pest `arch()` presets in `tests/Arch/Lay
 
 ## Design system
 
-The UI implements a **canonical "quiet-luxury" editorial design system** shared across the cmstack multi-stack project (spec: `../DESIGN_SYSTEM.md`).
+The UI implements a **canonical "quiet-luxury" editorial design system** shared across the agentic-cms multi-stack project (spec: `../DESIGN_SYSTEM.md`).
 
 ### Tokens and theming
 
@@ -162,12 +175,12 @@ The fastest path. The Docker stack (nginx + PHP 8.3-FPM with imagick + MySQL 8) 
 **local development convenience** — it is **not** required at runtime in production.
 
 ```bash
-git clone <your-repo-url> cmstack-laravel && cd cmstack-laravel
+git clone <your-repo-url> agentic-cms-laravel && cd agentic-cms-laravel
 make dev
 ```
 
 **`make dev` is the single command to launch this stack — the same entry point as every
-other `cmstack-*` stack.** It bootstraps everything end-to-end, then follows the container
+other `agentic-cms-*` stack.** It bootstraps everything end-to-end, then follows the container
 logs (Ctrl-C stops following; the stack keeps running in the background):
 
 1. copies `.env.example` → `.env` (if missing),
@@ -186,7 +199,7 @@ When it is up:
 
 ### Available `make` targets
 
-Every `cmstack-*` stack shares the same core commands — `make dev`, `up`, `down`, `reset`,
+Every `agentic-cms-*` stack shares the same core commands — `make dev`, `up`, `down`, `reset`,
 `logs`, `seed`, `migrate`, `test`, `clean`, `kill` — so you launch and manage them all the
 same way. Laravel-specific extras are listed below the shared ones.
 
@@ -209,7 +222,7 @@ same way. Laravel-specific extras are listed below the shared ones.
 
 Run `make help` to see all targets.
 
-> **Ports.** This repo lives beside sibling `cmstack-*` stacks. Host ports are deduplicated so
+> **Ports.** This repo lives beside sibling `agentic-cms-*` stacks. Host ports are deduplicated so
 > they can all run at once — this stack uses **app 8080 / MySQL 33060 / Vite 5173 / Mailpit
 > 8025 + 1025** (`WEB_PORT` / `DB_FORWARD_PORT` / `VITE_PORT` / `MAILPIT_*` in `.env`). See
 > [`../PORTS.md`](../PORTS.md) for the cross-stack allocation.
@@ -385,7 +398,7 @@ so the default `composer test` run stays fast.
 
 ## SEO / GEO
 
-Cmstack-Laravel ships SEO/GEO support out of the box, built to stay fast (no
+Agentic CMS for Laravel ships SEO/GEO support out of the box, built to stay fast (no
 script bloat — public pages load only the Vite bundle and, optionally, a single async
 analytics tag):
 
@@ -408,10 +421,11 @@ async GA4/GTM id, a global "discourage search engines" toggle, sitemap toggle, a
 
 ## AI / MCP connector (manage your site from Claude)
 
-Cmstack-Laravel includes a built-in **Model Context Protocol (MCP) server**, so you can manage
-your **live** site from an AI client such as **Claude** (Claude Code CLI, the VS Code
-extension, or claude.ai) using natural language — _"create a draft post about X"_,
-_"update the SEO meta description"_, _"add a partial to the theme"_.
+Agentic CMS for Laravel ships a built-in **Model Context Protocol (MCP) server**, so you
+can manage your **live** site from an AI client such as **Claude** (Claude Code CLI, the
+VS Code extension, or claude.ai) using natural language — _"create a draft post about X"_,
+_"update the SEO meta description"_, _"add a partial to the theme"_, instead of clicking
+through the admin panel.
 
 It is built on the official [`laravel/mcp`](https://laravel.com/docs/12.x/mcp) package and
 runs **inside the Laravel app** (no separate service). Security is first-class:
@@ -482,7 +496,7 @@ Password: cmstackadmin123
 
 ## Deployment
 
-Cmstack-Laravel runs on traditional PHP hosting with **no runtime dependency on Docker**. Two
+Agentic CMS for Laravel runs on traditional PHP hosting with **no runtime dependency on Docker**. Two
 supported targets:
 
 ### Hostinger (shared hosting, no Docker)
@@ -535,7 +549,7 @@ You have two options on a VPS:
 **A) Reuse the included Docker stack** (simplest):
 
 ```bash
-git clone <repo> && cd cmstack-laravel
+git clone <repo> && cd agentic-cms-laravel
 make dev              # single-command launch (or: docker compose up -d ...)
 ```
 
@@ -562,7 +576,7 @@ reference config):
 server {
     listen 80;
     server_name your-domain.com;
-    root /var/www/cmstack-laravel/public;
+    root /var/www/agentic-cms-laravel/public;
     index index.php index.html;
     charset utf-8;
     client_max_body_size 64M;            # sized for the media/file manager
@@ -593,7 +607,7 @@ Make sure `storage/` and `bootstrap/cache/` are writable by the php-fpm user.
 
 ### Is it ready to deploy?
 
-**Yes.** Cmstack-Laravel runs cleanly **locally** (Docker via `make dev`, or fully manual), and
+**Yes.** Agentic CMS for Laravel runs cleanly **locally** (Docker via `make dev`, or fully manual), and
 deploys to both **Hostinger shared hosting** and a **VPS** with no required background
 services. A clean Docker bring-up was verified end to end: migrations + seeders succeed
 against a fresh `cmstack_laravel` MySQL database, the home page returns `200`, `/cmstack-laravel-admin`

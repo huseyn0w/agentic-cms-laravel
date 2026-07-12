@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Cmstack-Laravel — a modern, open-source multilingual CMS built on **Laravel 12 / PHP 8.3** (min PHP 8.2). Requires the `ext-imagick` PHP extension and **MySQL 8** (SQLite is used only for the test suite). Front-end is **Tailwind CSS 3 + Alpine.js bundled with Vite** (no Bootstrap/jQuery/Vue — those were removed in the modernization). Local dev can run via Docker Compose; production runs on plain PHP-FPM (Hostinger/VPS) with **no** Docker dependency.
+Agentic CMS for Laravel: an open-source, AI-first CMS with a built-in MCP server (manage the site from Claude or any MCP client), built on **Laravel 12 / PHP 8.3** (min PHP 8.2). Requires the `ext-imagick` PHP extension and **MySQL 8** (SQLite is used only for the test suite). Front-end is **Tailwind CSS 3 + Alpine.js bundled with Vite** (no Bootstrap/jQuery/Vue — those were removed in the modernization). Local dev can run via Docker Compose; production runs on plain PHP-FPM (Hostinger/VPS) with **no** Docker dependency.
 
 ## Commands
 

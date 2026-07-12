@@ -48,7 +48,7 @@ external-integration concern here that justifies them. Adding them would be over
 
 ---
 
-## 2. Feature-parity gaps for agentic-cms-laravel (from FEATURE_MATRIX §"cmstack-laravel needs")
+## 2. Feature-parity gaps for agentic-cms-laravel (from FEATURE_MATRIX §"agentic-cms-laravel needs")
 
 Ordered by value/independence. Each becomes its own TDD slice with characterization +
 feature tests. **None may silently drop existing behavior.**
@@ -351,5 +351,5 @@ mail *is* the primary user action, not a side effect of a DB write.)
 | Providers / bindings | 8 (`app/Providers/**`) | PluginBootIntegrationTest, UserPolicyTest, CommentNotificationTest, CaptchaServiceTest | ✅ covered (AppServiceProvider/Broadcast/Observer/RouteServiceProvider verified transitively) |
 | Blade components | 0 (`app/View/Components` absent) | — | ✅ n/a |
 | Factories | 1 (`UserFactory`) | exercised by 20+ test files | ✅ covered |
-| Helpers | `bootstrap/cmstack-laravel-helpers.php` | tests/Unit/HelpersTest.php | ✅ covered |
-| MCP tools | 33 (`app/Mcp/**`: 28 tools + 1 server + 4 concerns) | Mcp/CmstackLaravelServerTest (5 tools + Concerns), Mcp/WriteThemeFileToolTest | ⚠️ → ✅ (security-critical `WriteThemeFileTool` path-traversal test added) |
+| Helpers | `bootstrap/agentic-cms-laravel-helpers.php` | tests/Unit/HelpersTest.php | ✅ covered |
+| MCP tools | 33 (`app/Mcp/**`: 28 tools + 1 server + 4 concerns) | Mcp/AgenticCmsLaravelServerTest (5 tools + Concerns), Mcp/WriteThemeFileToolTest | ⚠️ → ✅ (security-critical `WriteThemeFileTool` path-traversal test added) |

@@ -44,7 +44,7 @@ class CommentModerationTest extends TestCase
         $this->makeComment();
 
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/comments')
+            ->get('/agentic-cms-laravel-admin/comments')
             ->assertStatus(200);
     }
 
@@ -53,7 +53,7 @@ class CommentModerationTest extends TestCase
         $comment = $this->makeComment(0);
 
         $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/comments/'.$comment->id.'/approve')
+            ->put('/agentic-cms-laravel-admin/comments/'.$comment->id.'/approve')
             ->assertOk();
 
         $this->assertSame(1, (int) $comment->fresh()->status);
@@ -64,7 +64,7 @@ class CommentModerationTest extends TestCase
         $comment = $this->makeComment(1);
 
         $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/comments/'.$comment->id.'/unapprove')
+            ->put('/agentic-cms-laravel-admin/comments/'.$comment->id.'/unapprove')
             ->assertOk();
 
         $this->assertSame(0, (int) $comment->fresh()->status);
@@ -76,7 +76,7 @@ class CommentModerationTest extends TestCase
         $b = $this->makeComment();
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/comments/multipleDelete', ['comments' => [$a->id, $b->id]])
+            ->delete('/agentic-cms-laravel-admin/comments/multipleDelete', ['comments' => [$a->id, $b->id]])
             ->assertRedirect();
 
         $this->assertDatabaseMissing('post_comments', ['id' => $a->id]);
@@ -91,6 +91,6 @@ class CommentModerationTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/comments')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/comments')->assertStatus(401);
     }
 }

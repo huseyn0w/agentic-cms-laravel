@@ -47,7 +47,7 @@ class PageCrudTest extends TestCase
     public function test_admin_can_create_a_page(): void
     {
         $response = $this->actingAs($this->admin)
-            ->post('/cmstack-laravel-admin/pages/new', $this->payload());
+            ->post('/agentic-cms-laravel-admin/pages/new', $this->payload());
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -60,11 +60,11 @@ class PageCrudTest extends TestCase
 
     public function test_admin_can_update_a_page(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload());
         $translation = PageTranslation::where('slug', 'about-page')->firstOrFail();
 
         $response = $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/pages/'.$translation->page_id.'/update', $this->payload([
+            ->put('/agentic-cms-laravel-admin/pages/'.$translation->page_id.'/update', $this->payload([
                 'content' => 'updated page body',
             ]));
 
@@ -75,11 +75,11 @@ class PageCrudTest extends TestCase
 
     public function test_admin_can_delete_a_page(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload());
         $translation = PageTranslation::where('slug', 'about-page')->firstOrFail();
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/pages/'.$translation->page_id.'/delete')
+            ->delete('/agentic-cms-laravel-admin/pages/'.$translation->page_id.'/delete')
             ->assertOk();
 
         // Delete is now a soft-delete (parity with posts): the page is hidden
@@ -92,8 +92,8 @@ class PageCrudTest extends TestCase
     public function test_validation_blocks_invalid_page(): void
     {
         $response = $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/pages/new')
-            ->post('/cmstack-laravel-admin/pages/new', ['title' => '']);
+            ->from('/agentic-cms-laravel-admin/pages/new')
+            ->post('/agentic-cms-laravel-admin/pages/new', ['title' => '']);
 
         $response->assertSessionHasErrors(['title', 'slug', 'author_id', 'template']);
     }
@@ -106,6 +106,6 @@ class PageCrudTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/pages')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/pages')->assertStatus(401);
     }
 }

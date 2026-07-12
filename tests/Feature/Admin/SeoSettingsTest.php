@@ -31,7 +31,7 @@ class SeoSettingsTest extends TestCase
     public function test_seo_settings_page_renders(): void
     {
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/seo-settings')
+            ->get('/agentic-cms-laravel-admin/seo-settings')
             ->assertStatus(200)
             ->assertSee('SEO Settings');
     }
@@ -39,7 +39,7 @@ class SeoSettingsTest extends TestCase
     public function test_admin_can_persist_seo_settings(): void
     {
         $this->actingAs($this->admin)
-            ->post('/cmstack-laravel-admin/seo-settings', [
+            ->post('/agentic-cms-laravel-admin/seo-settings', [
                 'title_separator' => '|',
                 'default_meta_description' => 'A persisted default description.',
                 'default_og_image' => 'https://example.com/og.png',
@@ -67,7 +67,7 @@ class SeoSettingsTest extends TestCase
     public function test_unchecked_toggles_persist_as_false(): void
     {
         $this->actingAs($this->admin)
-            ->post('/cmstack-laravel-admin/seo-settings', [
+            ->post('/agentic-cms-laravel-admin/seo-settings', [
                 'title_separator' => '-',
                 // discourage_search_engines and sitemap_enabled omitted = unchecked
             ])
@@ -81,8 +81,8 @@ class SeoSettingsTest extends TestCase
     public function test_validation_rejects_bad_input(): void
     {
         $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/seo-settings')
-            ->post('/cmstack-laravel-admin/seo-settings', [
+            ->from('/agentic-cms-laravel-admin/seo-settings')
+            ->post('/agentic-cms-laravel-admin/seo-settings', [
                 'title_separator' => '',                 // required
                 'default_og_image' => 'not-a-url',        // must be a url
             ])
@@ -97,6 +97,6 @@ class SeoSettingsTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/seo-settings')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/seo-settings')->assertStatus(401);
     }
 }

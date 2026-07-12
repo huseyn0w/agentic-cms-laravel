@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: header.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 19.07.2019
@@ -34,12 +34,12 @@ $languages = get_translation_links();
     <meta name="theme-color" content="#fbfbf9">
 
     {{-- Tiny inline script: apply stored/preferred theme BEFORE first paint to avoid FOUC.
-         Reads localStorage (key: cmstack-theme, shared with admin), falls back to
+         Reads localStorage (key: agentic-cms-theme, shared with admin), falls back to
          prefers-color-scheme. Runs before any CSS so .dark is on <html> at parse time. --}}
     <script>
         (function () {
             try {
-                var s = localStorage.getItem('cmstack-theme');
+                var s = localStorage.getItem('agentic-cms-theme');
                 if (s === 'dark' || (!s && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     document.documentElement.classList.add('dark');
                 }
@@ -140,7 +140,7 @@ $languages = get_translation_links();
             @if($logo_url)
                 <img src="{{$logo_url}}" alt="" width="auto" height="36" decoding="async" class="h-9 w-auto">
             @else
-                <span class="font-serif text-xl font-semibold tracking-tight text-[var(--text)]">Cmstack-Laravel</span>
+                <span class="font-serif text-xl font-semibold tracking-tight text-[var(--text)]">AgenticCms-Laravel</span>
             @endif
         </a>
 

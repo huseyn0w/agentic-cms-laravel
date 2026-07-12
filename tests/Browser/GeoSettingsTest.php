@@ -29,11 +29,11 @@ it('admin fills geo settings and the data reaches llms.txt', function () {
     // Sign in with seeded admin credentials.
     visit('/login')
         ->fill('[data-testid="login-username"]', 'admin')
-        ->fill('[data-testid="login-password"]', 'cmstackadmin123')
+        ->fill('[data-testid="login-password"]', 'agentic-cmsadmin123')
         ->click('[data-testid="login-submit"]');
 
     // Navigate to the GEO settings page.
-    $page = visit('/cmstack-laravel-admin/geo-settings');
+    $page = visit('/agentic-cms-laravel-admin/geo-settings');
 
     $page->assertSee('GEO')
         ->assertPresent('[data-testid="geo-business-name"]')
@@ -64,10 +64,10 @@ it('geo settings page is accessible on a mobile viewport', function () {
     // Sign in.
     visit('/login')
         ->fill('[data-testid="login-username"]', 'admin')
-        ->fill('[data-testid="login-password"]', 'cmstackadmin123')
+        ->fill('[data-testid="login-password"]', 'agentic-cmsadmin123')
         ->click('[data-testid="login-submit"]');
 
-    $page = visit('/cmstack-laravel-admin/geo-settings')->on()->mobile();
+    $page = visit('/agentic-cms-laravel-admin/geo-settings')->on()->mobile();
 
     $page->assertSee('GEO')
         ->assertNoSmoke()

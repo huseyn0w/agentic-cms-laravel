@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: new_category.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 31.08.2019

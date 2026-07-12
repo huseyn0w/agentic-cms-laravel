@@ -8,7 +8,7 @@ export default {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.js',
         './app/**/*.php',
-        './bootstrap/cmstack-laravel-helpers.php',
+        './bootstrap/agentic-cms-laravel-helpers.php',
     ],
 
     /*

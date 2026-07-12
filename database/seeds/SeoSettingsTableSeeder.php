@@ -21,9 +21,9 @@ class SeoSettingsTableSeeder extends Seeder
 
         DB::table('seo_settings')->insertOrIgnore([
             'title_separator' => '—',
-            'default_meta_description' => 'Cmstack-Laravel — a fast, lightweight Laravel content platform.',
+            'default_meta_description' => 'AgenticCms-Laravel — a fast, lightweight Laravel content platform.',
             'default_og_image' => null,
-            'og_site_name' => 'Cmstack-Laravel',
+            'og_site_name' => 'AgenticCms-Laravel',
             'twitter_handle' => null,
             'google_site_verification' => null,
             'bing_site_verification' => null,

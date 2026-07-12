@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: lang/en/services.php
  * Strings for the public Services listing and detail views.
  */

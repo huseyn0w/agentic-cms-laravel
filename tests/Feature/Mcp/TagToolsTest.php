@@ -6,7 +6,7 @@ use App\Http\Models\Tag;
 use App\Http\Models\TagTranslation;
 use App\Http\Models\User;
 use App\Http\Models\UserRoles;
-use App\Mcp\Servers\CmstackLaravelServer;
+use App\Mcp\Servers\AgenticCmsLaravelServer;
 use App\Mcp\Tools\Tags\CreateTagTool;
 use App\Mcp\Tools\Tags\DeleteTagTool;
 use App\Mcp\Tools\Tags\GetTagTool;
@@ -19,7 +19,7 @@ use Tests\TestCase;
 
 /**
  * MCP Tag tool family: verifies the auth gate and happy-path CRUD, mirroring
- * the category tool tests in CmstackLaravelServerTest.
+ * the category tool tests in AgenticCmsLaravelServerTest.
  */
 class TagToolsTest extends TestCase
 {
@@ -58,7 +58,7 @@ class TagToolsTest extends TestCase
 
     public function test_list_tags_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(ListTagsTool::class, [])
+        AgenticCmsLaravelServer::tool(ListTagsTool::class, [])
             ->assertSee('Authentication required');
     }
 
@@ -66,14 +66,14 @@ class TagToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListTagsTool::class, [])
             ->assertSee('Permission denied');
     }
 
     public function test_create_tag_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(CreateTagTool::class, ['name' => 'Laravel'])
+        AgenticCmsLaravelServer::tool(CreateTagTool::class, ['name' => 'Laravel'])
             ->assertSee('Authentication required');
     }
 
@@ -81,14 +81,14 @@ class TagToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(CreateTagTool::class, ['name' => 'Laravel'])
             ->assertSee('Permission denied');
     }
 
     public function test_delete_tag_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(DeleteTagTool::class, ['id' => 1])
+        AgenticCmsLaravelServer::tool(DeleteTagTool::class, ['id' => 1])
             ->assertSee('Authentication required');
     }
 
@@ -96,7 +96,7 @@ class TagToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(DeleteTagTool::class, ['id' => 1])
             ->assertSee('Permission denied');
     }
@@ -109,7 +109,7 @@ class TagToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(CreateTagTool::class, ['name' => 'PHP', 'locale' => 'en'])
             ->assertOk()
             ->assertSee('created');
@@ -121,12 +121,12 @@ class TagToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 1]);
 
-        $first = CmstackLaravelServer::actingAs($user)
+        $first = AgenticCmsLaravelServer::actingAs($user)
             ->tool(CreateTagTool::class, ['name' => 'Laravel', 'locale' => 'en']);
         $first->assertOk();
 
         // Creating the same tag again should return the existing one, not a duplicate.
-        $second = CmstackLaravelServer::actingAs($user)
+        $second = AgenticCmsLaravelServer::actingAs($user)
             ->tool(CreateTagTool::class, ['name' => 'Laravel', 'locale' => 'en']);
         $second->assertOk();
 
@@ -144,7 +144,7 @@ class TagToolsTest extends TestCase
         $this->makeTag('PHP');
         $this->makeTag('Laravel');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListTagsTool::class, ['locale' => 'en', 'per_page' => 10])
             ->assertOk()
             ->assertSee('total')
@@ -161,7 +161,7 @@ class TagToolsTest extends TestCase
 
         $tag = $this->makeTag('Tailwind');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetTagTool::class, ['id' => $tag->id, 'locale' => 'en'])
             ->assertOk()
             ->assertSee('Tailwind');
@@ -177,7 +177,7 @@ class TagToolsTest extends TestCase
 
         $tag = $this->makeTag('Old Name');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateTagTool::class, ['id' => $tag->id, 'name' => 'New Name', 'locale' => 'en'])
             ->assertOk()
             ->assertSee('updated');
@@ -191,7 +191,7 @@ class TagToolsTest extends TestCase
 
         $tag = $this->makeTag('Something');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateTagTool::class, ['id' => $tag->id])
             ->assertSee('Nothing to update');
     }
@@ -206,7 +206,7 @@ class TagToolsTest extends TestCase
 
         $tag = $this->makeTag('Deleteme');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(DeleteTagTool::class, ['id' => $tag->id])
             ->assertOk()
             ->assertSee('deleted');
@@ -218,7 +218,7 @@ class TagToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(DeleteTagTool::class, ['id' => 99999])
             ->assertSee('Could not delete');
     }

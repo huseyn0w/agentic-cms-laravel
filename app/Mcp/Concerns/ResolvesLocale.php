@@ -5,7 +5,7 @@ namespace App\Mcp\Concerns;
 /**
  * Locale handling for translatable content tools.
  *
- * Cmstack-Laravel content (Post/Page/Category) is multilingual via
+ * AgenticCms-Laravel content (Post/Page/Category) is multilingual via
  * astrotomic/laravel-translatable: writes land in the *_translations row for
  * the *active* application locale. The repositories pick this up implicitly, so
  * a tool must set the locale explicitly before delegating, rather than relying

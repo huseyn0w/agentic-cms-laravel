@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Cmstack-Laravel
- * File: cmstack-laravel-helpers.php
+ * AgenticCms-Laravel
+ * File: agentic-cms-laravel-helpers.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 22.07.2019
  */
@@ -924,7 +924,7 @@ function get_entity_translation_links($type, $id): array
         if ($prefix === $locale) {
             continue;
         }
-        $result[$data['title']] = 'cmstack-laravel-admin/'.$type.'/'.$id.'/'.$prefix;
+        $result[$data['title']] = 'agentic-cms-laravel-admin/'.$type.'/'.$id.'/'.$prefix;
     }
 
     return $result;

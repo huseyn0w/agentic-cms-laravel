@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: custom-fields-variables.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 19.11.2019

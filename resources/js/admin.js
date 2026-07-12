@@ -1,5 +1,5 @@
 /**
- * Cmstack-Laravel — admin shell runtime (Phase 5 / Phase 6 dark-toggle update).
+ * AgenticCms-Laravel — admin shell runtime (Phase 5 / Phase 6 dark-toggle update).
  *
  * Loaded via Vite in the admin <head>. Responsibilities:
  *   1. Alpine for the app shell (sidebar toggle, topbar user/language menus).
@@ -10,7 +10,7 @@
  *      accordion) still target the same selectors / call $('#x').modal('hide').
  *   3. A Tailwind toast system that backs the global showNotification() the
  *      legacy scripts call via $.notify (bootstrap-notify replacement).
- *   4. Dark-mode toggle (Phase 6): same localStorage key as front.js (`cmstack-theme`).
+ *   4. Dark-mode toggle (Phase 6): same localStorage key as front.js (`agentic-cms-theme`).
  *      No-FOUC inline script in header-styles.blade.php applies .dark before paint;
  *      this file wires the topbar toggle button at boot time.
  *
@@ -156,7 +156,7 @@ function installJqueryShims($) {
         });
     };
 
-    // bootstrap-notify replacement. showNotification() (in cmstack-laravel.js) calls
+    // bootstrap-notify replacement. showNotification() (in agentic-cms-laravel.js) calls
     // $.notify({ message }, { type, placement }). Map type -> toast kind.
     $.notify = function (content, options) {
         const message = (content && content.message) || '';
@@ -169,12 +169,12 @@ function installJqueryShims($) {
 
 /* -------------------------------------------------------------------------
  | Dark-mode toggle (DESIGN_SYSTEM §5 / Phase 6).
- | Shares the same localStorage key `cmstack-theme` as front.js so toggling
+ | Shares the same localStorage key `agentic-cms-theme` as front.js so toggling
  | in either shell persists across the whole site.
  | The no-FOUC inline script in header-styles.blade.php applies .dark before
  | first paint; this wires the topbar toggle button.
  | ------------------------------------------------------------------------- */
-const THEME_KEY = 'cmstack-theme';
+const THEME_KEY = 'agentic-cms-theme';
 
 function adminResolveTheme() {
     const stored = localStorage.getItem(THEME_KEY);

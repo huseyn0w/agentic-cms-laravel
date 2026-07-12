@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — edit-comment dialog.
+ * AgenticCms-Laravel — edit-comment dialog.
  * Phase 5: restyled to DESIGN_SYSTEM §5. Keeps editCommentDialog Alpine
  * component and native <dialog> behavior unchanged.
  * x-ref="dialog", x-ref="field", x-ref="id" preserved for Alpine wiring.

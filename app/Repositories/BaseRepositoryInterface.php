@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: BaseRepositoryInterface.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 28.07.2019

@@ -31,7 +31,7 @@ class ScheduledPostHiddenOnFrontTest extends TestCase
 
     private function makePost(string $slug, $scheduledAt, int $status = 1): PostTranslation
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', [
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', [
             'title' => $slug, 'slug' => $slug, 'content' => 'body', 'preview' => 'prev',
             'author_id' => $this->admin->id, 'meta_keywords' => 'k', 'meta_description' => 'd',
             'category' => [1], 'status' => $status,
@@ -71,7 +71,7 @@ class ScheduledPostHiddenOnFrontTest extends TestCase
         $this->makePost('sitemap-hidden', now()->addDay(), status: 0);
         $this->makePost('sitemap-shown', now()->subHour(), status: 1);
 
-        Cache::forget('cmstack_laravel.sitemap.xml');
+        Cache::forget('agentic_cms_laravel.sitemap.xml');
         $xml = $this->get('/sitemap.xml')->getContent();
 
         $this->assertStringNotContainsString('sitemap-hidden', $xml, 'Scheduled post must not be in the sitemap.');

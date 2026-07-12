@@ -32,7 +32,7 @@ $(function () {
         var delete_confirmed = confirm(delete_confirmation);
         if(delete_confirmed){
             $.ajax({
-                url: "/cmstack-laravel-admin/users/" + deleted_user_id + "/delete/",
+                url: "/agentic-cms-laravel-admin/users/" + deleted_user_id + "/delete/",
                 type: 'DELETE',
                 data: {
                     "id": deleted_user_id

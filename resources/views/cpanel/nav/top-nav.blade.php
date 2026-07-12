@@ -1,13 +1,13 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: top-nav.blade.php — DESIGN_SYSTEM §5 (Phase 6)
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 21.07.2019
  *
  * Topbar: sticky 56px, bg-surface + 1px border-border bottom (token-driven → dark flips).
  * Left: mobile menu button + current section h4.
- * Right: dark/light toggle (cmstack-theme localStorage key), "View site ↗",
+ * Right: dark/light toggle (agentic-cms-theme localStorage key), "View site ↗",
  *        language switcher (original URLs/logic preserved),
  *        user <x-avatar> → <x-dropdown> (role badge, profile, sign out).
  * logout: preserved as route('logout') link (GET logout is fine here — no POST form needed).
@@ -35,7 +35,7 @@ $languages = get_languages();
     <div class="ml-auto flex items-center gap-1">
 
         {{-- ── Dark / light toggle (§5 — admin dark toggle) ──────────── --}}
-        {{-- Backed by admin.js adminDarkToggle(); localStorage key = cmstack-theme --}}
+        {{-- Backed by admin.js adminDarkToggle(); localStorage key = agentic-cms-theme --}}
         <button
             type="button"
             id="admin-dark-toggle"

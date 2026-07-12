@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Support\Facades\Auth;
 
-class MenuRequest extends CmstackLaravelRequest
+class MenuRequest extends AgenticCmsLaravelRequest
 {
     protected $table = 'menu_translations';
 

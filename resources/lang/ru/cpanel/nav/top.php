@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: top.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 17.11.2019
  */
 
 return [
-    'header_title' => 'Панель администрирования Cmstack-Laravel',
+    'header_title' => 'Панель администрирования AgenticCms-Laravel',
     'logged_in_as' => 'Вошел как:',
     'homepage' => 'Главная',
     'settings' => 'Настройки',

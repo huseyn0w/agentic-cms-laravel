@@ -1,5 +1,5 @@
 # =============================================================================
-# Cmstack-Laravel - LOCAL DEVELOPMENT stack only.
+# AgenticCms-Laravel - LOCAL DEVELOPMENT stack only.
 #
 # This file is a developer convenience. It is NOT used in production.
 # Production runs on Hostinger (traditional PHP-FPM hosting) without Docker.
@@ -24,19 +24,19 @@ services:
       args:
         UID: ${UID:-1000}
         GID: ${GID:-1000}
-    image: cmstack-laravel-app:local
+    image: agentic-cms-laravel-app:local
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
-      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-cmstack-laravel.ini:ro
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-agentic-cms-laravel.ini:ro
     env_file:
       - .env
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - cmstack-laravel
+      - agentic-cms-laravel
 
   # ---- Nginx web server ------------------------------------------------------
   web:
@@ -50,7 +50,7 @@ services:
     depends_on:
       - app
     networks:
-      - cmstack-laravel
+      - agentic-cms-laravel
 
   # ---- MySQL 8 database (matches Hostinger's default DB engine) --------------
   mysql:
@@ -72,7 +72,7 @@ services:
       timeout: 5s
       retries: 20
     networks:
-      - cmstack-laravel
+      - agentic-cms-laravel
 
   # ---- Vite dev server (OPTIONAL) -------------------------------------------
   # Provides HMR during local dev. Start explicitly with:
@@ -89,7 +89,7 @@ services:
     volumes:
       - ./:/var/www/html
     networks:
-      - cmstack-laravel
+      - agentic-cms-laravel
 
   # ---- Mailpit (OPTIONAL) - catches local outgoing mail ----------------------
   # Start with the stack, or only when needed via the `mail` profile:
@@ -103,12 +103,12 @@ services:
       - "${MAILPIT_UI_PORT:-8025}:8025"   # Web UI
       - "${MAILPIT_SMTP_PORT:-1025}:1025" # SMTP
     networks:
-      - cmstack-laravel
+      - agentic-cms-laravel
 
 volumes:
   mysql-data:
     driver: local
 
 networks:
-  cmstack-laravel:
+  agentic-cms-laravel:
     driver: bridge

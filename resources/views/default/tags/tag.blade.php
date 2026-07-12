@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — tag archive.
+ * AgenticCms-Laravel — tag archive.
  * Phase 5: redesigned to DESIGN_SYSTEM §5 (card grid, pagination, empty-state).
  * TagArchiveTest asserts assertSee($data->name) and assertSee($post->title).
  */

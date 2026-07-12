@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Cmstack-Laravel'),
+    'name' => env('APP_NAME', 'AgenticCms-Laravel'),
 
     /*
     |--------------------------------------------------------------------------

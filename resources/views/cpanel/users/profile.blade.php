@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: yourprofile.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 21.07.2019

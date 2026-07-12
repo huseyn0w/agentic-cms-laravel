@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: categories.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 17.11.2019

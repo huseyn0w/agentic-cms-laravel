@@ -34,7 +34,7 @@ class SeoController extends Controller
             abort(404);
         }
 
-        $xml = Cache::remember('cmstack_laravel.sitemap.xml', now()->addHour(), function () {
+        $xml = Cache::remember('agentic_cms_laravel.sitemap.xml', now()->addHour(), function () {
             return $this->service->buildSitemap();
         });
 
@@ -68,7 +68,7 @@ class SeoController extends Controller
      */
     public function rss()
     {
-        $xml = Cache::remember('cmstack_laravel.rss.xml', now()->addHour(), function () {
+        $xml = Cache::remember('agentic_cms_laravel.rss.xml', now()->addHour(), function () {
             return $this->feeds->buildRss();
         });
 
@@ -80,7 +80,7 @@ class SeoController extends Controller
      */
     public function atom()
     {
-        $xml = Cache::remember('cmstack_laravel.atom.xml', now()->addHour(), function () {
+        $xml = Cache::remember('agentic_cms_laravel.atom.xml', now()->addHour(), function () {
             return $this->feeds->buildAtom();
         });
 
@@ -95,7 +95,7 @@ class SeoController extends Controller
     {
         $category = $this->resolveCategory($slug);
 
-        $xml = Cache::remember('cmstack_laravel.rss.category.'.$category->category_id, now()->addHour(), function () use ($category) {
+        $xml = Cache::remember('agentic_cms_laravel.rss.category.'.$category->category_id, now()->addHour(), function () use ($category) {
             return $this->feeds->buildCategoryRss($category->category_id, $category->title, $category->slug);
         });
 
@@ -109,7 +109,7 @@ class SeoController extends Controller
     {
         $category = $this->resolveCategory($slug);
 
-        $xml = Cache::remember('cmstack_laravel.atom.category.'.$category->category_id, now()->addHour(), function () use ($category) {
+        $xml = Cache::remember('agentic_cms_laravel.atom.category.'.$category->category_id, now()->addHour(), function () use ($category) {
             return $this->feeds->buildCategoryAtom($category->category_id, $category->title, $category->slug);
         });
 

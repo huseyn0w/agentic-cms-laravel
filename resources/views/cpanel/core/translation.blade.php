@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: translation.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 07.12.2019

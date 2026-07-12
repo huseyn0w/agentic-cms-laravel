@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — category archive.
+ * AgenticCms-Laravel — category archive.
  * Phase 5: redesigned to DESIGN_SYSTEM §5 (card grid, pagination, empty-state).
  */
 ?>

@@ -22,7 +22,7 @@ class UploadSecurityTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->tmpDir = sys_get_temp_dir().'/cmstack-upload-test-'.uniqid();
+        $this->tmpDir = sys_get_temp_dir().'/agentic-cms-upload-test-'.uniqid();
         File::ensureDirectoryExists($this->tmpDir);
     }
 

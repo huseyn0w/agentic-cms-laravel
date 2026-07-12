@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: diff.blade.php — per-field comparison of one revision vs the live row.
  * Shared by posts and pages; values are escaped (snapshots may contain HTML).
  * Redesigned: DESIGN_SYSTEM §5 — x-card, x-button, x-badge, token colors.

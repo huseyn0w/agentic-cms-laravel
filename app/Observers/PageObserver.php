@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Http\Models\Page;
 
-class PageObserver extends CmstackLaravelObserver
+class PageObserver extends AgenticCmsLaravelObserver
 {
     /**
      * Handle the page "creating" event.

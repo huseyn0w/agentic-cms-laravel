@@ -47,7 +47,7 @@ Route::get('/health/ready', 'HealthController@ready')->name('health_ready');
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('cmstack-laravel-admin')->middleware(['auth', 'see_admin_panel'])->namespace('CPanel')->group(function () {
+Route::prefix('agentic-cms-laravel-admin')->middleware(['auth', 'see_admin_panel'])->namespace('CPanel')->group(function () {
 
     Route::get('/locale/{locale}', 'CPanelLanguageController@index')->name('lang_route');
 

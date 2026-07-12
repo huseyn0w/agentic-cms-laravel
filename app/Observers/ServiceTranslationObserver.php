@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Http\Models\ServiceTranslation;
 
-class ServiceTranslationObserver extends CmstackLaravelObserver
+class ServiceTranslationObserver extends AgenticCmsLaravelObserver
 {
     /**
      * Sanitize rich text before persisting. Services have no revision history,

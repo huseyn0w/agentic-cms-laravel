@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: footer.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 19.07.2019
@@ -31,7 +31,7 @@ $languages = get_translation_links();
                     href="{{config('app.url')}}"
                     class="font-serif text-xl font-semibold tracking-tight text-[var(--text)]"
                     data-testid="footer-wordmark"
-                >Cmstack-Laravel</a>
+                >AgenticCms-Laravel</a>
                 @if($copyright)
                 <div class="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">{!! $copyright !!}</div>
                 @endif
@@ -114,7 +114,7 @@ $languages = get_translation_links();
         {{-- Bottom row: mono caption copyright + stack attribution --}}
         <div class="mt-12 flex flex-col gap-1 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p class="font-mono text-xs text-[var(--text-subtle)]">
-                © {{ date('Y') }} Cmstack-Laravel. All rights reserved.
+                © {{ date('Y') }} AgenticCms-Laravel. All rights reserved.
             </p>
             <p class="font-mono text-xs text-[var(--text-subtle)]">
                 Built with

@@ -4,7 +4,7 @@ namespace Tests\Feature\Mcp;
 
 use App\Http\Models\User;
 use App\Http\Models\UserRoles;
-use App\Mcp\Servers\CmstackLaravelServer;
+use App\Mcp\Servers\AgenticCmsLaravelServer;
 use App\Mcp\Tools\Media\GetMediaMetadataTool;
 use App\Mcp\Tools\Media\ListMediaTool;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -74,13 +74,13 @@ class MediaToolsTest extends TestCase
 
     public function test_unauthenticated_list_is_rejected(): void
     {
-        CmstackLaravelServer::tool(ListMediaTool::class, [])
+        AgenticCmsLaravelServer::tool(ListMediaTool::class, [])
             ->assertSee('Authentication required');
     }
 
     public function test_unauthenticated_metadata_is_rejected(): void
     {
-        CmstackLaravelServer::tool(GetMediaMetadataTool::class, ['path' => 'test.jpg'])
+        AgenticCmsLaravelServer::tool(GetMediaMetadataTool::class, ['path' => 'test.jpg'])
             ->assertSee('Authentication required');
     }
 
@@ -88,7 +88,7 @@ class MediaToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListMediaTool::class, [])
             ->assertSee('Permission denied');
     }
@@ -97,7 +97,7 @@ class MediaToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetMediaMetadataTool::class, ['path' => 'test.jpg'])
             ->assertSee('Permission denied');
     }
@@ -112,7 +112,7 @@ class MediaToolsTest extends TestCase
 
         $this->createTempMediaFile('mcp_test_image.jpg', 'fake-jpeg-content');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListMediaTool::class, [])
             ->assertOk()
             ->assertSee('mcp_test_image.jpg');
@@ -124,7 +124,7 @@ class MediaToolsTest extends TestCase
 
         $this->createTempMediaFile('mcp_meta_test.txt', 'hello');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetMediaMetadataTool::class, ['path' => 'mcp_meta_test.txt'])
             ->assertOk()
             ->assertSee('mcp_meta_test.txt');
@@ -138,7 +138,7 @@ class MediaToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListMediaTool::class, ['subdirectory' => '../../config'])
             ->assertSee('Rejected subdirectory');
     }
@@ -148,7 +148,7 @@ class MediaToolsTest extends TestCase
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
         // Must not succeed — must see an error, not file contents
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetMediaMetadataTool::class, ['path' => '../../.env'])
             ->assertSee('rejected path')
             ->assertDontSee('APP_KEY');
@@ -158,7 +158,7 @@ class MediaToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetMediaMetadataTool::class, ['path' => '/etc/passwd'])
             ->assertSee('rejected path');
     }
@@ -167,7 +167,7 @@ class MediaToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetMediaMetadataTool::class, ['path' => "valid\0../../.env"])
             ->assertSee('rejected path');
     }

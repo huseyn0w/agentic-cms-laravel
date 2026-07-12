@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: seo-settings.blade.php
  * Phase 7 (SEO/GEO): global SEO settings admin page.
  * Redesigned: DESIGN_SYSTEM §5 — x-card / x-field / x-button / x-alert / x-eyebrow

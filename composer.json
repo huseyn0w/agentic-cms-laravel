@@ -1,7 +1,7 @@
 {
-    "name": "cmstack/laravel",
+    "name": "agentic-cms/laravel",
     "type": "project",
-    "description": "Cmstack-Laravel — a modern, open-source CMS built on Laravel.",
+    "description": "AgenticCms-Laravel — a modern, open-source CMS built on Laravel.",
     "keywords": [
         "framework",
         "laravel"
@@ -61,7 +61,7 @@
             "Database\\Seeders\\": "database/seeds/"
         },
         "files": [
-            "bootstrap/cmstack-laravel-helpers.php"
+            "bootstrap/agentic-cms-laravel-helpers.php"
         ]
     },
     "autoload-dev": {

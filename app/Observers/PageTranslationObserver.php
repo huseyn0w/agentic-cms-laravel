@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Http\Models\PageTranslation;
 use App\Repositories\RevisionRepository;
 
-class PageTranslationObserver extends CmstackLaravelObserver
+class PageTranslationObserver extends AgenticCmsLaravelObserver
 {
     /**
      * Snapshot the pre-edit page translation before an update is persisted.

@@ -30,7 +30,7 @@ class RoleCrudTest extends TestCase
 
     public function test_admin_can_create_a_role(): void
     {
-        $response = $this->actingAs($this->admin)->post('/cmstack-laravel-admin/roles/new', [
+        $response = $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/roles/new', [
             'name' => 'Author',
             'permissions' => ['manage_posts', 'manage_comments'],
         ]);
@@ -52,7 +52,7 @@ class RoleCrudTest extends TestCase
             'permissions' => json_encode(['manage_posts' => 1]),
         ]);
 
-        $response = $this->actingAs($this->admin)->put('/cmstack-laravel-admin/roles/'.$role->id.'/update', [
+        $response = $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/roles/'.$role->id.'/update', [
             'name' => 'Temp Renamed',
             'permissions' => ['manage_pages'],
         ]);
@@ -73,7 +73,7 @@ class RoleCrudTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/roles/'.$role->id.'/delete')
+            ->delete('/agentic-cms-laravel-admin/roles/'.$role->id.'/delete')
             ->assertOk();
 
         $this->assertDatabaseMissing('user_roles', ['id' => $role->id]);
@@ -82,8 +82,8 @@ class RoleCrudTest extends TestCase
     public function test_validation_blocks_duplicate_role_name(): void
     {
         $response = $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/roles/new')
-            ->post('/cmstack-laravel-admin/roles/new', ['name' => 'Administrator']);
+            ->from('/agentic-cms-laravel-admin/roles/new')
+            ->post('/agentic-cms-laravel-admin/roles/new', ['name' => 'Administrator']);
 
         $response->assertSessionHasErrors(['name']);
     }
@@ -96,6 +96,6 @@ class RoleCrudTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/roles')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/roles')->assertStatus(401);
     }
 }

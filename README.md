@@ -195,7 +195,7 @@ logs (Ctrl-C stops following; the stack keeps running in the background):
 When it is up:
 
 - **App:** http://localhost:8080
-- **Admin:** http://localhost:8080/cmstack-laravel-admin (see [credentials](#admin-credentials))
+- **Admin:** http://localhost:8080/agentic-cms-laravel-admin (see [credentials](#admin-credentials))
 
 ### Available `make` targets
 
@@ -269,7 +269,7 @@ Requires a local PHP 8.3 + Composer + Node + a running MySQL 8 server.
    ```
 
    For a **local MySQL** server, set `DB_HOST=127.0.0.1` (the `.env.example` default of
-   `DB_HOST=mysql` is the Docker service name). Create a database named `cmstack_laravel`
+   `DB_HOST=mysql` is the Docker service name). Create a database named `agentic-cms_laravel`
    (or update `DB_DATABASE`/`DB_USERNAME`/`DB_PASSWORD` accordingly).
 
 2. Install PHP and front-end dependencies:
@@ -430,7 +430,7 @@ through the admin panel.
 It is built on the official [`laravel/mcp`](https://laravel.com/docs/12.x/mcp) package and
 runs **inside the Laravel app** (no separate service). Security is first-class:
 
-- **OAuth 2.1** authentication via Laravel Passport — endpoint `POST /mcp/cmstack-laravel`.
+- **OAuth 2.1** authentication via Laravel Passport — endpoint `POST /mcp/agentic-cms-laravel`.
 - Every tool runs as the authenticated admin and is **gated by the same `manage_*`
   permissions** as the admin panel.
 - **No raw code execution.** The only code surface is editing theme Blade templates,
@@ -450,7 +450,7 @@ php artisan passport:keys    # generate encryption keys (once per environment)
 Connect from Claude Code:
 
 ```bash
-claude mcp add --transport http cmstack-laravel https://your-site.com/mcp/cmstack-laravel
+claude mcp add --transport http agentic-cms-laravel https://your-site.com/mcp/agentic-cms-laravel
 # then run /mcp in Claude and authenticate in the browser
 ```
 
@@ -480,14 +480,14 @@ The active locale is resolved per request from `session('locale')`, falling back
 After seeding, the admin panel lives at:
 
 ```
-<APP_URL>/cmstack-laravel-admin
+<APP_URL>/agentic-cms-laravel-admin
 ```
 
 Seeded login:
 
 ```
 Username: admin
-Password: cmstackadmin123
+Password: agentic-cmsadmin123
 ```
 
 > Change this password immediately in any non-local environment.
@@ -610,7 +610,7 @@ Make sure `storage/` and `bootstrap/cache/` are writable by the php-fpm user.
 **Yes.** Agentic CMS for Laravel runs cleanly **locally** (Docker via `make dev`, or fully manual), and
 deploys to both **Hostinger shared hosting** and a **VPS** with no required background
 services. A clean Docker bring-up was verified end to end: migrations + seeders succeed
-against a fresh `cmstack_laravel` MySQL database, the home page returns `200`, `/cmstack-laravel-admin`
+against a fresh `agentic-cms_laravel` MySQL database, the home page returns `200`, `/agentic-cms-laravel-admin`
 returns `302`, and `/sitemap.xml` returns `200` — and these stay correct with
 `config:cache` + `route:cache` enabled (the production code path).
 

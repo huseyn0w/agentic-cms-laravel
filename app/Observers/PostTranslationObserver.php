@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Http\Models\PostTranslation;
 use App\Repositories\RevisionRepository;
 
-class PostTranslationObserver extends CmstackLaravelObserver
+class PostTranslationObserver extends AgenticCmsLaravelObserver
 {
     /**
      * Handle the post translation "saving" event.

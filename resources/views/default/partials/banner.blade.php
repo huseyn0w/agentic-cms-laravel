@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — shared page banner / breadcrumb partial (Phase 4).
+ * AgenticCms-Laravel — shared page banner / breadcrumb partial (Phase 4).
  *
  * @param string      $title        Heading text.
  * @param array|null  $crumbs       Optional breadcrumb items: [['label' => .., 'url' => ..|null], ...]

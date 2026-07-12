@@ -65,13 +65,13 @@ Ledger: `.git/sdd/progress.md` "Task 3" section. Commits `088419a`..`3b381f6`.
   size>` (open via `$dispatch('open-modal','name')`).
 - **P4 public shell DONE** — header/footer/breadcrumb rebuilt to §5 (sticky scroll-shadow, skip-link,
   `<nav aria-label>`, locale switcher as `<x-dropdown>`, **public dark/light toggle** [localStorage key
-  `cmstack-theme` SHARED with admin, no-FOUC inline `<head>` script], focus-trapped mobile drawer in
+  `agentic-cms-theme` SHARED with admin, no-FOUC inline `<head>` script], focus-trapped mobile drawer in
   `front.js`); all `<head>`/seo-meta/`@vite`/`@yield`/`@stack`/locale wiring preserved; `@hook('footer')`.
 - **P5 public pages DONE** — post detail + category/tag archives + home/page/contact/search + user
   pages (profile/edit/change-password) + auth (login/social parity + the 4 Bootstrap-4 ports:
   register, passwords/email, passwords/reset, verify). All forms/Alpine islands/get_field/captcha/
   routes preserved; full Auth suite (43) green; no Bootstrap-4 left in `default/`+`auth/`.
-- **P6 admin shell DONE** — sidebar/topbar §5, admin dark toggle (`cmstack-theme`), token-driven
+- **P6 admin shell DONE** — sidebar/topbar §5, admin dark toggle (`agentic-cms-theme`), token-driven
   `.admin-*` classes in admin.css, flash→`x-alert`; admin.js runtime (collapse/modal/toast/jQuery-shims)
   + permission-gating + language switcher + logout preserved.
 - **P7 admin section views DONE** — 30 views: lists (token tables + bulk bar + status tabs + badges +
@@ -334,9 +334,9 @@ php artisan test                       # full suite TODAY (PHPUnit; in-memory SQ
 composer lint                          # pint --test
 composer analyse                       # phpstan level 5 (+ baseline)
 composer check                         # lint + analyse + test
-# App (needs MySQL 8 + ext-imagick): make setup ; admin at /cmstack-laravel-admin
+# App (needs MySQL 8 + ext-imagick): make setup ; admin at /agentic-cms-laravel-admin
 ```
-> NOTE: the updated operating prompt (`../prompts/cmstack-laravel.md`) makes **Pest 4** the
+> NOTE: the updated operating prompt (`../prompts/agentic-cms-laravel.md`) makes **Pest 4** the
 > canonical runner and **Pest browser** the E2E layer (replacing Dusk). The suite still runs under
 > PHPUnit via `php artisan test` until the P10 migration lands.
 
@@ -363,13 +363,13 @@ composer check                         # lint + analyse + test
 ## READY-TO-PASTE CONTINUATION PROMPT (new window)
 
 ```
-You are a senior Laravel/PHP engineer continuing the cmstack-laravel canon-convergence
-work AUTONOMOUSLY in /Users/huseyn0w/Desktop/SWE/cmstack/cmstack-laravel (git branch
+You are a senior Laravel/PHP engineer continuing the agentic-cms-laravel canon-convergence
+work AUTONOMOUSLY in /Users/huseyn0w/Desktop/SWE/agentic-cms/agentic-cms-laravel (git branch
 refactor/canon-convergence).
 
-AUTHORITATIVE OPERATING CONTRACT: ../prompts/cmstack-laravel.md (updated 2026-06-26) — read it
+AUTHORITATIVE OPERATING CONTRACT: ../prompts/agentic-cms-laravel.md (updated 2026-06-26) — read it
 FIRST; if it conflicts with anything below, IT wins. Then read, in order:
-cmstack-laravel/HANDOFF.md, cmstack-laravel/REFACTOR_PLAN.md, ../FEATURE_MATRIX.md,
+agentic-cms-laravel/HANDOFF.md, agentic-cms-laravel/REFACTOR_PLAN.md, ../FEATURE_MATRIX.md,
 ../DESIGN_SYSTEM.md (the last two are read-only canon — do NOT edit; if either is missing, stop
 and tell me in Russian "Нет общих спеков — сначала запусти prompts/00-bootstrap.md"). Then resume
 from the FIRST item in HANDOFF.md "PENDING".
@@ -381,7 +381,7 @@ Operating rules (summary — the prompt above is authoritative):
   implementation/tests; Opus = architecture-sensitive/critical work + all review.
 - TESTING: Pest 4 is the canonical runner (`./vendor/bin/pest`), Pest browser replaces Dusk, add
   `arch()` layering presets, per-layer test status in REFACTOR_PLAN.md (see PENDING P10).
-- Work autonomously inside cmstack-laravel/; don't ask permission for reads/edits/artisan/
+- Work autonomously inside agentic-cms-laravel/; don't ask permission for reads/edits/artisan/
   composer/npm/tests/local git. Only stop for genuinely irreversible actions or a product
   decision the spec files don't answer (batch such questions).
 - HARD RULES (top priority, non-negotiable): controllers in app/Http/Controllers contain

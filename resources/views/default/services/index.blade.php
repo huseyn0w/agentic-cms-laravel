@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — public services listing grid.
+ * AgenticCms-Laravel — public services listing grid.
  * DATA: $services  — Collection<stdClass> from ServiceRepository::publishedOrdered().
  *       Each item exposes: id, sort_order, title, slug, icon (nullable),
  *       excerpt (nullable), content, thumbnail (nullable), meta_description,

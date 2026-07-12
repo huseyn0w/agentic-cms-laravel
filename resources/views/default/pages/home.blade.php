@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: home.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 21.07.2019
@@ -53,7 +53,7 @@
         <div class="max-w-3xl">
             <p class="mb-6 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.08em] text-white/60">
                 <span class="h-px w-8 bg-[var(--accent)]" aria-hidden="true"></span>
-                {{ $home_page_data->title ?? 'Cmstack-Laravel' }}
+                {{ $home_page_data->title ?? 'AgenticCms-Laravel' }}
             </p>
             <h1 class="font-serif text-5xl font-medium leading-[1.05] tracking-[-0.01em] text-white [text-wrap:balance] sm:text-6xl lg:text-[clamp(2.5rem,5vw,3.815rem)]">
                 {!! $headline !!}

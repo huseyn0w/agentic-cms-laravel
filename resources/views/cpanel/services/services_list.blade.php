@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: services_list.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  */

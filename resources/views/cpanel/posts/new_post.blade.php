@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: new_post.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 16.08.2019

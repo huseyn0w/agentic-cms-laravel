@@ -6,7 +6,7 @@ use App\Repositories\CPanelCategoryRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class CategoryRequest extends CmstackLaravelRequest
+class CategoryRequest extends AgenticCmsLaravelRequest
 {
     protected $table = 'category_translations';
 

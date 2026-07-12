@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — single comment partial (Phase 4).
+ * AgenticCms-Laravel — single comment partial (Phase 4).
  *
  * Rendered inside the x-data="commentThread(...)" scope on the post page, so
  * the reply / edit / delete buttons can call its Alpine methods directly.

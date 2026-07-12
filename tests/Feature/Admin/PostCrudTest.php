@@ -49,7 +49,7 @@ class PostCrudTest extends TestCase
     public function test_admin_can_create_a_post(): void
     {
         $response = $this->actingAs($this->admin)
-            ->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+            ->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('cpanel_posts_list'));
@@ -67,11 +67,11 @@ class PostCrudTest extends TestCase
 
     public function test_admin_can_update_a_post(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
 
         $response = $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload([
+            ->put('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload([
                 'content' => 'edited body',
             ]));
 
@@ -83,12 +83,12 @@ class PostCrudTest extends TestCase
 
     public function test_admin_can_soft_delete_a_post(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
         $postId = $translation->post_id;
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/posts/'.$postId.'/delete')
+            ->delete('/agentic-cms-laravel-admin/posts/'.$postId.'/delete')
             ->assertOk();
 
         $this->assertNull(Post::find($postId), 'Post should be soft deleted.');
@@ -99,13 +99,13 @@ class PostCrudTest extends TestCase
     {
         // Single restore: GET /posts/{id}/restore must actually restore (the
         // route must not be shadowed by the greedy /{id}/{lang} editor route).
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $postId = PostTranslation::where('slug', 'round-trip-post')->firstOrFail()->post_id;
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/posts/'.$postId.'/delete');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/posts/'.$postId.'/delete');
         $this->assertNull(Post::find($postId), 'Post should be trashed first.');
 
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/posts/'.$postId.'/restore')
+            ->get('/agentic-cms-laravel-admin/posts/'.$postId.'/restore')
             ->assertRedirect();
 
         $this->assertNotNull(Post::find($postId), 'Post should be restored.');
@@ -113,10 +113,10 @@ class PostCrudTest extends TestCase
 
     public function test_destroy_endpoint_cannot_permanently_delete_a_live_post(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $postId = PostTranslation::where('slug', 'round-trip-post')->firstOrFail()->post_id;
 
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/posts/'.$postId.'/destroy');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/posts/'.$postId.'/destroy');
 
         $this->assertNotNull(Post::find($postId), 'A live post must not be force-deleted via destroy.');
     }
@@ -124,8 +124,8 @@ class PostCrudTest extends TestCase
     public function test_validation_blocks_post_without_required_fields(): void
     {
         $response = $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/posts/new')
-            ->post('/cmstack-laravel-admin/posts/new', ['title' => '']);
+            ->from('/agentic-cms-laravel-admin/posts/new')
+            ->post('/agentic-cms-laravel-admin/posts/new', ['title' => '']);
 
         $response->assertSessionHasErrors(['title', 'slug', 'author_id', 'category']);
         $this->assertSame(0, PostTranslation::where('slug', 'round-trip-post')->count());
@@ -137,7 +137,7 @@ class PostCrudTest extends TestCase
         $user = User::factory()->create(['role_id' => 2]);
 
         $this->actingAs($user)
-            ->get('/cmstack-laravel-admin/posts')
+            ->get('/agentic-cms-laravel-admin/posts')
             ->assertStatus(403);
     }
 
@@ -150,7 +150,7 @@ class PostCrudTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin')->assertOk();
-        $this->actingAs($user)->get('/cmstack-laravel-admin/posts')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin')->assertOk();
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/posts')->assertStatus(401);
     }
 }

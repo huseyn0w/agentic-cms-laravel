@@ -43,18 +43,18 @@ class PageRevisionTest extends TestCase
 
     public function test_creating_a_page_takes_no_revision(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload());
 
         $this->assertSame(0, Revision::count(), 'Creating a page must not snapshot.');
     }
 
     public function test_updating_a_page_snapshots_the_previous_translation(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload());
         $translation = PageTranslation::where('slug', 'about-page')->firstOrFail();
 
         $this->actingAs($this->admin)->put(
-            '/cmstack-laravel-admin/pages/'.$translation->page_id.'/update',
+            '/agentic-cms-laravel-admin/pages/'.$translation->page_id.'/update',
             $this->payload(['content' => 'updated page body'])
         );
 
@@ -68,17 +68,17 @@ class PageRevisionTest extends TestCase
 
     public function test_restoring_a_page_revision_reverts_content(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload());
         $translation = PageTranslation::where('slug', 'about-page')->firstOrFail();
 
         $this->actingAs($this->admin)->put(
-            '/cmstack-laravel-admin/pages/'.$translation->page_id.'/update',
+            '/agentic-cms-laravel-admin/pages/'.$translation->page_id.'/update',
             $this->payload(['content' => 'updated page body'])
         );
         $revision = Revision::firstOrFail();
 
         $this->actingAs($this->admin)->post(
-            '/cmstack-laravel-admin/pages/'.$translation->page_id.'/revisions/'.$revision->id.'/restore/en'
+            '/agentic-cms-laravel-admin/pages/'.$translation->page_id.'/revisions/'.$revision->id.'/restore/en'
         )->assertRedirect();
 
         $fresh = PageTranslation::findOrFail($translation->id);

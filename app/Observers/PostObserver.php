@@ -6,7 +6,7 @@ use App\Http\Models\Category;
 use App\Http\Models\Post;
 use App\Repositories\TagRepository;
 
-class PostObserver extends CmstackLaravelObserver
+class PostObserver extends AgenticCmsLaravelObserver
 {
     /**
      * Handle the post "saving" event.

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Cmstack-Laravel
- * File: CmstackLaravelRequest.php
+ * AgenticCms-Laravel
+ * File: AgenticCmsLaravelRequest.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 23.11.2019
  */
@@ -13,7 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 
-class CmstackLaravelRequest extends FormRequest
+class AgenticCmsLaravelRequest extends FormRequest
 {
     // NOTE: do NOT name this $locale — Symfony 7's HttpFoundation\Request (the
     // parent of FormRequest) declares a typed `protected ?string $locale`, and

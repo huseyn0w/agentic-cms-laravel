@@ -25,13 +25,13 @@ class MediaRouteGuardTest extends TestCase
     {
         $admin = User::where('username', 'admin')->firstOrFail();
 
-        $this->actingAs($admin)->get('/cmstack-laravel-admin/media')->assertStatus(200);
+        $this->actingAs($admin)->get('/agentic-cms-laravel-admin/media')->assertStatus(200);
     }
 
     public function test_user_without_permission_is_denied_media(): void
     {
         $user = User::factory()->create(['role_id' => 2]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/media')->assertStatus(403);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/media')->assertStatus(403);
     }
 }

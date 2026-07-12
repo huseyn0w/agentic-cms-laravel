@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: CPanelSeoSettingsRepository.php
  * Phase 7 (SEO/GEO): persistence for the global SEO settings singleton.
  */

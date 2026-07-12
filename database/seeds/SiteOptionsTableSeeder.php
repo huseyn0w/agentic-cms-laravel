@@ -19,7 +19,7 @@ class SiteOptionsTableSeeder extends Seeder
                 'logo_url' => env('APP_URL').'/filemanager/images/5db423b7ed176.png',
                 'copyright' => 'Copyright ©2019 All rights reserved | This template is made with love by <a href="https://colorlib.com" target="_blank">Colorlib</a>',
                 'linkedin_url' => 'https://linkedin.com/in/huseyn0w',
-                'github_url' => 'https://github.com/huseyn0w/cmstack-laravel',
+                'github_url' => 'https://github.com/huseyn0w/agentic-cms-laravel',
             ],
         ]);
     }

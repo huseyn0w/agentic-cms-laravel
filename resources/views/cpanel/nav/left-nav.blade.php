@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: left-nav.blade.php — DESIGN_SYSTEM §5 (Phase 6)
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 21.07.2019
@@ -36,7 +36,7 @@ $settingsActive = in_array($current_route, ['cpanel_general_settings', 'cpanel_s
     <div class="admin-sidebar-brand flex h-14 shrink-0 items-center gap-2.5 px-5">
         <span class="flex h-8 w-8 items-center justify-center rounded-lg font-bold text-sm"
               style="background:var(--primary);color:var(--primary-contrast)">L</span>
-        <span class="text-sm font-semibold tracking-tight" style="color:var(--text)">Cmstack-Laravel</span>
+        <span class="text-sm font-semibold tracking-tight" style="color:var(--text)">AgenticCms-Laravel</span>
     </div>
 
     @php

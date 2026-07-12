@@ -6,7 +6,7 @@ use App\Http\Models\Category;
 use App\Http\Models\CategoryTranslation;
 use App\Http\Models\User;
 use App\Http\Models\UserRoles;
-use App\Mcp\Servers\CmstackLaravelServer;
+use App\Mcp\Servers\AgenticCmsLaravelServer;
 use App\Mcp\Tools\Categories\UpdateCategoryTool;
 use App\Mcp\Tools\Posts\ListPostsTool;
 use App\Mcp\Tools\Theme\ListThemeFilesTool;
@@ -21,7 +21,7 @@ use Tests\TestCase;
  * and the theme tools must never escape the theme directory. These tests pin
  * that down without depending on the (request-coupled) content write path.
  */
-class CmstackLaravelServerTest extends TestCase
+class AgenticCmsLaravelServerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -37,7 +37,7 @@ class CmstackLaravelServerTest extends TestCase
 
     public function test_unauthenticated_calls_are_rejected(): void
     {
-        CmstackLaravelServer::tool(ListPostsTool::class, [])
+        AgenticCmsLaravelServer::tool(ListPostsTool::class, [])
             ->assertSee('Authentication required');
     }
 
@@ -45,7 +45,7 @@ class CmstackLaravelServerTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListPostsTool::class, [])
             ->assertSee('Permission denied');
     }
@@ -54,7 +54,7 @@ class CmstackLaravelServerTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListPostsTool::class, ['per_page' => 5])
             ->assertOk();
     }
@@ -63,7 +63,7 @@ class CmstackLaravelServerTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListThemeFilesTool::class, [])
             ->assertOk()
             ->assertSee('index.blade.php');
@@ -73,7 +73,7 @@ class CmstackLaravelServerTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ReadThemeFileTool::class, ['path' => '../../../../config/app.blade.php'])
             ->assertSee('Rejected path');
     }
@@ -82,7 +82,7 @@ class CmstackLaravelServerTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ReadThemeFileTool::class, ['path' => 'index.php'])
             ->assertSee('Rejected path');
     }
@@ -96,12 +96,12 @@ class CmstackLaravelServerTest extends TestCase
         $b = $this->makeCategory('Beta', 'beta', $user->id, $a);
 
         // Parenting A to its descendant B -> cycle, must be rejected.
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateCategoryTool::class, ['id' => $a, 'parent_category_id' => $b])
             ->assertSee('cycle');
 
         // Parenting A to itself -> cycle, must be rejected.
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateCategoryTool::class, ['id' => $a, 'parent_category_id' => $a])
             ->assertSee('cycle');
 

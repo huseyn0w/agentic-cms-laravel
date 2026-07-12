@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: geo-settings.blade.php
  * GEO (Generative Engine Optimization) admin settings page.
  * Redesigned: DESIGN_SYSTEM §5 — x-card / x-field / x-button / x-alert / x-eyebrow

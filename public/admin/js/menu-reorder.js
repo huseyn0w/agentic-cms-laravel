@@ -1,5 +1,5 @@
 /*
- * Cmstack-Laravel — accessible menu-builder reordering (DESIGN_SYSTEM §5).
+ * AgenticCms-Laravel — accessible menu-builder reordering (DESIGN_SYSTEM §5).
  *
  * The menu builder used to be drag-only (jQuery UI nestedSortable loaded from a
  * googleapis CDN). §5 makes keyboard-accessible reordering MANDATORY and bans

@@ -21,12 +21,12 @@
   - Model: `app/Http/Models/Page.php` + `app/Http/Models/PageTranslation.php` (Page is the closest simple analogue — translatable + soft-delete, no tags/likes). Cross-check `Post.php` for the `applyFrontReadScope`/status pattern.
   - Front repo: `app/Repositories/PageRepository.php` (has `applyFrontReadScope()`); admin repo: `app/Repositories/CPanelPageRepository.php`.
   - Services: `app/Services/Front/PostViewService.php`, `app/Services/CPanel/CPanelPostService.php`, base `app/Services/BaseCrudService.php`.
-  - Requests: `app/Http/Requests/ValidatePostData.php`, `app/Http/Requests/PostListRequest.php`, base `app/Http/Requests/CmstackLaravelRequest.php`.
+  - Requests: `app/Http/Requests/ValidatePostData.php`, `app/Http/Requests/PostListRequest.php`, base `app/Http/Requests/AgenticCmsLaravelRequest.php`.
   - Controllers: front `app/Http/Controllers/PageController.php` + `app/Http/Controllers/PostController.php`; admin `app/Http/Controllers/CPanel/CPanelPostController.php`, base `CPanelBaseController.php`.
-  - Observers: `app/Observers/PostObserver.php`, `app/Observers/PostTranslationObserver.php`, base `app/Observers/CmstackLaravelObserver.php`; registration in `app/Providers/ObserverServiceProvider.php`.
+  - Observers: `app/Observers/PostObserver.php`, `app/Observers/PostTranslationObserver.php`, base `app/Observers/AgenticCmsLaravelObserver.php`; registration in `app/Providers/ObserverServiceProvider.php`.
   - Admin views: `resources/views/cpanel/pages/{pages_list,new_page,edit_page}.blade.php`.
   - Front views: `resources/views/default/posts/post.blade.php` for the detail shell; `resources/views/default/partials/banner.blade.php` (h1 + breadcrumbs) and `seo-meta.blade.php` for JSON-LD.
-  - MCP: `app/Mcp/Tools/Posts/*` + `app/Mcp/Servers/CmstackLaravelServer.php`; concerns `AuthorizesAccess`, `HydratesRequest`, `ResolvesLocale`.
+  - MCP: `app/Mcp/Tools/Posts/*` + `app/Mcp/Servers/AgenticCmsLaravelServer.php`; concerns `AuthorizesAccess`, `HydratesRequest`, `ResolvesLocale`.
   - Tests: `tests/Feature/Admin/PostCrudTest.php` (admin user bootstrap pattern), `tests/Feature/Front/PostViewServiceTest.php`, `tests/Feature/Mcp/*`, arch `tests/Arch/LayeringTest.php`.
   - Lang: `resources/lang/{en,ru}/cpanel/posts.php`, `resources/lang/{en,ru}/cpanel/nav/left.php`.
 
@@ -686,7 +686,7 @@ git commit -m "feat(services): add front + admin Service services over the repos
 - Test: `tests/Feature/Services/ServiceObserverTest.php`
 
 **Interfaces:**
-- Consumes: `App\Observers\CmstackLaravelObserver` base, `mews/purifier` `clean()`.
+- Consumes: `App\Observers\AgenticCmsLaravelObserver` base, `mews/purifier` `clean()`.
 - Produces: auto-slug from title when slug empty; `content`/`excerpt` sanitized on save.
 
 - [ ] **Step 1: Write the failing test**
@@ -733,7 +733,7 @@ namespace App\Observers;
 use App\Http\Models\Service;
 use Illuminate\Support\Str;
 
-class ServiceObserver extends CmstackLaravelObserver
+class ServiceObserver extends AgenticCmsLaravelObserver
 {
     public function saving(Service $service): void
     {
@@ -749,7 +749,7 @@ namespace App\Observers;
 use App\Http\Models\ServiceTranslation;
 use Illuminate\Support\Str;
 
-class ServiceTranslationObserver extends CmstackLaravelObserver
+class ServiceTranslationObserver extends AgenticCmsLaravelObserver
 {
     public function saving(ServiceTranslation $translation): void
     {
@@ -795,10 +795,10 @@ git commit -m "feat(services): add Service observers (auto-slug + content saniti
 **Files:**
 - Create: `app/Http/Requests/ValidateServiceData.php`
 - Create: `app/Http/Requests/ServiceListRequest.php`
-- Test: covered indirectly by Task 8 (controller) — no standalone test file required, but add `tests/Feature/Services/ValidateServiceDataTest.php` if `CmstackLaravelRequest` is unit-testable in isolation (it is for Post — see `tests/` if a `ValidatePostDataTest` exists; mirror it).
+- Test: covered indirectly by Task 8 (controller) — no standalone test file required, but add `tests/Feature/Services/ValidateServiceDataTest.php` if `AgenticCmsLaravelRequest` is unit-testable in isolation (it is for Post — see `tests/` if a `ValidatePostDataTest` exists; mirror it).
 
 **Interfaces:**
-- Consumes: `App\Http\Requests\CmstackLaravelRequest` (`$table`, `$ignore_column`, `newRecordRule()`/`updateRecordRule()` — read `ValidatePostData.php`).
+- Consumes: `App\Http\Requests\AgenticCmsLaravelRequest` (`$table`, `$ignore_column`, `newRecordRule()`/`updateRecordRule()` — read `ValidatePostData.php`).
 - Produces: `ValidateServiceData` (`rules()` for the Service fields), `ServiceListRequest` (`services_action` in `['delete','destroy','restore']`, `services` array).
 
 - [ ] **Step 1: Implement `ValidateServiceData`** (clone `ValidatePostData`; swap fields, drop `category`/`author_id`/`scheduled_at`)
@@ -807,7 +807,7 @@ git commit -m "feat(services): add Service observers (auto-slug + content saniti
 <?php // app/Http/Requests/ValidateServiceData.php
 namespace App\Http\Requests;
 
-class ValidateServiceData extends CmstackLaravelRequest
+class ValidateServiceData extends AgenticCmsLaravelRequest
 {
     protected $table = 'service_translations';
     protected $ignore_column = 'service_id';
@@ -1037,7 +1037,7 @@ class CPanelServiceController extends CPanelBaseController
 
 > Align method signatures (`create($request)` vs `create($request->validated())`), redirect/route names, and the edit/update locale param exactly with `CPanelPostController` + `BaseCrudService::create()` so the observers receive the request. If Post's `create` reads `app('request')`, keep passing the `$request` object (not `->validated()`).
 
-- [ ] **Step 4: Add the admin routes** in `routes/web.php` inside the `cmstack-laravel-admin` / `CPanel` group, mirroring the posts block:
+- [ ] **Step 4: Add the admin routes** in `routes/web.php` inside the `agentic-cms-laravel-admin` / `CPanel` group, mirroring the posts block:
 
 ```php
 Route::prefix('services')->middleware('manage_services')->group(function () {
@@ -1285,7 +1285,7 @@ git commit -m "feat(services): front index grid + service detail views"
 **Files:**
 - Modify: `resources/views/default/partials/seo-meta.blade.php` (homepage `Service` JSON-LD from real records, `geo_settings` fallback)
 - Modify: `app/Http/Controllers/SeoController.php` (sitemap: add `ServiceRepository::sitemapEntries()`; `/llms.txt`: list services)
-- Create/Modify: a view-composer or helper to expose published services to `seo-meta` on the homepage (e.g. `get_services_for_jsonld()` helper in `bootstrap/cmstack-laravel-helpers.php`, or share via the existing SEO composer).
+- Create/Modify: a view-composer or helper to expose published services to `seo-meta` on the homepage (e.g. `get_services_for_jsonld()` helper in `bootstrap/agentic-cms-laravel-helpers.php`, or share via the existing SEO composer).
 - Test: `tests/Feature/Services/ServiceJsonLdTest.php`
 
 **Interfaces:**
@@ -1341,7 +1341,7 @@ Expected: PASS (2 tests).
 - [ ] **Step 6: Commit**
 
 ```bash
-git add resources/views/default/partials/seo-meta.blade.php app/Http/Controllers/SeoController.php bootstrap/cmstack-laravel-helpers.php tests/Feature/Services/ServiceJsonLdTest.php
+git add resources/views/default/partials/seo-meta.blade.php app/Http/Controllers/SeoController.php bootstrap/agentic-cms-laravel-helpers.php tests/Feature/Services/ServiceJsonLdTest.php
 git commit -m "feat(services): drive Service JSON-LD/sitemap/llms from real records (closes M1 source gap)"
 ```
 
@@ -1351,7 +1351,7 @@ git commit -m "feat(services): drive Service JSON-LD/sitemap/llms from real reco
 
 **Files:**
 - Create: `app/Mcp/Tools/Services/ListServicesTool.php`, `GetServiceTool.php`, `CreateServiceTool.php`, `UpdateServiceTool.php`, `DeleteServiceTool.php`
-- Modify: `app/Mcp/Servers/CmstackLaravelServer.php` (use-imports + `$tools` array — append a `// Services` block)
+- Modify: `app/Mcp/Servers/AgenticCmsLaravelServer.php` (use-imports + `$tools` array — append a `// Services` block)
 - Test: `tests/Feature/Services/ServiceMcpTest.php`
 
 **Interfaces:**
@@ -1388,7 +1388,7 @@ Expected: FAIL — tool classes not found.
 
 - [ ] **Step 3: Implement the 5 tools** by cloning the corresponding `app/Mcp/Tools/Posts/*Tool.php`, swapping `CPanelPostRepository`→`CPanelServiceRepository`, the `manage_posts`→`manage_services` `deny()` gate, and the schema fields to the Service field set (title, slug, icon, excerpt, content, thumbnail, meta_*, sort_order, status, locale). Drop category/tag/author/schedule fields.
 
-- [ ] **Step 4: Register the tools** in `CmstackLaravelServer.php`: add the five `use App\Mcp\Tools\Services\...Tool;` imports (keep alphabetical order in the import block) and a `// Services` group in the `$tools` array.
+- [ ] **Step 4: Register the tools** in `AgenticCmsLaravelServer.php`: add the five `use App\Mcp\Tools\Services\...Tool;` imports (keep alphabetical order in the import block) and a `// Services` group in the `$tools` array.
 
 - [ ] **Step 5: Run the test to verify it passes**
 
@@ -1398,7 +1398,7 @@ Expected: PASS. Update the server's `#[Instructions]` block to mention services 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add app/Mcp/Tools/Services/ app/Mcp/Servers/CmstackLaravelServer.php tests/Feature/Services/ServiceMcpTest.php
+git add app/Mcp/Tools/Services/ app/Mcp/Servers/AgenticCmsLaravelServer.php tests/Feature/Services/ServiceMcpTest.php
 git commit -m "feat(services): MCP tools (list/get/create/update/delete), surface 44->49"
 ```
 

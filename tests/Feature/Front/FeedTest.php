@@ -34,7 +34,7 @@ class FeedTest extends TestCase
 
     private function makePost(string $slug, $scheduledAt = null, int $status = 1): PostTranslation
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', [
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', [
             'title' => $slug, 'slug' => $slug, 'content' => 'body of '.$slug, 'preview' => 'prev '.$slug,
             'author_id' => $this->admin->id, 'meta_keywords' => 'k', 'meta_description' => 'd',
             'category' => [1], 'status' => $status,
@@ -96,8 +96,8 @@ class FeedTest extends TestCase
         $this->makePost('feed-hidden', now()->addDay(), status: 0);
         $this->makePost('feed-shown', now()->subHour(), status: 1);
 
-        Cache::forget('cmstack_laravel.rss.xml');
-        Cache::forget('cmstack_laravel.atom.xml');
+        Cache::forget('agentic_cms_laravel.rss.xml');
+        Cache::forget('agentic_cms_laravel.atom.xml');
 
         $rss = $this->get('/rss.xml')->getContent();
         $atom = $this->get('/atom.xml')->getContent();
@@ -114,8 +114,8 @@ class FeedTest extends TestCase
         // NEVER appear in syndication feeds — feeds carry PUBLISHED posts only.
         $this->makePost('draft-only', null, status: 0);
 
-        Cache::forget('cmstack_laravel.rss.xml');
-        Cache::forget('cmstack_laravel.atom.xml');
+        Cache::forget('agentic_cms_laravel.rss.xml');
+        Cache::forget('agentic_cms_laravel.atom.xml');
 
         $this->assertStringNotContainsString('draft-only', $this->get('/rss.xml')->getContent());
         $this->assertStringNotContainsString('draft-only', $this->get('/atom.xml')->getContent());
@@ -134,8 +134,8 @@ class FeedTest extends TestCase
             'title' => "ctrl\x05title",
         ]);
 
-        Cache::forget('cmstack_laravel.rss.xml');
-        Cache::forget('cmstack_laravel.atom.xml');
+        Cache::forget('agentic_cms_laravel.rss.xml');
+        Cache::forget('agentic_cms_laravel.atom.xml');
 
         $rss = $this->get('/rss.xml')->getContent();
         $atom = $this->get('/atom.xml')->getContent();

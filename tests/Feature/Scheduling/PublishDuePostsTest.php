@@ -35,7 +35,7 @@ class PublishDuePostsTest extends TestCase
      */
     private function scheduledDraft(string $slug, $scheduledAt, int $status = 0): PostTranslation
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', [
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', [
             'title' => $slug, 'slug' => $slug, 'content' => 'body', 'preview' => 'prev',
             'author_id' => $this->admin->id, 'meta_keywords' => 'k', 'meta_description' => 'd',
             'category' => [1], 'status' => $status,

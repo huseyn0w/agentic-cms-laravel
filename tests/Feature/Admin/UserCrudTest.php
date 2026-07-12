@@ -29,7 +29,7 @@ class UserCrudTest extends TestCase
 
     public function test_admin_can_create_a_user(): void
     {
-        $response = $this->actingAs($this->admin)->post('/cmstack-laravel-admin/users/new', [
+        $response = $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/users/new', [
             'username' => 'createduser',
             'email' => 'createduser@example.com',
             'role_id' => 2,
@@ -51,7 +51,7 @@ class UserCrudTest extends TestCase
     {
         $user = User::factory()->create(['role_id' => 2]);
 
-        $response = $this->actingAs($this->admin)->put('/cmstack-laravel-admin/users/'.$user->id.'/update', [
+        $response = $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/users/'.$user->id.'/update', [
             'username' => $user->username,
             'email' => $user->email,
             'role_id' => 2,
@@ -67,7 +67,7 @@ class UserCrudTest extends TestCase
         $user = User::factory()->create(['role_id' => 2]);
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/users/'.$user->id.'/delete')
+            ->delete('/agentic-cms-laravel-admin/users/'.$user->id.'/delete')
             ->assertOk();
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
@@ -78,8 +78,8 @@ class UserCrudTest extends TestCase
         $existing = User::factory()->create(['role_id' => 2]);
 
         $response = $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/users/new')
-            ->post('/cmstack-laravel-admin/users/new', [
+            ->from('/agentic-cms-laravel-admin/users/new')
+            ->post('/agentic-cms-laravel-admin/users/new', [
                 'username' => $existing->username,
                 'email' => $existing->email,
                 'role_id' => 2,
@@ -98,6 +98,6 @@ class UserCrudTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/users')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/users')->assertStatus(401);
     }
 }

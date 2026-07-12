@@ -1,5 +1,5 @@
 {{--
-  Cmstack-Laravel — Phase 7 (SEO/GEO)
+  AgenticCms-Laravel — Phase 7 (SEO/GEO)
   File: partials/analytics.blade.php
 
   The single, OPTIONAL third-party script the public theme will ever load, and

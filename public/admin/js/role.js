@@ -9,7 +9,7 @@ $(function () {
         var del_conf = confirm(delete_confirmation);
         if(del_conf){
             $.ajax({
-                url: "/cmstack-laravel-admin/roles/" + deleted_role_id + "/delete/",
+                url: "/agentic-cms-laravel-admin/roles/" + deleted_role_id + "/delete/",
                 type: 'DELETE',
                 data: {
                     "id": deleted_role_id

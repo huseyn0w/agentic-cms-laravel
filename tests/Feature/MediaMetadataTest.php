@@ -66,7 +66,7 @@ class MediaMetadataTest extends TestCase
     {
         MediaMetadata::forPath('uploads/edit-me.jpg', ['mime' => 'image/jpeg']);
 
-        $response = $this->actingAs($this->admin)->put('/cmstack-laravel-admin/media/metadata', [
+        $response = $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/media/metadata', [
             'path' => 'uploads/edit-me.jpg',
             'alt' => 'edited alt',
             'title' => 'edited title',
@@ -84,7 +84,7 @@ class MediaMetadataTest extends TestCase
 
     public function test_metadata_edit_requires_admin(): void
     {
-        $this->put('/cmstack-laravel-admin/media/metadata', [
+        $this->put('/agentic-cms-laravel-admin/media/metadata', [
             'path' => 'uploads/edit-me.jpg', 'alt' => 'x',
         ])->assertRedirect();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: edit_service.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  */

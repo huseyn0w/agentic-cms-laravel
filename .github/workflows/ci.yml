@@ -100,7 +100,7 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_DATABASE: cmstack_laravel_dusk
+          MYSQL_DATABASE: agentic_cms_laravel_dusk
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
@@ -114,7 +114,7 @@ jobs:
       DB_CONNECTION: mysql
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
-      DB_DATABASE: cmstack_laravel_dusk
+      DB_DATABASE: agentic_cms_laravel_dusk
       DB_USERNAME: root
       DB_PASSWORD: root
     steps:
@@ -183,7 +183,7 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_DATABASE: cmstack_laravel_lh
+          MYSQL_DATABASE: agentic_cms_laravel_lh
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
@@ -196,7 +196,7 @@ jobs:
       DB_CONNECTION: mysql
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
-      DB_DATABASE: cmstack_laravel_lh
+      DB_DATABASE: agentic_cms_laravel_lh
       DB_USERNAME: root
       DB_PASSWORD: root
     steps:

@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: header-styles.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 09.08.2019
@@ -16,9 +16,9 @@
 {{-- No-FOUC dark-mode script (DESIGN_SYSTEM §5 — admin dark toggle).
      Runs inline before paint to apply .dark on <html> from localStorage /
      prefers-color-scheme so the shell never flashes unstyled.
-     Uses the same key `cmstack-theme` as front.js / admin.js. --}}
+     Uses the same key `agentic-cms-theme` as front.js / admin.js. --}}
 <script>
-(function(){try{var t=localStorage.getItem('cmstack-theme');if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();
+(function(){try{var t=localStorage.getItem('agentic-cms-theme');if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();
 </script>
 {{-- Font Awesome CDN removed (DESIGN_SYSTEM §3/§7 — no font/icon CDN).
      Social profile icons replaced with inline SVG in cpanel/users/profile.blade.php.

@@ -31,7 +31,7 @@ function servicePayload(array $overrides = []): array
 
 it('creates a service via the admin endpoint', function () {
     $response = $this->actingAs($this->admin)
-        ->post('/cmstack-laravel-admin/services/new', servicePayload());
+        ->post('/agentic-cms-laravel-admin/services/new', servicePayload());
 
     $response->assertSessionHasNoErrors();
     $response->assertRedirect(route('cpanel_services_list'));
@@ -43,11 +43,11 @@ it('creates a service via the admin endpoint', function () {
 });
 
 it('updates a service via the admin endpoint', function () {
-    $this->actingAs($this->admin)->post('/cmstack-laravel-admin/services/new', servicePayload());
+    $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/services/new', servicePayload());
     $translation = ServiceTranslation::where('slug', 'seo-audit')->firstOrFail();
 
     $response = $this->actingAs($this->admin)
-        ->put('/cmstack-laravel-admin/services/'.$translation->service_id.'/update', servicePayload([
+        ->put('/agentic-cms-laravel-admin/services/'.$translation->service_id.'/update', servicePayload([
             'content' => '<p>edited body</p>',
         ]));
 
@@ -58,11 +58,11 @@ it('updates a service via the admin endpoint', function () {
 });
 
 it('soft-deletes a service via the admin ajax endpoint', function () {
-    $this->actingAs($this->admin)->post('/cmstack-laravel-admin/services/new', servicePayload());
+    $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/services/new', servicePayload());
     $serviceId = ServiceTranslation::where('slug', 'seo-audit')->firstOrFail()->service_id;
 
     $this->actingAs($this->admin)
-        ->delete('/cmstack-laravel-admin/services/'.$serviceId.'/delete')
+        ->delete('/agentic-cms-laravel-admin/services/'.$serviceId.'/delete')
         ->assertOk();
 
     expect(Service::find($serviceId))->toBeNull()
@@ -71,7 +71,7 @@ it('soft-deletes a service via the admin ajax endpoint', function () {
 
 it('rejects a service create with a missing required title', function () {
     $response = $this->actingAs($this->admin)
-        ->post('/cmstack-laravel-admin/services/new', servicePayload(['title' => '']));
+        ->post('/agentic-cms-laravel-admin/services/new', servicePayload(['title' => '']));
 
     $response->assertSessionHasErrors('title');
     // The seeded sample services remain; the rejected create added nothing.
@@ -80,7 +80,7 @@ it('rejects a service create with a missing required title', function () {
 
 it('renders the admin services list', function () {
     $this->actingAs($this->admin)
-        ->post('/cmstack-laravel-admin/services/new', servicePayload());
+        ->post('/agentic-cms-laravel-admin/services/new', servicePayload());
 
     $response = $this->actingAs($this->admin)
         ->get(route('cpanel_services_list'));
@@ -96,7 +96,7 @@ it('renders the new-service form', function () {
 });
 
 it('renders the edit-service form', function () {
-    $this->actingAs($this->admin)->post('/cmstack-laravel-admin/services/new', servicePayload());
+    $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/services/new', servicePayload());
     $serviceId = ServiceTranslation::where('slug', 'seo-audit')->firstOrFail()->service_id;
 
     $this->actingAs($this->admin)

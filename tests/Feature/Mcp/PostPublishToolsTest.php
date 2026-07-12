@@ -7,7 +7,7 @@ use App\Http\Models\PostTranslation;
 use App\Http\Models\Revision;
 use App\Http\Models\User;
 use App\Http\Models\UserRoles;
-use App\Mcp\Servers\CmstackLaravelServer;
+use App\Mcp\Servers\AgenticCmsLaravelServer;
 use App\Mcp\Tools\Posts\ListPostRevisionsTool;
 use App\Mcp\Tools\Posts\PublishPostTool;
 use App\Mcp\Tools\Posts\RestorePostRevisionTool;
@@ -68,7 +68,7 @@ class PostPublishToolsTest extends TestCase
 
     public function test_publish_post_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(PublishPostTool::class, ['id' => 1])
+        AgenticCmsLaravelServer::tool(PublishPostTool::class, ['id' => 1])
             ->assertSee('Authentication required');
     }
 
@@ -76,7 +76,7 @@ class PostPublishToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(PublishPostTool::class, ['id' => 1])
             ->assertSee('Permission denied');
     }
@@ -87,7 +87,7 @@ class PostPublishToolsTest extends TestCase
 
     public function test_list_post_revisions_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(ListPostRevisionsTool::class, ['id' => 1, 'locale' => 'en'])
+        AgenticCmsLaravelServer::tool(ListPostRevisionsTool::class, ['id' => 1, 'locale' => 'en'])
             ->assertSee('Authentication required');
     }
 
@@ -95,7 +95,7 @@ class PostPublishToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListPostRevisionsTool::class, ['id' => 1, 'locale' => 'en'])
             ->assertSee('Permission denied');
     }
@@ -106,7 +106,7 @@ class PostPublishToolsTest extends TestCase
 
     public function test_restore_post_revision_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(RestorePostRevisionTool::class, ['id' => 1, 'locale' => 'en', 'revision_id' => 1])
+        AgenticCmsLaravelServer::tool(RestorePostRevisionTool::class, ['id' => 1, 'locale' => 'en', 'revision_id' => 1])
             ->assertSee('Authentication required');
     }
 
@@ -114,7 +114,7 @@ class PostPublishToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(RestorePostRevisionTool::class, ['id' => 1, 'locale' => 'en', 'revision_id' => 1])
             ->assertSee('Permission denied');
     }
@@ -128,7 +128,7 @@ class PostPublishToolsTest extends TestCase
         $user = $this->userWithPermissions(['manage_posts' => 1]);
         $translation = $this->makeDraftPost($user, 'en', 0);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(PublishPostTool::class, ['id' => $translation->post_id, 'locale' => 'en'])
             ->assertOk()
             ->assertSee('published');
@@ -149,7 +149,7 @@ class PostPublishToolsTest extends TestCase
             'scheduled_at' => now()->addDay(),
         ]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(PublishPostTool::class, ['id' => $translation->post_id, 'locale' => 'en'])
             ->assertOk();
 
@@ -162,7 +162,7 @@ class PostPublishToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(PublishPostTool::class, ['id' => 99999])
             ->assertSee('No post found');
     }
@@ -192,7 +192,7 @@ class PostPublishToolsTest extends TestCase
             ]);
         }
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(PublishPostTool::class, ['id' => $postId])
             ->assertOk()
             ->assertSee('"translations_published":2');
@@ -212,7 +212,7 @@ class PostPublishToolsTest extends TestCase
         $user = $this->userWithPermissions(['manage_posts' => 1]);
         $translation = $this->makeDraftPost($user);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListPostRevisionsTool::class, [
                 'id' => $translation->post_id,
                 'locale' => 'en',
@@ -227,7 +227,7 @@ class PostPublishToolsTest extends TestCase
         $translation = $this->makeDraftPost($user, 'en');
 
         // Ask for a locale that has no translation
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListPostRevisionsTool::class, [
                 'id' => $translation->post_id,
                 'locale' => 'xx',
@@ -248,7 +248,7 @@ class PostPublishToolsTest extends TestCase
             'data' => $translation->getAttributes(),
         ]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListPostRevisionsTool::class, [
                 'id' => $translation->post_id,
                 'locale' => 'en',
@@ -265,7 +265,7 @@ class PostPublishToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_posts' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(RestorePostRevisionTool::class, [
                 'id' => 99999,
                 'locale' => 'en',
@@ -294,7 +294,7 @@ class PostPublishToolsTest extends TestCase
             ->update(['title' => 'Changed Title']);
 
         // Restore the revision — the title should revert
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(RestorePostRevisionTool::class, [
                 'id' => $translation->post_id,
                 'locale' => 'en',

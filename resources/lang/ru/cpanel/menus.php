@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: menus.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 20.11.2019

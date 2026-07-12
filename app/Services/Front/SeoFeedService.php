@@ -134,7 +134,7 @@ class SeoFeedService
         if ($seo && ! empty($seo->discourage_search_engines)) {
             $lines[] = 'Disallow: /';
         } else {
-            $lines[] = 'Disallow: /cmstack-laravel-admin';
+            $lines[] = 'Disallow: /agentic-cms-laravel-admin';
             $lines[] = 'Disallow: /search';
             $lines[] = 'Allow: /';
         }

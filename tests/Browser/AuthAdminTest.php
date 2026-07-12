@@ -45,11 +45,11 @@ it('login page is styled and admin can sign in via credentials', function () {
 
     // Sign in with the seeded admin credentials.
     $page->fill('[data-testid="login-username"]', 'admin')
-        ->fill('[data-testid="login-password"]', 'cmstackadmin123')
+        ->fill('[data-testid="login-password"]', 'agentic-cmsadmin123')
         ->click('[data-testid="login-submit"]');
 
     // After login, navigate to admin panel — reaching it proves authentication.
-    visit('/cmstack-laravel-admin')
+    visit('/agentic-cms-laravel-admin')
         ->assertSee('Dashboard')
         ->assertNoSmoke();
 })->skip(! $browserEnv, 'browser env (served app + Playwright Chromium) required — set BROWSER_TESTS=1');
@@ -58,11 +58,11 @@ it('admin sidebar is rendered and text is readable on the dark rail', function (
     // Log in first.
     visit('/login')
         ->fill('[data-testid="login-username"]', 'admin')
-        ->fill('[data-testid="login-password"]', 'cmstackadmin123')
+        ->fill('[data-testid="login-password"]', 'agentic-cmsadmin123')
         ->click('[data-testid="login-submit"]');
 
     // Visit the admin panel and assert the sidebar is visible and accessible.
-    $page = visit('/cmstack-laravel-admin');
+    $page = visit('/agentic-cms-laravel-admin');
 
     $page->assertVisible('[data-testid="admin-sidebar"]')
         ->assertSeeIn('[data-testid="admin-sidebar"]', 'Pages')
@@ -75,10 +75,10 @@ it('admin panel is usable on a mobile viewport', function () {
     // Log in.
     visit('/login')
         ->fill('[data-testid="login-username"]', 'admin')
-        ->fill('[data-testid="login-password"]', 'cmstackadmin123')
+        ->fill('[data-testid="login-password"]', 'agentic-cmsadmin123')
         ->click('[data-testid="login-submit"]');
 
-    $page = visit('/cmstack-laravel-admin')->on()->mobile();
+    $page = visit('/agentic-cms-laravel-admin')->on()->mobile();
 
     $page->assertNoSmoke()
         ->assertNoAccessibilityIssues(1);

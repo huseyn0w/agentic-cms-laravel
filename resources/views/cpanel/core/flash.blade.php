@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: flash.blade.php — DESIGN_SYSTEM §5 Phase 6
  * Reusable validation-error block for admin forms.
  * Pull in with @include('cpanel.core.flash').

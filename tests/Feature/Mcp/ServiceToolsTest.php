@@ -6,7 +6,7 @@ use App\Http\Models\Service;
 use App\Http\Models\ServiceTranslation;
 use App\Http\Models\User;
 use App\Http\Models\UserRoles;
-use App\Mcp\Servers\CmstackLaravelServer;
+use App\Mcp\Servers\AgenticCmsLaravelServer;
 use App\Mcp\Tools\Services\CreateServiceTool;
 use App\Mcp\Tools\Services\DeleteServiceTool;
 use App\Mcp\Tools\Services\GetServiceTool;
@@ -54,7 +54,7 @@ class ServiceToolsTest extends TestCase
 
     public function test_list_services_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(ListServicesTool::class, [])
+        AgenticCmsLaravelServer::tool(ListServicesTool::class, [])
             ->assertSee('Authentication required');
     }
 
@@ -62,7 +62,7 @@ class ServiceToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_services' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(CreateServiceTool::class, ['title' => 'Hosting'])
             ->assertSee('Permission denied');
     }
@@ -71,7 +71,7 @@ class ServiceToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_services' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(DeleteServiceTool::class, ['id' => 1])
             ->assertSee('Permission denied');
     }
@@ -82,7 +82,7 @@ class ServiceToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_services' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(CreateServiceTool::class, [
                 'title' => 'Managed Hosting',
                 'locale' => 'en',
@@ -101,7 +101,7 @@ class ServiceToolsTest extends TestCase
         $this->makeService('Hosting');
         $this->makeService('SEO');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListServicesTool::class, ['locale' => 'en', 'per_page' => 10])
             ->assertOk()
             ->assertSee('total')
@@ -113,7 +113,7 @@ class ServiceToolsTest extends TestCase
         $user = $this->userWithPermissions(['manage_services' => 1]);
         $service = $this->makeService('Consulting');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetServiceTool::class, ['id' => $service->id, 'locale' => 'en'])
             ->assertOk()
             ->assertSee('Consulting');
@@ -124,7 +124,7 @@ class ServiceToolsTest extends TestCase
         $user = $this->userWithPermissions(['manage_services' => 1]);
         $service = $this->makeService('Old Title');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateServiceTool::class, [
                 'id' => $service->id,
                 'locale' => 'en',
@@ -141,7 +141,7 @@ class ServiceToolsTest extends TestCase
         $user = $this->userWithPermissions(['manage_services' => 1]);
         $service = $this->makeService('Temp');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(DeleteServiceTool::class, ['id' => $service->id])
             ->assertOk()
             ->assertSee('deleted');

@@ -19,7 +19,7 @@ trait CreatesApplication
         $app->make(Kernel::class)->bootstrap();
 
         // Browser (Dusk) tests run the app over real HTTP against a dedicated
-        // MySQL database (cmstack_laravel_dusk, see .env.dusk.local). The test process
+        // MySQL database (agentic_cms_laravel_dusk, see .env.dusk.local). The test process
         // and the served app must SHARE that database, so the in-memory SQLite
         // pin below must NOT apply for Dusk — DUSK=true signals that.
         if (env('DUSK')) {

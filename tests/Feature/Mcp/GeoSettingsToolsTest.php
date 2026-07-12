@@ -4,7 +4,7 @@ namespace Tests\Feature\Mcp;
 
 use App\Http\Models\User;
 use App\Http\Models\UserRoles;
-use App\Mcp\Servers\CmstackLaravelServer;
+use App\Mcp\Servers\AgenticCmsLaravelServer;
 use App\Mcp\Tools\Settings\GetGeoSettingsTool;
 use App\Mcp\Tools\Settings\UpdateGeoSettingsTool;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,7 +35,7 @@ class GeoSettingsToolsTest extends TestCase
 
     public function test_get_geo_settings_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(GetGeoSettingsTool::class, [])
+        AgenticCmsLaravelServer::tool(GetGeoSettingsTool::class, [])
             ->assertSee('Authentication required');
     }
 
@@ -43,7 +43,7 @@ class GeoSettingsToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetGeoSettingsTool::class, [])
             ->assertSee('Permission denied');
     }
@@ -54,7 +54,7 @@ class GeoSettingsToolsTest extends TestCase
 
     public function test_update_geo_settings_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(UpdateGeoSettingsTool::class, ['business_name' => 'Acme'])
+        AgenticCmsLaravelServer::tool(UpdateGeoSettingsTool::class, ['business_name' => 'Acme'])
             ->assertSee('Authentication required');
     }
 
@@ -62,7 +62,7 @@ class GeoSettingsToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateGeoSettingsTool::class, ['business_name' => 'Acme'])
             ->assertSee('Permission denied');
     }
@@ -75,7 +75,7 @@ class GeoSettingsToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetGeoSettingsTool::class, [])
             ->assertOk()
             ->assertSee('business_name');
@@ -89,7 +89,7 @@ class GeoSettingsToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateGeoSettingsTool::class, [])
             ->assertSee('Nothing to update');
     }
@@ -102,7 +102,7 @@ class GeoSettingsToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateGeoSettingsTool::class, [
                 'business_name' => 'Elman Group',
                 'business_type' => 'Organization',
@@ -118,7 +118,7 @@ class GeoSettingsToolsTest extends TestCase
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
         // First write
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateGeoSettingsTool::class, [
                 'business_name' => 'Round Trip Co',
                 'business_type' => 'LocalBusiness',
@@ -129,7 +129,7 @@ class GeoSettingsToolsTest extends TestCase
             ->assertOk();
 
         // Confirm persistence via a fresh GET (tests the full stack — not a cache hit)
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetGeoSettingsTool::class, [])
             ->assertOk()
             ->assertSee('Round Trip Co')
@@ -141,7 +141,7 @@ class GeoSettingsToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateGeoSettingsTool::class, [
                 'business_name' => 'Acme',
                 'business_type' => 'Organization',
@@ -160,7 +160,7 @@ class GeoSettingsToolsTest extends TestCase
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
         // Set initial state
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateGeoSettingsTool::class, [
                 'business_name' => 'First Name',
                 'business_type' => 'Organization',
@@ -169,7 +169,7 @@ class GeoSettingsToolsTest extends TestCase
             ->assertOk();
 
         // Update only the phone; business_name must remain unchanged
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(UpdateGeoSettingsTool::class, [
                 'contact_phone' => '+1 555 9999',
             ])

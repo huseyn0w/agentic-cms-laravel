@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: CPanelUserRepository.phpCreated by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 09.08.2019
  */

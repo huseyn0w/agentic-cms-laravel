@@ -35,7 +35,7 @@ class MenuReorderTest extends TestCase
     public function test_edit_menu_screen_ships_accessible_reorder_and_no_cdn(): void
     {
         $html = $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/menus/1/en')
+            ->get('/agentic-cms-laravel-admin/menus/1/en')
             ->assertStatus(200)
             ->getContent();
 
@@ -58,7 +58,7 @@ class MenuReorderTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin)->put(
-            '/cmstack-laravel-admin/menus/1/update',
+            '/agentic-cms-laravel-admin/menus/1/update',
             [
                 'title' => 'Header Menu',
                 'slug' => 'header_menu',

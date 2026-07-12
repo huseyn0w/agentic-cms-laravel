@@ -7,7 +7,7 @@
 
 /*
  |----------------------------------------------------------------------------
- | Cmstack-Laravel admin — scoped Tailwind reset (.theme-admin)
+ | AgenticCms-Laravel admin — scoped Tailwind reset (.theme-admin)
  |----------------------------------------------------------------------------
  | Tailwind Preflight stays disabled GLOBALLY (tailwind.config.js) so the
  | public theme's own `.theme-default` reset is never double-applied. The admin

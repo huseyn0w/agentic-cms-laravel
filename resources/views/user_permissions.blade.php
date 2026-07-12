@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: user_permissions.blade.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 08.08.2019

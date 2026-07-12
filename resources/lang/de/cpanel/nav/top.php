@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: top.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 17.11.2019
  */
 
 return [
-    'header_title' => 'Cmstack-Laravel Verwaltungsbereich',
+    'header_title' => 'AgenticCms-Laravel Verwaltungsbereich',
     'logged_in_as' => 'Angemeldet als:',
     'homepage' => 'Startseite',
     'settings' => 'Einstellungen',

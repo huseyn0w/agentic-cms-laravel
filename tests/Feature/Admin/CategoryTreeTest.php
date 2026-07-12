@@ -43,7 +43,7 @@ class CategoryTreeTest extends TestCase
 
     private function create(string $title, string $slug, $parentId = ''): int
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/categories/new', $this->payload([
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/categories/new', $this->payload([
             'title' => $title, 'slug' => $slug, 'parent_category_id' => $parentId,
         ]));
 
@@ -64,7 +64,7 @@ class CategoryTreeTest extends TestCase
         $parentId = $this->create('Parent', 'parent');
         $childId = $this->create('Child', 'child');
 
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/categories/'.$childId.'/update', $this->payload([
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/categories/'.$childId.'/update', $this->payload([
             'title' => 'Child', 'slug' => 'child', 'parent_category_id' => $parentId,
         ]))->assertSessionHasNoErrors();
 
@@ -77,8 +77,8 @@ class CategoryTreeTest extends TestCase
         $id = $this->create('Solo', 'solo');
 
         $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/categories/'.$id.'/en')
-            ->put('/cmstack-laravel-admin/categories/'.$id.'/update', $this->payload([
+            ->from('/agentic-cms-laravel-admin/categories/'.$id.'/en')
+            ->put('/agentic-cms-laravel-admin/categories/'.$id.'/update', $this->payload([
                 'title' => 'Solo', 'slug' => 'solo', 'parent_category_id' => $id,
             ]))
             ->assertSessionHasErrors('parent_category_id');
@@ -92,8 +92,8 @@ class CategoryTreeTest extends TestCase
         $c = $this->create('C', 'cat-c', $b);
 
         $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/categories/'.$a.'/en')
-            ->put('/cmstack-laravel-admin/categories/'.$a.'/update', $this->payload([
+            ->from('/agentic-cms-laravel-admin/categories/'.$a.'/en')
+            ->put('/agentic-cms-laravel-admin/categories/'.$a.'/update', $this->payload([
                 'title' => 'A', 'slug' => 'cat-a', 'parent_category_id' => $c,
             ]))
             ->assertSessionHasErrors('parent_category_id');
@@ -111,16 +111,16 @@ class CategoryTreeTest extends TestCase
 
         // Descendant via fraction (B is A's child).
         $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/categories/'.$a.'/en')
-            ->put('/cmstack-laravel-admin/categories/'.$a.'/update', $this->payload([
+            ->from('/agentic-cms-laravel-admin/categories/'.$a.'/en')
+            ->put('/agentic-cms-laravel-admin/categories/'.$a.'/update', $this->payload([
                 'title' => 'A', 'slug' => 'cat-a', 'parent_category_id' => $b.'.5',
             ]))
             ->assertSessionHasErrors('parent_category_id');
 
         // Self via fraction.
         $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/categories/'.$a.'/en')
-            ->put('/cmstack-laravel-admin/categories/'.$a.'/update', $this->payload([
+            ->from('/agentic-cms-laravel-admin/categories/'.$a.'/en')
+            ->put('/agentic-cms-laravel-admin/categories/'.$a.'/update', $this->payload([
                 'title' => 'A', 'slug' => 'cat-a', 'parent_category_id' => $a.'.9',
             ]))
             ->assertSessionHasErrors('parent_category_id');
@@ -135,7 +135,7 @@ class CategoryTreeTest extends TestCase
         $b = $this->create('Beta', 'beta', $a);
 
         $html = $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/categories/'.$a.'/en')
+            ->get('/agentic-cms-laravel-admin/categories/'.$a.'/en')
             ->assertOk()
             ->getContent();
 

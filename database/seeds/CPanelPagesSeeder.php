@@ -18,7 +18,7 @@ class CPanelPagesSeeder extends Seeder
         $home_page_custom_fields = [
             'en' => [
                 'headline' => [
-                    'value' => 'Cmstack-Laravel',
+                    'value' => 'AgenticCms-Laravel',
                     'type' => 'text',
                     'admin_label' => 'Headline',
                 ],
@@ -73,7 +73,7 @@ class CPanelPagesSeeder extends Seeder
                                 'admin_label' => 'Author Name',
                             ],
                             'author-position' => [
-                                'value' => 'Cmstack-Laravel Author',
+                                'value' => 'AgenticCms-Laravel Author',
                                 'type' => 'text',
                                 'admin_label' => 'Author Position',
                             ],
@@ -93,7 +93,7 @@ class CPanelPagesSeeder extends Seeder
             ],
             'ru' => [
                 'headline' => [
-                    'value' => 'Cmstack-Laravel',
+                    'value' => 'AgenticCms-Laravel',
                     'type' => 'text',
                     'admin_label' => 'Заголовок',
                 ],
@@ -148,7 +148,7 @@ class CPanelPagesSeeder extends Seeder
                                 'admin_label' => 'Имя автора',
                             ],
                             'author-position' => [
-                                'value' => 'Создатель Cmstack-Laravel',
+                                'value' => 'Создатель AgenticCms-Laravel',
                                 'type' => 'text',
                                 'admin_label' => 'Должность',
                             ],
@@ -181,9 +181,9 @@ class CPanelPagesSeeder extends Seeder
 
         // Homepage (page 1) — one row per locale (en/de/ru).
         $home_meta = [
-            'en' => ['title' => 'Homepage', 'keywords' => 'page, homepage', 'description' => 'This is homepage of CMS Cmstack-Laravel'],
-            'de' => ['title' => 'Startseite', 'keywords' => 'seite, startseite', 'description' => 'Dies ist die Startseite des CMS Cmstack-Laravel'],
-            'ru' => ['title' => 'Главная страница', 'keywords' => 'страница, главная', 'description' => 'Это главная страница CMS Cmstack-Laravel'],
+            'en' => ['title' => 'Homepage', 'keywords' => 'page, homepage', 'description' => 'This is homepage of CMS AgenticCms-Laravel'],
+            'de' => ['title' => 'Startseite', 'keywords' => 'seite, startseite', 'description' => 'Dies ist die Startseite des CMS AgenticCms-Laravel'],
+            'ru' => ['title' => 'Главная страница', 'keywords' => 'страница, главная', 'description' => 'Это главная страница CMS AgenticCms-Laravel'],
         ];
 
         $homeRows = [];
@@ -225,7 +225,7 @@ class CPanelPagesSeeder extends Seeder
                     'page_id' => $pageId,
                     'author_id' => 1,
                     'status' => 1,
-                    'meta_keywords' => $meta['data']['slug'].', cmstack, cms',
+                    'meta_keywords' => $meta['data']['slug'].', agentic-cms, cms',
                     'meta_description' => mb_substr(strip_tags($meta['data']['content'][$locale]), 0, 200),
                     'template' => $meta['template'],
                     'content' => $meta['data']['content'][$locale],

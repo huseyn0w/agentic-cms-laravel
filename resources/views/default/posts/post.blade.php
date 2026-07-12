@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — post detail view.
+ * AgenticCms-Laravel — post detail view.
  * Phase 5: redesigned to DESIGN_SYSTEM §5 (prose, avatar, badges, pagination, field).
  * Functional wiring preserved: postLike, commentThread, editCommentDialog, comment form.
  */

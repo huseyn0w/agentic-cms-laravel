@@ -41,7 +41,7 @@ class CPanelWriteFlowSmokeTest extends TestCase
     public function test_admin_can_update_general_settings(): void
     {
         $this->actingAs($this->admin)
-            ->post('/cmstack-laravel-admin/general-settings', [
+            ->post('/agentic-cms-laravel-admin/general-settings', [
                 'website_name' => 'New Site Name',
                 'tagline' => 'New Tagline',
                 'posts_per_page' => 7,
@@ -61,7 +61,7 @@ class CPanelWriteFlowSmokeTest extends TestCase
     public function test_admin_can_create_role_with_whitelisted_permissions(): void
     {
         $this->actingAs($this->admin)
-            ->post('/cmstack-laravel-admin/roles/new', [
+            ->post('/agentic-cms-laravel-admin/roles/new', [
                 'name' => 'Editor',
                 'permissions' => ['manage_posts', 'manage_pages', 'not_a_real_permission'],
             ])

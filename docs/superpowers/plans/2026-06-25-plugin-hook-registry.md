@@ -874,7 +874,7 @@ class PluginAdminTest extends TestCase
     public function test_admin_can_see_discovered_plugins(): void
     {
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/plugins')
+            ->get('/agentic-cms-laravel-admin/plugins')
             ->assertOk()
             ->assertSee('Reading time');
     }
@@ -882,7 +882,7 @@ class PluginAdminTest extends TestCase
     public function test_admin_can_enable_a_plugin(): void
     {
         $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/plugins/toggle', ['slug' => 'reading-time', 'enabled' => 1])
+            ->put('/agentic-cms-laravel-admin/plugins/toggle', ['slug' => 'reading-time', 'enabled' => 1])
             ->assertRedirect();
 
         $this->assertDatabaseHas('plugins', ['slug' => 'reading-time', 'enabled' => true]);
@@ -890,7 +890,7 @@ class PluginAdminTest extends TestCase
 
     public function test_guest_cannot_access_plugin_admin(): void
     {
-        $this->get('/cmstack-laravel-admin/plugins')->assertRedirect();
+        $this->get('/agentic-cms-laravel-admin/plugins')->assertRedirect();
     }
 }
 ```

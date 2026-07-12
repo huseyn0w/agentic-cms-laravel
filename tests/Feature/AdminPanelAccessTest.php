@@ -28,7 +28,7 @@ class AdminPanelAccessTest extends TestCase
 
         $this->assertSame(1, $admin->role->id, 'Seeded admin should hold role_id 1');
 
-        $response = $this->actingAs($admin)->get('/cmstack-laravel-admin');
+        $response = $this->actingAs($admin)->get('/agentic-cms-laravel-admin');
 
         $response->assertStatus(200);
     }
@@ -38,7 +38,7 @@ class AdminPanelAccessTest extends TestCase
         // role_id 2 = standard user, see_admin_panel permission = 0.
         $user = User::factory()->create(['role_id' => 2]);
 
-        $response = $this->actingAs($user)->get('/cmstack-laravel-admin');
+        $response = $this->actingAs($user)->get('/agentic-cms-laravel-admin');
 
         $response->assertStatus(403);
     }

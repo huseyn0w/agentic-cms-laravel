@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * Unit coverage for the pure-ish helpers in bootstrap/cmstack-laravel-helpers.php:
+ * Unit coverage for the pure-ish helpers in bootstrap/agentic-cms-laravel-helpers.php:
  * language helpers, slug/translation list helpers and category post counting.
  */
 class HelpersTest extends TestCase
@@ -109,7 +109,7 @@ class HelpersTest extends TestCase
         // The current locale (en) must be skipped; only other languages remain.
         $this->assertArrayNotHasKey('English', $links);
         $this->assertArrayHasKey('Русский', $links);
-        $this->assertStringContainsString('cmstack-laravel-admin/posts/1/ru', $links['Русский']);
+        $this->assertStringContainsString('agentic-cms-laravel-admin/posts/1/ru', $links['Русский']);
         \Session::forget('locale');
     }
 }

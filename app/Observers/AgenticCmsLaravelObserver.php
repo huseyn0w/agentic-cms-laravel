@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Cmstack-Laravel
- * File: CmstackLaravelObserver.php
+ * AgenticCms-Laravel
+ * File: AgenticCmsLaravelObserver.php
  * Created by Elman (https://linkedin.com/in/huseyn0w)
  * Date: 01.12.2019
  */
 
 namespace App\Observers;
 
-class CmstackLaravelObserver
+class AgenticCmsLaravelObserver
 {
     protected $locale;
 

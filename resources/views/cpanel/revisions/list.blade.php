@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel
+ * AgenticCms-Laravel
  * File: list.blade.php — revision history for a post/page translation.
  * Shared by posts and pages; the owning controller passes the route names.
  */

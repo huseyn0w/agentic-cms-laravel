@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Support\Facades\Auth;
 
-class ValidatePageData extends CmstackLaravelRequest
+class ValidatePageData extends AgenticCmsLaravelRequest
 {
     protected $table = 'page_translations';
 

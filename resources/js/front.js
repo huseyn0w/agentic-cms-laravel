@@ -1,5 +1,5 @@
 /**
- * Cmstack-Laravel — public theme interactivity (Alpine.js + fetch).
+ * AgenticCms-Laravel — public theme interactivity (Alpine.js + fetch).
  *
  * Replaces the legacy jQuery/Bootstrap front bundle (like.js, comment.js,
  * nice-select, sticky nav, magnific lightbox). Everything hits the SAME
@@ -32,7 +32,7 @@ async function postJson(url, method, body) {
 // ---------------------------------------------------------------------------
 // Storage key shared with the admin bundle so toggling in either shell
 // persists across the site. Value is 'dark' | 'light' | null (auto).
-const THEME_KEY = 'cmstack-theme';
+const THEME_KEY = 'agentic-cms-theme';
 
 /**
  * Return the effective theme: 'dark' | 'light'.

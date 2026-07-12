@@ -44,7 +44,7 @@ class CategoryCrudTest extends TestCase
     public function test_admin_can_create_a_category(): void
     {
         $response = $this->actingAs($this->admin)
-            ->post('/cmstack-laravel-admin/categories/new', $this->payload());
+            ->post('/agentic-cms-laravel-admin/categories/new', $this->payload());
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -57,11 +57,11 @@ class CategoryCrudTest extends TestCase
 
     public function test_admin_can_update_a_category(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/categories/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/categories/new', $this->payload());
         $translation = CategoryTranslation::where('slug', 'travel')->firstOrFail();
 
         $response = $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/categories/'.$translation->category_id.'/update', $this->payload([
+            ->put('/agentic-cms-laravel-admin/categories/'.$translation->category_id.'/update', $this->payload([
                 'description' => 'updated description',
             ]));
 
@@ -71,11 +71,11 @@ class CategoryCrudTest extends TestCase
 
     public function test_admin_can_delete_a_category(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/categories/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/categories/new', $this->payload());
         $translation = CategoryTranslation::where('slug', 'travel')->firstOrFail();
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/categories/'.$translation->category_id.'/delete')
+            ->delete('/agentic-cms-laravel-admin/categories/'.$translation->category_id.'/delete')
             ->assertOk();
 
         $this->assertSame(0, CategoryTranslation::where('slug', 'travel')->count());
@@ -84,8 +84,8 @@ class CategoryCrudTest extends TestCase
     public function test_validation_blocks_invalid_category(): void
     {
         $response = $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/categories/new')
-            ->post('/cmstack-laravel-admin/categories/new', ['title' => '']);
+            ->from('/agentic-cms-laravel-admin/categories/new')
+            ->post('/agentic-cms-laravel-admin/categories/new', ['title' => '']);
 
         $response->assertSessionHasErrors(['title', 'slug']);
     }
@@ -98,6 +98,6 @@ class CategoryCrudTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/categories')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/categories')->assertStatus(401);
     }
 }

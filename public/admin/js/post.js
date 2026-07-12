@@ -33,7 +33,7 @@ $(function () {
         var del_conf = confirm(delete_confirmation);
         if(del_conf){
             $.ajax({
-                url: "/cmstack-laravel-admin/posts/" + deleted_post_id + "/delete/",
+                url: "/agentic-cms-laravel-admin/posts/" + deleted_post_id + "/delete/",
                 type: 'DELETE',
                 data: {
                     "id": deleted_post_id
@@ -74,7 +74,7 @@ $(function () {
         var dest_conf = confirm(destroy_confirmation);
         if(dest_conf){
             $.ajax({
-                url: "/cmstack-laravel-admin/posts/" + deleted_post_id + "/destroy/",
+                url: "/agentic-cms-laravel-admin/posts/" + deleted_post_id + "/destroy/",
                 type: 'DELETE',
                 data: {
                     "id": deleted_post_id

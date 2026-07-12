@@ -45,14 +45,14 @@ class MenuCrudTest extends TestCase
         // Regression: get_post_list()/get_pages_list() ordered by an unqualified
         // `id` over a join where both tables have an `id` column -> 500 on SQLite.
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/menus/new')
+            ->get('/agentic-cms-laravel-admin/menus/new')
             ->assertStatus(200);
     }
 
     public function test_admin_can_create_a_menu(): void
     {
         $response = $this->actingAs($this->admin)
-            ->post('/cmstack-laravel-admin/menus/new', $this->payload());
+            ->post('/agentic-cms-laravel-admin/menus/new', $this->payload());
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('cpanel_menu_list'));
@@ -64,11 +64,11 @@ class MenuCrudTest extends TestCase
 
     public function test_admin_can_update_a_menu(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/menus/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/menus/new', $this->payload());
         $translation = MenuTranslation::where('title', 'Footer')->firstOrFail();
 
         $response = $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/menus/'.$translation->menu_id.'/update', $this->payload([
+            ->put('/agentic-cms-laravel-admin/menus/'.$translation->menu_id.'/update', $this->payload([
                 'content' => '[{"label":"Changed","slug":"/x"}]',
             ]));
 
@@ -78,11 +78,11 @@ class MenuCrudTest extends TestCase
 
     public function test_admin_can_delete_a_menu(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/menus/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/menus/new', $this->payload());
         $translation = MenuTranslation::where('title', 'Footer')->firstOrFail();
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/menus/'.$translation->menu_id.'/delete')
+            ->delete('/agentic-cms-laravel-admin/menus/'.$translation->menu_id.'/delete')
             ->assertOk();
 
         $this->assertSame(0, MenuTranslation::where('title', 'Footer')->count());
@@ -91,8 +91,8 @@ class MenuCrudTest extends TestCase
     public function test_validation_blocks_invalid_menu(): void
     {
         $response = $this->actingAs($this->admin)
-            ->from('/cmstack-laravel-admin/menus/new')
-            ->post('/cmstack-laravel-admin/menus/new', ['title' => '']);
+            ->from('/agentic-cms-laravel-admin/menus/new')
+            ->post('/agentic-cms-laravel-admin/menus/new', ['title' => '']);
 
         $response->assertSessionHasErrors(['title', 'slug', 'content']);
     }
@@ -105,6 +105,6 @@ class MenuCrudTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/menus')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/menus')->assertStatus(401);
     }
 }

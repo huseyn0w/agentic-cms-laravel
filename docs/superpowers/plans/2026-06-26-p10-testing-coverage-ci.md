@@ -286,12 +286,12 @@ Create `tests/Browser/AuthAdminTest.php`:
 <?php
 
 it('lets a seeded admin sign in and shows a readable dark sidebar', function () {
-    $page = visit('/cmstack-laravel-admin');
+    $page = visit('/agentic-cms-laravel-admin');
 
     $page->fill('[data-testid="login-username"]', 'admin')
-        ->fill('[data-testid="login-password"]', 'cmstackadmin123')
+        ->fill('[data-testid="login-password"]', 'agentic-cmsadmin123')
         ->click('[data-testid="login-submit"]')
-        ->assertPathContains('cmstack-laravel-admin')
+        ->assertPathContains('agentic-cms-laravel-admin')
         ->assertVisible('[data-testid="admin-sidebar"]')
         ->assertNoAccessibilityIssues()
         ->assertNoSmoke();
@@ -441,7 +441,7 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_DATABASE: cmstack_laravel_dusk
+          MYSQL_DATABASE: agentic_cms_laravel_dusk
           MYSQL_ROOT_PASSWORD: root
         ports: ['3306:3306']
         options: >-
@@ -451,7 +451,7 @@ jobs:
       BROWSER_TESTS: 1
       DB_CONNECTION: mysql
       DB_HOST: 127.0.0.1
-      DB_DATABASE: cmstack_laravel_dusk
+      DB_DATABASE: agentic_cms_laravel_dusk
       DB_USERNAME: root
       DB_PASSWORD: root
     steps:

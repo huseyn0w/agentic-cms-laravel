@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — menu builder source accordion (Phase 7c redesign).
+ * AgenticCms-Laravel — menu builder source accordion (Phase 7c redesign).
  * Shared by new_menu / edit_menu.
  * DESIGN_SYSTEM §5: token-driven containers with card + eyebrow + field structure.
  *

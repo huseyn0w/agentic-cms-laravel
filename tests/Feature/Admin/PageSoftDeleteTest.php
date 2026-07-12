@@ -47,7 +47,7 @@ class PageSoftDeleteTest extends TestCase
 
     private function createPage(): int
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload());
 
         return PageTranslation::where('slug', 'trashable-page')->firstOrFail()->page_id;
     }
@@ -57,7 +57,7 @@ class PageSoftDeleteTest extends TestCase
         $pageId = $this->createPage();
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/pages/'.$pageId.'/delete')
+            ->delete('/agentic-cms-laravel-admin/pages/'.$pageId.'/delete')
             ->assertOk();
 
         $this->assertNull(Page::find($pageId), 'Page should be soft deleted.');
@@ -69,13 +69,13 @@ class PageSoftDeleteTest extends TestCase
     public function test_trashed_pages_listing_shows_only_soft_deleted_pages(): void
     {
         $deletedId = $this->createPage();
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/new', $this->payload([
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload([
             'title' => 'Live Page', 'slug' => 'live-page',
         ]));
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/pages/'.$deletedId.'/delete');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/pages/'.$deletedId.'/delete');
 
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/pages/trashed')
+            ->get('/agentic-cms-laravel-admin/pages/trashed')
             ->assertOk()
             ->assertSee('Trashable Page')
             ->assertDontSee('Live Page');
@@ -84,10 +84,10 @@ class PageSoftDeleteTest extends TestCase
     public function test_trashed_tab_renders_restore_and_destroy_affordances(): void
     {
         $pageId = $this->createPage();
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/pages/'.$pageId.'/delete');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/pages/'.$pageId.'/delete');
 
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/pages/trashed')
+            ->get('/agentic-cms-laravel-admin/pages/trashed')
             ->assertOk()
             ->assertSee(__('cpanel/pages.restore_page'))
             ->assertSee(__('cpanel/pages.destroy_page'))
@@ -97,10 +97,10 @@ class PageSoftDeleteTest extends TestCase
     public function test_admin_can_restore_a_soft_deleted_page(): void
     {
         $pageId = $this->createPage();
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/pages/'.$pageId.'/delete');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/pages/'.$pageId.'/delete');
 
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/pages/'.$pageId.'/restore')
+            ->get('/agentic-cms-laravel-admin/pages/'.$pageId.'/restore')
             ->assertRedirect();
 
         $this->assertNotNull(Page::find($pageId), 'Page should be restored (no longer trashed).');
@@ -109,10 +109,10 @@ class PageSoftDeleteTest extends TestCase
     public function test_admin_can_permanently_destroy_a_trashed_page(): void
     {
         $pageId = $this->createPage();
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/pages/'.$pageId.'/delete');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/pages/'.$pageId.'/delete');
 
         $this->actingAs($this->admin)
-            ->delete('/cmstack-laravel-admin/pages/'.$pageId.'/destroy')
+            ->delete('/agentic-cms-laravel-admin/pages/'.$pageId.'/destroy')
             ->assertOk();
 
         $this->assertNull(Page::withTrashed()->find($pageId), 'Page row should be gone.');
@@ -126,7 +126,7 @@ class PageSoftDeleteTest extends TestCase
         // endpoint — permanent-delete is restricted to already-trashed rows.
         $pageId = $this->createPage();
 
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/pages/'.$pageId.'/destroy');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/pages/'.$pageId.'/destroy');
 
         $this->assertNotNull(Page::find($pageId), 'A live page must not be force-deleted via destroy.');
     }
@@ -139,10 +139,10 @@ class PageSoftDeleteTest extends TestCase
         ]);
         $user = User::factory()->create(['role_id' => $role->id]);
 
-        $this->actingAs($user)->get('/cmstack-laravel-admin/pages/trashed')->assertStatus(401);
-        $this->actingAs($user)->get('/cmstack-laravel-admin/pages/1/restore')->assertStatus(401);
-        $this->actingAs($user)->delete('/cmstack-laravel-admin/pages/1/destroy')->assertStatus(401);
-        $this->actingAs($user)->post('/cmstack-laravel-admin/pages/multiple', [
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/pages/trashed')->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/pages/1/restore')->assertStatus(401);
+        $this->actingAs($user)->delete('/agentic-cms-laravel-admin/pages/1/destroy')->assertStatus(401);
+        $this->actingAs($user)->post('/agentic-cms-laravel-admin/pages/multiple', [
             'pages_action' => 'destroy', 'pages' => [1],
         ])->assertStatus(401);
     }
@@ -162,7 +162,7 @@ class PageSoftDeleteTest extends TestCase
         // The sitemap is cached for an hour (eventually-consistent for ALL content
         // changes, by design); bust that cache to assert the QUERY itself excludes
         // trashed pages — guarding against a future raw-query refactor leaking them.
-        Cache::forget('cmstack_laravel.sitemap.xml');
+        Cache::forget('agentic_cms_laravel.sitemap.xml');
         $sitemap = $this->get('/sitemap.xml')->getContent();
         $this->assertStringNotContainsString('/contact', $sitemap, 'Trashed page must drop from the sitemap query.');
     }
@@ -170,14 +170,14 @@ class PageSoftDeleteTest extends TestCase
     public function test_admin_can_bulk_restore_trashed_pages(): void
     {
         $a = $this->createPage();
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/new', $this->payload([
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload([
             'title' => 'Second Page', 'slug' => 'second-page',
         ]));
         $b = PageTranslation::where('slug', 'second-page')->firstOrFail()->page_id;
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/pages/'.$a.'/delete');
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/pages/'.$b.'/delete');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/pages/'.$a.'/delete');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/pages/'.$b.'/delete');
 
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/pages/multiple', [
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/multiple', [
             'pages_action' => 'restore',
             'pages' => [$a, $b],
         ])->assertRedirect();

@@ -5,7 +5,7 @@ namespace Tests\Feature\Mcp;
 use App\Http\Models\Comments;
 use App\Http\Models\User;
 use App\Http\Models\UserRoles;
-use App\Mcp\Servers\CmstackLaravelServer;
+use App\Mcp\Servers\AgenticCmsLaravelServer;
 use App\Mcp\Tools\Comments\DeleteCommentTool;
 use App\Mcp\Tools\Comments\GetCommentTool;
 use App\Mcp\Tools\Comments\ListCommentsTool;
@@ -63,25 +63,25 @@ class CommentToolsTest extends TestCase
 
     public function test_list_comments_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(ListCommentsTool::class, [])
+        AgenticCmsLaravelServer::tool(ListCommentsTool::class, [])
             ->assertSee('Authentication required');
     }
 
     public function test_get_comment_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(GetCommentTool::class, ['id' => 1])
+        AgenticCmsLaravelServer::tool(GetCommentTool::class, ['id' => 1])
             ->assertSee('Authentication required');
     }
 
     public function test_moderate_comment_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(ModerateCommentTool::class, ['id' => 1, 'approved' => true])
+        AgenticCmsLaravelServer::tool(ModerateCommentTool::class, ['id' => 1, 'approved' => true])
             ->assertSee('Authentication required');
     }
 
     public function test_delete_comment_rejects_unauthenticated_callers(): void
     {
-        CmstackLaravelServer::tool(DeleteCommentTool::class, ['id' => 1])
+        AgenticCmsLaravelServer::tool(DeleteCommentTool::class, ['id' => 1])
             ->assertSee('Authentication required');
     }
 
@@ -93,7 +93,7 @@ class CommentToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_comments' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListCommentsTool::class, [])
             ->assertSee('Permission denied');
     }
@@ -102,7 +102,7 @@ class CommentToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_comments' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetCommentTool::class, ['id' => 1])
             ->assertSee('Permission denied');
     }
@@ -111,7 +111,7 @@ class CommentToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_comments' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ModerateCommentTool::class, ['id' => 1, 'approved' => true])
             ->assertSee('Permission denied');
     }
@@ -120,7 +120,7 @@ class CommentToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_comments' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(DeleteCommentTool::class, ['id' => 1])
             ->assertSee('Permission denied');
     }
@@ -136,7 +136,7 @@ class CommentToolsTest extends TestCase
         $this->makeComment('First comment');
         $this->makeComment('Second comment');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListCommentsTool::class, ['per_page' => 10])
             ->assertOk()
             ->assertSee('total')
@@ -153,7 +153,7 @@ class CommentToolsTest extends TestCase
 
         $comment = $this->makeComment('Hello world');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetCommentTool::class, ['id' => $comment->id])
             ->assertOk()
             ->assertSee('Hello world');
@@ -163,7 +163,7 @@ class CommentToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_comments' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(GetCommentTool::class, ['id' => 99999])
             ->assertSee('No comment found');
     }
@@ -178,7 +178,7 @@ class CommentToolsTest extends TestCase
 
         $comment = $this->makeComment('Pending comment', 0);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ModerateCommentTool::class, ['id' => $comment->id, 'approved' => true])
             ->assertOk()
             ->assertSee('moderated');
@@ -192,7 +192,7 @@ class CommentToolsTest extends TestCase
 
         $comment = $this->makeComment('Approved comment', 1);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ModerateCommentTool::class, ['id' => $comment->id, 'approved' => false])
             ->assertOk()
             ->assertSee('moderated');
@@ -204,7 +204,7 @@ class CommentToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_comments' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(ModerateCommentTool::class, ['id' => 99999, 'approved' => true])
             ->assertSee('Could not moderate');
     }
@@ -219,7 +219,7 @@ class CommentToolsTest extends TestCase
 
         $comment = $this->makeComment('Delete me');
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(DeleteCommentTool::class, ['id' => $comment->id])
             ->assertOk()
             ->assertSee('deleted');
@@ -231,7 +231,7 @@ class CommentToolsTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_comments' => 1]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(DeleteCommentTool::class, ['id' => 99999])
             ->assertSee('Could not delete');
     }

@@ -1,5 +1,5 @@
 # =============================================================================
-# Cmstack-Laravel - convenience targets for local development (Docker).
+# AgenticCms-Laravel - convenience targets for local development (Docker).
 #
 # The Docker stack is a LOCAL DEV convenience only; production deploys to
 # Hostinger / a VPS without Docker (see README "Deployment").
@@ -46,9 +46,9 @@ setup: kill ## First-time bootstrap: bring up Docker, install deps, migrate+seed
 	npm install
 	npm run build
 	@echo ""
-	@echo "  Cmstack-Laravel is up:  http://localhost:8080"
-	@echo "  Admin panel:      http://localhost:8080/cmstack-laravel-admin"
-	@echo "  Login: admin / cmstackadmin123"
+	@echo "  AgenticCms-Laravel is up:  http://localhost:8080"
+	@echo "  Admin panel:      http://localhost:8080/agentic-cms-laravel-admin"
+	@echo "  Login: admin / agentic-cmsadmin123"
 
 up: kill ## Start the Docker stack
 	$(DC) up -d

@@ -1,6 +1,6 @@
 <?php
 /**
- * Cmstack-Laravel — public service detail page.
+ * AgenticCms-Laravel — public service detail page.
  * DATA: $data — single Service model instance (Astrotomic Translatable).
  *       Translated columns are accessible flat: $data->title, $data->content,
  *       $data->excerpt, $data->slug, $data->thumbnail, $data->meta_description,

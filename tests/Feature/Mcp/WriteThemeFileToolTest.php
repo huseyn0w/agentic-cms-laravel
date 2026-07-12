@@ -4,7 +4,7 @@ namespace Tests\Feature\Mcp;
 
 use App\Http\Models\User;
 use App\Http\Models\UserRoles;
-use App\Mcp\Servers\CmstackLaravelServer;
+use App\Mcp\Servers\AgenticCmsLaravelServer;
 use App\Mcp\Tools\Theme\WriteThemeFileTool;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -18,7 +18,7 @@ use Tests\TestCase;
  *  - deny callers who lack manage_general_settings,
  *  - write successfully for a valid .blade.php path when permitted.
  *
- * Auth/permission setup mirrors CmstackLaravelServerTest.
+ * Auth/permission setup mirrors AgenticCmsLaravelServerTest.
  */
 class WriteThemeFileToolTest extends TestCase
 {
@@ -40,7 +40,7 @@ class WriteThemeFileToolTest extends TestCase
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
         // A traversal that resolves outside the theme root.
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(WriteThemeFileTool::class, [
                 'path' => '../../.env',
                 'contents' => 'MALICIOUS=1',
@@ -57,10 +57,10 @@ class WriteThemeFileToolTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
-        $absolute = '/tmp/cmstack-write-theme-abs-'.bin2hex(random_bytes(4)).'.blade.php';
+        $absolute = '/tmp/agentic-cms-write-theme-abs-'.bin2hex(random_bytes(4)).'.blade.php';
         $this->assertFileDoesNotExist($absolute);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(WriteThemeFileTool::class, [
                 'path' => $absolute,
                 'contents' => 'evil',
@@ -81,7 +81,7 @@ class WriteThemeFileToolTest extends TestCase
         $target = $themeRoot.'/partials/evil.php';
         $this->assertFileDoesNotExist($target);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(WriteThemeFileTool::class, [
                 'path' => 'partials/evil.php',
                 'contents' => '<?php system("rm -rf /"); ?>',
@@ -98,7 +98,7 @@ class WriteThemeFileToolTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 0]);
 
-        CmstackLaravelServer::actingAs($user)
+        AgenticCmsLaravelServer::actingAs($user)
             ->tool(WriteThemeFileTool::class, [
                 'path' => 'index.blade.php',
                 'contents' => 'hello',
@@ -112,14 +112,14 @@ class WriteThemeFileToolTest extends TestCase
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
         // Use an existing template from the default theme (index.blade.php is
-        // confirmed to exist by CmstackLaravelServerTest::test_theme_listing_returns_known_template).
+        // confirmed to exist by AgenticCmsLaravelServerTest::test_theme_listing_returns_known_template).
         $themePath = resource_path('views/'.config('app.template_name', 'default').'/index.blade.php');
 
         // Back up the current contents so we can restore after the test.
         $original = file_get_contents($themePath);
 
         try {
-            CmstackLaravelServer::actingAs($user)
+            AgenticCmsLaravelServer::actingAs($user)
                 ->tool(WriteThemeFileTool::class, [
                     'path' => 'index.blade.php',
                     'contents' => '{{-- written by test --}}',

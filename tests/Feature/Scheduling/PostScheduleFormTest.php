@@ -38,12 +38,12 @@ class PostScheduleFormTest extends TestCase
 
     public function test_admin_can_schedule_a_post_via_the_form(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->payload());
         $postId = PostTranslation::where('slug', 'sched-post')->firstOrFail()->post_id;
 
         $future = now()->addDays(3)->format('Y-m-d H:i:s');
         $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/posts/'.$postId.'/update', $this->payload([
+            ->put('/agentic-cms-laravel-admin/posts/'.$postId.'/update', $this->payload([
                 'status' => 0, 'scheduled_at' => $future,
             ]))
             ->assertSessionHasNoErrors();
@@ -58,13 +58,13 @@ class PostScheduleFormTest extends TestCase
 
     public function test_clearing_the_schedule_field_unschedules_the_post(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->payload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->payload());
         $postId = PostTranslation::where('slug', 'sched-post')->firstOrFail()->post_id;
         PostTranslation::where('post_id', $postId)->update(['scheduled_at' => now()->addDay()]);
 
         // Re-save with an empty schedule field -> schedule cleared.
         $this->actingAs($this->admin)
-            ->put('/cmstack-laravel-admin/posts/'.$postId.'/update', $this->payload(['scheduled_at' => '']))
+            ->put('/agentic-cms-laravel-admin/posts/'.$postId.'/update', $this->payload(['scheduled_at' => '']))
             ->assertSessionHasNoErrors();
 
         $this->assertNull(PostTranslation::where('slug', 'sched-post')->firstOrFail()->scheduled_at);

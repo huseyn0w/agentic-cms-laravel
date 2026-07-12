@@ -47,18 +47,18 @@ class PostRevisionTest extends TestCase
 
     public function test_creating_a_post_takes_no_revision(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
 
         $this->assertSame(0, Revision::count(), 'Creating a post must not snapshot.');
     }
 
     public function test_updating_a_post_snapshots_the_previous_translation(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
 
         $this->actingAs($this->admin)->put(
-            '/cmstack-laravel-admin/posts/'.$translation->post_id.'/update',
+            '/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/update',
             $this->postPayload(['content' => 'edited body'])
         );
 
@@ -75,23 +75,23 @@ class PostRevisionTest extends TestCase
 
     public function test_each_edit_appends_a_new_revision(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
 
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload(['content' => 'edit one']));
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload(['content' => 'edit two']));
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload(['content' => 'edit one']));
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload(['content' => 'edit two']));
 
         $this->assertSame(2, Revision::count(), 'Each edit appends one revision.');
     }
 
     public function test_restoring_a_revision_reverts_content_and_snapshots_current(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
 
         // Edit: snapshots the 'original body' state as the first revision.
         $this->actingAs($this->admin)->put(
-            '/cmstack-laravel-admin/posts/'.$translation->post_id.'/update',
+            '/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/update',
             $this->postPayload(['content' => 'edited body'])
         );
         $revision = Revision::firstOrFail();
@@ -99,7 +99,7 @@ class PostRevisionTest extends TestCase
 
         // Restore the original revision.
         $this->actingAs($this->admin)->post(
-            '/cmstack-laravel-admin/posts/'.$translation->post_id.'/revisions/'.$revision->id.'/restore/en'
+            '/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/revisions/'.$revision->id.'/restore/en'
         )->assertRedirect();
 
         // Content reverted to the snapshot.
@@ -116,19 +116,19 @@ class PostRevisionTest extends TestCase
     {
         $other = User::factory()->create(['role_id' => 1]);
 
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
 
         // Edit reassigns the author and changes content (snapshots the original,
         // authored by admin).
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload([
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload([
             'author_id' => $other->id, 'content' => 'edited body',
         ]));
         $revision = Revision::firstOrFail();
         $this->assertSame($this->admin->id, (int) $revision->data['author_id']);
 
         $this->actingAs($this->admin)->post(
-            '/cmstack-laravel-admin/posts/'.$translation->post_id.'/revisions/'.$revision->id.'/restore/en'
+            '/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/revisions/'.$revision->id.'/restore/en'
         )->assertRedirect();
 
         $fresh = PostTranslation::findOrFail($translation->id);
@@ -141,23 +141,23 @@ class PostRevisionTest extends TestCase
 
     public function test_restore_with_conflicting_slug_does_not_500(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $a = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
 
         // Rename A (snapshots its original title/slug), freeing the old slug.
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/posts/'.$a->post_id.'/update', $this->postPayload([
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/posts/'.$a->post_id.'/update', $this->postPayload([
             'title' => 'Renamed Post', 'slug' => 'renamed-post', 'content' => 'edited body',
         ]));
         $revision = Revision::firstOrFail();
 
         // B now takes A's original title/slug.
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload([
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload([
             'content' => 'b body',
         ]));
 
         // Restoring A's revision would collide on unique(locale,title,slug).
         $response = $this->actingAs($this->admin)->post(
-            '/cmstack-laravel-admin/posts/'.$a->post_id.'/revisions/'.$revision->id.'/restore/en'
+            '/agentic-cms-laravel-admin/posts/'.$a->post_id.'/revisions/'.$revision->id.'/restore/en'
         );
 
         $this->assertNotSame(500, $response->status(), 'Restore must fail gracefully, not 500.');
@@ -165,12 +165,12 @@ class PostRevisionTest extends TestCase
 
     public function test_revisions_are_unreachable_for_a_trashed_post(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
-        $this->actingAs($this->admin)->delete('/cmstack-laravel-admin/posts/'.$translation->post_id.'/delete');
+        $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/delete');
 
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/posts/'.$translation->post_id.'/revisions/en')
+            ->get('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/revisions/en')
             ->assertNotFound();
     }
 
@@ -183,18 +183,18 @@ class PostRevisionTest extends TestCase
         $user = User::factory()->create(['role_id' => $role->id]);
 
         $this->actingAs($user)
-            ->get('/cmstack-laravel-admin/posts/1/revisions/en')
+            ->get('/agentic-cms-laravel-admin/posts/1/revisions/en')
             ->assertStatus(401);
     }
 
     public function test_revisions_list_page_renders(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload(['content' => 'edited body']));
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload(['content' => 'edited body']));
 
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/posts/'.$translation->post_id.'/revisions/en')
+            ->get('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/revisions/en')
             ->assertOk()
             ->assertSee('v1')
             ->assertSee($this->admin->username);
@@ -202,13 +202,13 @@ class PostRevisionTest extends TestCase
 
     public function test_revision_diff_page_renders_and_marks_changes(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $translation = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload(['content' => 'edited body']));
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/update', $this->postPayload(['content' => 'edited body']));
         $revision = Revision::firstOrFail();
 
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/posts/'.$translation->post_id.'/revisions/'.$revision->id.'/compare/en')
+            ->get('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/revisions/'.$revision->id.'/compare/en')
             ->assertOk()
             ->assertSee('original body')
             ->assertSee('edited body');
@@ -217,20 +217,20 @@ class PostRevisionTest extends TestCase
     public function test_cannot_restore_a_revision_belonging_to_another_post(): void
     {
         // Post A with one revision.
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $a = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/posts/'.$a->post_id.'/update', $this->postPayload(['content' => 'a edited']));
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/posts/'.$a->post_id.'/update', $this->postPayload(['content' => 'a edited']));
         $revisionOfA = Revision::firstOrFail();
 
         // Post B with distinct content so a clobber is detectable.
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload([
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload([
             'title' => 'Second Post', 'slug' => 'second-post', 'content' => 'b untouched body',
         ]));
         $b = PostTranslation::where('slug', 'second-post')->firstOrFail();
 
         // Try to restore A's revision under B's id -> must 404 and not touch B.
         $this->actingAs($this->admin)->post(
-            '/cmstack-laravel-admin/posts/'.$b->post_id.'/revisions/'.$revisionOfA->id.'/restore/en'
+            '/agentic-cms-laravel-admin/posts/'.$b->post_id.'/revisions/'.$revisionOfA->id.'/restore/en'
         )->assertNotFound();
 
         $freshB = PostTranslation::findOrFail($b->id);
@@ -239,19 +239,19 @@ class PostRevisionTest extends TestCase
 
     public function test_cannot_compare_a_revision_belonging_to_another_post(): void
     {
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload());
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
         $a = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
-        $this->actingAs($this->admin)->put('/cmstack-laravel-admin/posts/'.$a->post_id.'/update', $this->postPayload(['content' => 'a edited']));
+        $this->actingAs($this->admin)->put('/agentic-cms-laravel-admin/posts/'.$a->post_id.'/update', $this->postPayload(['content' => 'a edited']));
         $revisionOfA = Revision::firstOrFail();
 
-        $this->actingAs($this->admin)->post('/cmstack-laravel-admin/posts/new', $this->postPayload([
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload([
             'title' => 'Second Post', 'slug' => 'second-post',
         ]));
         $b = PostTranslation::where('slug', 'second-post')->firstOrFail();
 
         // The compare endpoint must be scoped like restore (no cross-post leak).
         $this->actingAs($this->admin)
-            ->get('/cmstack-laravel-admin/posts/'.$b->post_id.'/revisions/'.$revisionOfA->id.'/compare/en')
+            ->get('/agentic-cms-laravel-admin/posts/'.$b->post_id.'/revisions/'.$revisionOfA->id.'/compare/en')
             ->assertNotFound();
     }
 }

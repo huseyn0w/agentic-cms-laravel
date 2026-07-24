@@ -43,6 +43,18 @@ Route::get('/health/ready', 'HealthController@ready')->name('health_ready');
 
 /*
 |--------------------------------------------------------------------------
+| Inertia smoke route (Phase 0 of the Blade -> Inertia migration)
+|--------------------------------------------------------------------------
+| Temporary: proves the Inertia + React pipeline renders. Must sit above the
+| front catch-all ({locale?}/{slug?}) so it is not swallowed. Remove once real
+| Inertia pages exist. See ~/.claude/plans/wild-percolating-allen.md
+*/
+Route::get('/inertia-demo', fn () => \Inertia\Inertia::render('Demo', [
+    'message' => 'Inertia is wired.',
+]))->name('inertia_demo');
+
+/*
+|--------------------------------------------------------------------------
 | Control Panel Routes
 |--------------------------------------------------------------------------
 */

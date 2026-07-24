@@ -8,6 +8,7 @@ use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\EnsureEmailIsVerifiedWhenRequired;
 use App\Http\Middleware\EnsureRegistrationEnabled;
+use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\Localization;
 use App\Http\Middleware\ManageCategories;
 use App\Http\Middleware\ManageComments;
@@ -67,6 +68,7 @@ class Kernel extends HttpKernel
             VerifyCsrfToken::class,
             SubstituteBindings::class,
             Localization::class,
+            HandleInertiaRequests::class,
         ],
 
         'api' => [

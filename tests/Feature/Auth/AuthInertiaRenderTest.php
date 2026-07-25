@@ -39,4 +39,21 @@ class AuthInertiaRenderTest extends TestCase
             fn (AssertableInertia $page) => $page->component('auth/Register')
         );
     }
+
+    public function test_forgot_password_renders_inertia_component(): void
+    {
+        $this->get('/password/reset')->assertInertia(
+            fn (AssertableInertia $page) => $page->component('auth/ForgotPassword')
+        );
+    }
+
+    public function test_reset_password_renders_inertia_component_with_token(): void
+    {
+        $this->get('/password/reset/sample-token?email=a@b.com')->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('auth/ResetPassword')
+                ->where('token', 'sample-token')
+                ->where('email', 'a@b.com')
+        );
+    }
 }

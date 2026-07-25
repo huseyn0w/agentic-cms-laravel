@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Http\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
@@ -54,6 +55,18 @@ class AuthInertiaRenderTest extends TestCase
                 ->component('auth/ResetPassword')
                 ->where('token', 'sample-token')
                 ->where('email', 'a@b.com')
+        );
+    }
+
+    public function test_verify_notice_renders_inertia_for_unverified_user(): void
+    {
+        $user = User::factory()->create([
+            'role_id' => 2,
+            'email_verified_at' => null,
+        ]);
+
+        $this->actingAs($user)->get('/email/verify')->assertInertia(
+            fn (AssertableInertia $page) => $page->component('auth/VerifyEmail')
         );
     }
 }

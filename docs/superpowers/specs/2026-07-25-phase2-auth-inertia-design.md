@@ -79,17 +79,18 @@ current preserved override. We add the render + POST methods the traits used to 
 - **LoginController** — keep `credentials()` (email-or-username), keep
   `redirectToProvider`/`handleProviderCallback` (Google-only now). Add:
   - `showLoginForm()` → `Inertia::render('auth/Login', ['status' => session('status'), 'canResetPassword' => Route::has('password.request'), 'membershipEnabled' => (bool) get_general_settings('membership')])`.
-  - `login(LoginRequest $request)` → replicate the trait: rate-limit via
-    `AuthenticatesUsers` logic is **not** trivially reproducible; we use Laravel's
-    `Illuminate\Foundation\Auth\ThrottlesLogins` trait (that is framework core, NOT
-    `laravel/ui`) to keep lockout behavior, or reimplement `attemptLogin` +
-    `sendFailedLoginResponse` inline. Decision: **inline** — call
+  - `login(LoginRequest $request)` → **use the framework-core
+    `Illuminate\Foundation\Auth\ThrottlesLogins` trait** (this is core Laravel, NOT
+    `laravel/ui`) for full lockout parity: `hasTooManyLoginAttempts` →
+    `fireLockoutEvent` + `sendLockoutResponse` (throws `ValidationException` keyed on
+    `throttleKey()` with `trans('auth.throttle')`); otherwise
     `Auth::attempt($this->credentials($request), $request->boolean('remember'))`; on
-    success `$request->session()->regenerate()` and redirect intended; on failure
+    success `clearLoginAttempts` + `$request->session()->regenerate()` + redirect
+    intended (`/`); on failure `incrementLoginAttempts` +
     `throw ValidationException::withMessages(['email' => [trans('auth.failed')]])`.
-    Keep the throttle middleware `throttle:...` off (parity: the trait's throttle was
-    active, but reproducing the exact `ThrottlesLogins` keying is scope creep — instead
-    add a route-level `throttle` if we want parity; see Open decision T-login).
+    `username()` returns `'email'` (the trait keys throttle on `email` + IP, matching the
+    old behavior). Lockout = 5 attempts / 1 minute (trait defaults `maxAttempts()=5`,
+    `decayMinutes()=1`).
   - `logout(Request $request)` → `Auth::logout()`, invalidate + regenerate token,
     redirect `/`.
 - **RegisterController** — keep constructor (`guest` + `registration_enabled`, injected
@@ -315,19 +316,18 @@ converted render tests ultimately assert against via `AssertableInertia` compone
 so component-name strings must be agreed up front: `auth/Login`, `auth/Register`,
 `auth/ForgotPassword`, `auth/ResetPassword`, `auth/VerifyEmail`.)
 
-## Open decisions to confirm during planning
+## Resolved decisions (2026-07-25)
 
-- **T-login (login throttle):** the `laravel/ui` `AuthenticatesUsers` trait applied
-  `ThrottlesLogins` (5 attempts, 1-min lockout). Reproduce parity via a route-level
-  `throttle:5,1` on POST `login`, or inline `ThrottlesLogins` (framework core). Recommend
-  **route-level `throttle`** for simplicity unless the lockout message/format is asserted
-  anywhere (it is not, from the test scan). Decide in planning.
-- **T-toggle:** include a light/dark toggle button on the auth form panel, or only honor
-  the stored theme silently? Recommend **silently honor stored theme** for Phase 2 (the
-  public shell already owns the visible toggle); revisit if the user wants a visible
-  toggle on auth pages.
-- **Component-name casing:** `auth/Login` (matches the existing `resolvePageComponent`
-  glob `./pages/${name}.tsx`, so `Inertia::render('auth/Login')` → `pages/auth/Login.tsx`).
+- **Login throttle:** inline the framework-core `ThrottlesLogins` trait for full parity
+  (5 attempts / 1 min, keyed on email+IP, `trans('auth.throttle')` lockout message). See
+  the LoginController description above. Add a test asserting lockout after 5 failed
+  attempts.
+- **Theme toggle:** no visible toggle on auth pages — `AuthLayout` silently honors the
+  stored theme (`localStorage['agentic-cms-theme']`, fallback `prefers-color-scheme`).
+  The public shell already owns the visible toggle.
+- **Component-name casing:** `auth/Login`, `auth/Register`, `auth/ForgotPassword`,
+  `auth/ResetPassword`, `auth/VerifyEmail` (matches the `resolvePageComponent` glob
+  `./pages/${name}.tsx` → `pages/auth/Login.tsx`).
 
 ## Out of scope (later phases)
 

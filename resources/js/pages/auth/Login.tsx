@@ -12,7 +12,7 @@ interface LoginProps {
     status?: string | null;
 }
 
-export default function Login({ canResetPassword, status }: LoginProps) {
+export default function Login({ canResetPassword, membershipEnabled, status }: LoginProps) {
     const { t } = useTranslation();
     const { data, setData, post, processing, errors } = useForm({
         email: '',
@@ -90,6 +90,14 @@ export default function Login({ canResetPassword, status }: LoginProps) {
                     )}
                 </div>
             </form>
+
+            {membershipEnabled && (
+                <div className="mt-6 text-center text-sm text-muted">
+                    <Link href="/register" className="font-medium text-primary transition hover:text-primary-hover">
+                        {t('registration.register')}
+                    </Link>
+                </div>
+            )}
         </AuthLayout>
     );
 }

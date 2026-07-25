@@ -24,4 +24,14 @@ describe('Login page', () => {
         expect(screen.getByTestId('login-submit')).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /google/i })).toHaveAttribute('href', '/login/google');
     });
+
+    it('shows a register link when membership is enabled', () => {
+        render(<Login canResetPassword membershipEnabled status={null} />);
+        expect(screen.getByRole('link', { name: 'registration.register' })).toHaveAttribute('href', '/register');
+    });
+
+    it('hides the register link when membership is disabled', () => {
+        render(<Login canResetPassword membershipEnabled={false} status={null} />);
+        expect(screen.queryByRole('link', { name: 'registration.register' })).not.toBeInTheDocument();
+    });
 });

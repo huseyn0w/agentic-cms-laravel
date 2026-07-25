@@ -83,7 +83,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Redirect the user to the GitHub authentication page.
+     * Redirect the user to the OAuth provider's authentication page.
      *
      * @return SymfonyRedirectResponse
      */
@@ -93,7 +93,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Obtain the user information from GitHub.
+     * Obtain the user information from the OAuth provider.
      *
      * @return RedirectResponse
      */

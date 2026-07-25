@@ -3,10 +3,8 @@
 namespace App\Support\I18n;
 
 use FilesystemIterator;
-use Illuminate\Contracts\Translation\Translator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Throwable;
 
 /**
  * Builds a flat, frontend-ready dictionary for a locale from the existing
@@ -19,10 +17,6 @@ class TranslationDictionary
 {
     /** @var array<string, array<string, string>> per-instance memo by locale */
     private array $memo = [];
-
-    public function __construct(private readonly Translator $translator)
-    {
-    }
 
     /** @return array<string, string> */
     public function forLocale(string $locale): array
@@ -43,15 +37,10 @@ class TranslationDictionary
 
         foreach ($this->phpFiles($base) as $file) {
             $group = $this->groupName($base, $file);
-            // Load through the injected Translator's loader to use the framework's
-            // translation loading mechanism; if empty, fall back to direct require
-            // to ensure we load this locale's strings without cross-locale fallback.
-            try {
-                $lines = $this->translator->getLoader()->load(null, $group, $locale) ?: require $file;
-            } catch (Throwable) {
-                // If loader fails, fall back to direct require
-                $lines = require $file;
-            }
+            // Load the locale's file directly. Each PHP lang file returns its
+            // array; this reads exactly that locale's strings with no cross-locale
+            // fallback merging, keeping the files the single source of truth.
+            $lines = require $file;
 
             if (is_array($lines)) {
                 $this->flatten($group, $lines, $messages);

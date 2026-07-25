@@ -6,7 +6,7 @@ import typography from '@tailwindcss/typography';
 export default {
     content: [
         './resources/views/**/*.blade.php',
-        './resources/js/**/*.js',
+        './resources/js/**/*.{js,ts,jsx,tsx}',
         './app/**/*.php',
         './bootstrap/agentic-cms-laravel-helpers.php',
     ],

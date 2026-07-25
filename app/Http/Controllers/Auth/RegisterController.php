@@ -3,66 +3,37 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Models\User;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\Auth\UserRegistrationService;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct(private UserRegistrationService $registrar)
     {
         $this->middleware('guest');
         $this->middleware('registration_enabled');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function showRegistrationForm(): InertiaResponse
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:10', 'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        return Inertia::render('auth/Register');
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @return User
-     */
-    protected function create(array $data)
+    public function register(RegisterRequest $request): RedirectResponse
     {
-        return $this->registrar->register($data);
+        $user = $this->registrar->register($request->validated());
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect($this->redirectTo);
     }
 }

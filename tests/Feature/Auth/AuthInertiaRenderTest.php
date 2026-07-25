@@ -32,4 +32,11 @@ class AuthInertiaRenderTest extends TestCase
                 ->has('membershipEnabled')
         );
     }
+
+    public function test_register_renders_inertia_component(): void
+    {
+        $this->get('/register')->assertInertia(
+            fn (AssertableInertia $page) => $page->component('auth/Register')
+        );
+    }
 }

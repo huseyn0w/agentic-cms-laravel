@@ -3,29 +3,23 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Services\Auth\SocialAuthService;
 use App\Services\Auth\SocialEmailNotVerifiedException;
 use Auth;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 use Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
+    use ThrottlesLogins;
 
     /**
      * Where to redirect users after login.
@@ -37,6 +31,55 @@ class LoginController extends Controller
     public function __construct(private SocialAuthService $socialAuth)
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function showLoginForm(): InertiaResponse
+    {
+        return Inertia::render('auth/Login', [
+            'status' => session('status'),
+            'canResetPassword' => Route::has('password.request'),
+            'membershipEnabled' => (bool) get_general_settings('membership'),
+        ]);
+    }
+
+    public function login(LoginRequest $request): RedirectResponse
+    {
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            $this->sendLockoutResponse($request);
+        }
+
+        if (Auth::attempt($this->credentials($request), $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            $this->clearLoginAttempts($request);
+
+            return redirect()->intended($this->redirectTo);
+        }
+
+        $this->incrementLoginAttempts($request);
+
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.failed')],
+        ]);
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+
+    /**
+     * The field the login form submits and the throttle key are both `email`.
+     * credentials() still decides email-vs-username at attempt time.
+     */
+    public function username(): string
+    {
+        return 'email';
     }
 
     /**

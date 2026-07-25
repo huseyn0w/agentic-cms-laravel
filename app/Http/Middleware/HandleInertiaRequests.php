@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\I18n\TranslationDictionary;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -48,9 +49,9 @@ class HandleInertiaRequests extends Middleware
     /**
      * Define the props that are shared by default.
      *
-     * Note: UI-string translations are shared in a later phase (i18n); this
-     * phase only wires identity, locale and flash so the first Inertia pages
-     * can render. See ~/.claude/plans/wild-percolating-allen.md
+     * Note: `messages` is the flat UI-string dictionary for the current locale,
+     * built from resources/lang by TranslationDictionary and consumed by
+     * react-i18next on the client. See docs/superpowers/plans/2026-07-25-frontend-i18n.md
      *
      * @see https://inertiajs.com/shared-data
      *
@@ -68,6 +69,8 @@ class HandleInertiaRequests extends Middleware
                 'current' => get_current_lang(),
                 'available' => get_languages(),
             ],
+            'messages' => fn (): array => app(TranslationDictionary::class)
+                ->forLocale(get_current_lang()),
             'flash' => [
                 'status' => fn () => $request->session()->get('status'),
                 'success' => fn () => $request->session()->get('success'),

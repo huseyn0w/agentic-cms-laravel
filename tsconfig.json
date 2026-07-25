@@ -12,10 +12,9 @@
         "isolatedModules": true,
         "resolveJsonModule": true,
         "allowJs": true,
-        "types": ["vite/client"],
-        "baseUrl": ".",
+        "types": ["vite/client", "vitest/globals"],
         "paths": {
-            "@/*": ["resources/js/*"]
+            "@/*": ["./resources/js/*"]
         }
     },
     "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx"]

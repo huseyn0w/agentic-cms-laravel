@@ -22,7 +22,6 @@
         "laravel/passport": "^13.7",
         "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.9",
-        "laravel/ui": "^4.0",
         "mews/purifier": "^3.4",
         "unisharp/laravel-filemanager": "^2.9"
     },

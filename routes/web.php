@@ -1,5 +1,7 @@
 <?php
 
+use Inertia\Inertia;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,7 +13,7 @@
 |
 */
 
-Auth::routes(['verify' => true]);
+require __DIR__.'/auth.php';
 
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('cpanel-logout');
 
@@ -49,7 +51,7 @@ Route::get('/health/ready', 'HealthController@ready')->name('health_ready');
 | front catch-all ({locale?}/{slug?}) so it is not swallowed. Remove once real
 | Inertia pages exist. See ~/.claude/plans/wild-percolating-allen.md
 */
-Route::get('/inertia-demo', fn () => \Inertia\Inertia::render('Demo', [
+Route::get('/inertia-demo', fn () => Inertia::render('Demo', [
     'message' => 'Inertia is wired.',
 ]))->name('inertia_demo');
 

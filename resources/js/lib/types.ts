@@ -33,5 +33,7 @@ export interface SharedProps {
         success: string | null;
         error: string | null;
     };
+    /** Flat UI-string dictionary for the current locale (react-i18next resources). */
+    messages: Record<string, string>;
     [key: string]: unknown;
 }

@@ -1,4 +1,5 @@
 import { Head, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 import type { SharedProps } from '@/lib/types';
 
 interface DemoProps {
@@ -9,6 +10,7 @@ interface DemoProps {
 // shared props (locale/auth) reach the client. Removed once real pages land.
 export default function Demo({ message }: DemoProps) {
     const { locale, auth } = usePage<SharedProps & DemoProps>().props;
+    const { t } = useTranslation();
 
     return (
         <>
@@ -17,6 +19,7 @@ export default function Demo({ message }: DemoProps) {
                 <h1>{message}</h1>
                 <p>Locale: {locale.current}</p>
                 <p>Authenticated: {auth.user ? auth.user.name : 'guest'}</p>
+                <p>{t('cpanel/categories.add_new_category')}</p>
             </main>
         </>
     );

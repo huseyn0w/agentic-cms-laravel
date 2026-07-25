@@ -6,6 +6,7 @@ use FilesystemIterator;
 use Illuminate\Contracts\Translation\Translator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Throwable;
 
 /**
  * Builds a flat, frontend-ready dictionary for a locale from the existing
@@ -42,7 +43,15 @@ class TranslationDictionary
 
         foreach ($this->phpFiles($base) as $file) {
             $group = $this->groupName($base, $file);
-            $lines = require $file;
+            // Load through the injected Translator's loader to use the framework's
+            // translation loading mechanism; if empty, fall back to direct require
+            // to ensure we load this locale's strings without cross-locale fallback.
+            try {
+                $lines = $this->translator->getLoader()->load(null, $group, $locale) ?: require $file;
+            } catch (Throwable) {
+                // If loader fails, fall back to direct require
+                $lines = require $file;
+            }
 
             if (is_array($lines)) {
                 $this->flatten($group, $lines, $messages);
@@ -93,6 +102,9 @@ class TranslationDictionary
 
     private function normalizePlaceholders(string $value): string
     {
+        // Assumes Laravel placeholder syntax only (":name"). A future lang
+        // string containing a URI scheme or time literal (e.g. "mailto:info",
+        // "9:30") would be rewritten too — none exist in the lang files today.
         return preg_replace_callback(
             '/:([a-zA-Z][a-zA-Z0-9_]*)/',
             fn (array $m): string => '{{'.strtolower($m[1]).'}}',

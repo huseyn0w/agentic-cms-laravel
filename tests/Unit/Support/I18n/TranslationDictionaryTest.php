@@ -38,3 +38,13 @@ it('builds a non-empty dictionary for every supported locale', function (string 
 it('returns an empty array for an unknown locale', function () {
     expect(dict()->forLocale('zz'))->toBe([]);
 });
+
+it('is bound as a singleton so the per-request memo is shared', function () {
+    expect(app(TranslationDictionary::class))->toBe(app(TranslationDictionary::class));
+});
+
+it('returns identical content on repeated calls for the same locale', function () {
+    $dict = app(TranslationDictionary::class);
+
+    expect($dict->forLocale('en'))->toBe($dict->forLocale('en'));
+});

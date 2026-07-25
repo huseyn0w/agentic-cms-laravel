@@ -3,6 +3,7 @@
 namespace App\Support\I18n;
 
 use FilesystemIterator;
+use Illuminate\Support\Facades\Cache;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -26,6 +27,20 @@ class TranslationDictionary
 
     /** @return array<string, string> */
     private function build(string $locale): array
+    {
+        // In production the lang files are static between deploys, so cache the
+        // built dictionary across requests (plain PHP-FPM gives no in-process
+        // reuse). `php artisan cache:clear` on deploy refreshes it. Outside
+        // production we rebuild each time so lang-file edits show immediately.
+        if (app()->isProduction()) {
+            return Cache::rememberForever("i18n.dict.{$locale}", fn (): array => $this->load($locale));
+        }
+
+        return $this->load($locale);
+    }
+
+    /** @return array<string, string> */
+    private function load(string $locale): array
     {
         $base = lang_path($locale);
 

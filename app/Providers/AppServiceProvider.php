@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Support\Hooks;
+use App\Support\I18n\TranslationDictionary;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         // dispatcher, also aliased as 'hooks' for the @hook Blade directive.
         $this->app->singleton(Hooks::class, fn ($app) => new Hooks($app['events']));
         $this->app->alias(Hooks::class, 'hooks');
+        $this->app->singleton(TranslationDictionary::class);
     }
 
     /**

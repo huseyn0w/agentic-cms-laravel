@@ -21,7 +21,9 @@ createInertiaApp({
 
         router.on('navigate', (event) => {
             const next = event.detail.page.props as unknown as SharedProps;
-            syncI18n(next.locale.current, next.messages);
+            if (next.messages) {
+                syncI18n(next.locale.current, next.messages);
+            }
         });
 
         createRoot(el).render(<App {...props} />);

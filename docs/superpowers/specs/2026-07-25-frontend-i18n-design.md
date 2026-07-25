@@ -54,7 +54,10 @@ loading is deferred (YAGNI); recorded as a future optimization if payload grows.
 - `fallbackLng: false`; missing key returns the key itself (parity with Laravel).
 - On every Inertia visit, `app.tsx` calls `addResourceBundle(locale, 'translation', messages, true, true)`
   then `changeLanguage(locale)` — locale changes via the URL, fresh `messages` arrive
-  per visit. Init is synchronous from `resources`, so it is SSR-safe for Phase 4.
+  per visit. Init is synchronous from `resources` (no async backend). Note for Phase 4:
+  server-side rendering must NOT reuse this module-level singleton across concurrent
+  requests — `ssr.tsx` must create a per-request instance via `i18next.createInstance()`,
+  otherwise `changeLanguage` would bleed locale between requests.
 
 ### 4. Usage in pages
 

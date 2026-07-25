@@ -275,8 +275,8 @@ Route::group([], function () {
 
     Route::get('/users/{username}', 'UserController@show')->name('show_user');
 
-    Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->where('provider', 'twitter|facebook|linkedin|google|github');
-    Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->where('provider', 'twitter|facebook|linkedin|google|github');
+    Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->where('provider', 'google');
+    Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->where('provider', 'google');
 
     Route::get('/{locale?}/{slug?}', 'PageController@languageIndex')->name('front_pages');
 

@@ -33,13 +33,14 @@ class Phase5AdminRenderTest extends TestCase
             // cpanel_home moved to Inertia (cpanel/Dashboard) in Phase 3 —
             // it no longer emits the Blade `theme-admin` string. Covered by
             // Tests\Feature\CPanel\DashboardInertiaTest instead.
+            // cpanel_category_list moved to Inertia (cpanel/categories/List)
+            // in Phase 3 Task 4 — covered by Tests\Feature\CPanel\CategoryInertiaRenderTest instead.
             'cpanel_myprofile',
             'cpanel_all_media',
             'cpanel_all_users_list',
             'cpanel_pages_list',
             'cpanel_posts_list',
             'cpanel_trashed_posts_list',
-            'cpanel_category_list',
             'cpanel_comments_list',
             'cpanel_user_roles',
             'cpanel_general_settings',

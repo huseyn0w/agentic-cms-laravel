@@ -43,7 +43,27 @@ class CPanelCategoryController extends CPanelBaseController
     {
         $categories_list = $this->service->list($this->per_page);
 
-        return view('cpanel.post_categories.post_categories_list', compact('categories_list'));
+        // The paginator rows are Category models selected with only
+        // id/author_id/title/meta_description/meta_keywords/canonical_url/
+        // meta_noindex/description/slug (see CPanelCategoryRepository::$select_fields);
+        // there is no parent_title on the row and no parent relation on the
+        // Category model. parent_category_id IS reachable via the Translatable
+        // trait's accessor (confirmed empirically: all seeded rows are roots,
+        // parent_category_id resolves to null; isset($row->parent_title) is
+        // false). Resolving the parent's title would require an extra
+        // lookup outside the repository, so — per the presentation-only
+        // mapping allowance — we surface parent_category_id itself and let
+        // the frontend render a dash when it's null.
+        $categories_list->getCollection()->transform(fn ($c) => [
+            'id' => $c->id,
+            'title' => $c->title,
+            'slug' => $c->slug,
+            'parent_title' => $c->parent_category_id !== null ? (string) $c->parent_category_id : null,
+        ]);
+
+        return \Inertia\Inertia::render('cpanel/categories/List', [
+            'categories_list' => $categories_list,
+        ]);
     }
 
     public function addCategory()

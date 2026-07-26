@@ -8,7 +8,7 @@ export function FlashBanner() {
   if (!msg && !err) return null;
   return (
     <div className={`mx-6 mt-4 rounded-lg px-4 py-2.5 text-sm admin-bevel ${err ? 'text-error' : 'text-success'}`}
-         role="status">
+         role={err ? 'alert' : 'status'}>
       {err ?? msg}
     </div>
   );

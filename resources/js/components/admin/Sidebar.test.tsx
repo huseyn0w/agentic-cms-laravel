@@ -32,4 +32,10 @@ describe('Sidebar', () => {
     render(<Sidebar can={can()} />);
     expect(screen.getByText('Categories').closest('a')).toHaveClass('admin-nav-active');
   });
+
+  it('hides the group label when every item in the group is filtered out', () => {
+    render(<Sidebar can={can({ manage_general_settings: false, manage_users: false })} />);
+    expect(screen.queryByText('Settings')).not.toBeInTheDocument();
+    expect(screen.getByText('Content')).toBeInTheDocument();
+  });
 });

@@ -30,7 +30,9 @@ class Phase5AdminRenderTest extends TestCase
     public function test_admin_index_pages_render_200(): void
     {
         $routes = [
-            'cpanel_home',
+            // cpanel_home moved to Inertia (cpanel/Dashboard) in Phase 3 —
+            // it no longer emits the Blade `theme-admin` string. Covered by
+            // Tests\Feature\CPanel\DashboardInertiaTest instead.
             'cpanel_myprofile',
             'cpanel_all_media',
             'cpanel_all_users_list',

@@ -22,6 +22,10 @@ class CPanelHomeController extends CPanelBaseController
         $users = $this->dashboard->latestUsers($count);
         $comments = $this->dashboard->latestComments($count);
 
-        return view('cpanel.home', compact('posts', 'users', 'comments'));
+        return \Inertia\Inertia::render('cpanel/Dashboard', [
+            'posts' => $posts,
+            'users' => $users,
+            'comments' => $comments,
+        ]);
     }
 }

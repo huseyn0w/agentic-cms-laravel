@@ -71,37 +71,37 @@ export default {
                 ring: 'var(--ring)',
                 error: { DEFAULT: 'var(--error)', bg: 'var(--error-bg)' },
 
-                // Single committed accent: a deep editorial garnet. Used for
-                // links, active state, and the "like" action — locked sitewide.
+                // Neutralized to monochrome (Task 8) — was a warm terracotta
+                // accent; now a black-anchored greyscale ramp so `bg-brand-600/700`
+                // and `text-brand-700` read near-black.
                 brand: {
-                    50: '#fbf3f2',
-                    100: '#f7e3e1',
-                    200: '#eec5c1',
-                    300: '#e29d97',
-                    400: '#d16b63',
-                    500: '#bf463c',
-                    600: '#b0322b',
-                    700: '#932520',
-                    800: '#7a201d',
-                    900: '#661f1d',
-                    950: '#380c0a',
+                    50: '#f4f4f5',
+                    100: '#e4e4e7',
+                    200: '#d4d4d8',
+                    300: '#a1a1aa',
+                    400: '#52525b',
+                    500: '#27272a',
+                    600: '#18181b',
+                    700: '#0a0a0a',
+                    800: '#0a0a0a',
+                    900: '#050505',
+                    950: '#000000',
                 },
-                // Near-neutral ink ramp (chroma kept tiny — paper + ink, not
-                // the cream/beige AI default).
+                // Neutralized to monochrome (Task 8) — pure zinc, no warm tint.
                 ink: {
-                    50: '#f6f6f4',
-                    100: '#eceae6',
-                    200: '#d9d6cf',
-                    300: '#bdb9b0',
-                    400: '#94908a',
-                    500: '#6f6c66',
-                    600: '#565350',
-                    700: '#403e3c',
-                    800: '#2a2927',
-                    900: '#1a1a18',
-                    950: '#111110',
+                    50: '#fafafa',
+                    100: '#f4f4f5',
+                    200: '#e4e4e7',
+                    300: '#d4d4d8',
+                    400: '#a1a1aa',
+                    500: '#71717a',
+                    600: '#52525b',
+                    700: '#3f3f46',
+                    800: '#27272a',
+                    900: '#18181b',
+                    950: '#09090b',
                 },
-                paper: '#fbfbf9',
+                paper: '#ffffff',
                 // `surface` — legacy hardcoded + new semantic token override.
                 surface: { DEFAULT: 'var(--surface)', 2: 'var(--surface-2)' },
                 // Admin semantic state ramps — kept intact for back-compat

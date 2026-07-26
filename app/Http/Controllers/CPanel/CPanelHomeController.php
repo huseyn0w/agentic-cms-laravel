@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CPanel;
 
 use App\Services\CPanel\CPanelDashboardService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CPanelHomeController extends CPanelBaseController
 {
@@ -22,7 +23,7 @@ class CPanelHomeController extends CPanelBaseController
         $users = $this->dashboard->latestUsers($count);
         $comments = $this->dashboard->latestComments($count);
 
-        return \Inertia\Inertia::render('cpanel/Dashboard', [
+        return Inertia::render('cpanel/Dashboard', [
             'posts' => $posts,
             'users' => $users,
             'comments' => $comments,

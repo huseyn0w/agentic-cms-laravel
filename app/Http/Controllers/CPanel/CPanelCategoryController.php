@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CPanel;
 use App\Http\Requests\CategoryListRequest;
 use App\Http\Requests\CategoryRequest;
 use App\Services\CPanel\CPanelCategoryService;
+use Inertia\Inertia;
 
 class CPanelCategoryController extends CPanelBaseController
 {
@@ -32,7 +33,7 @@ class CPanelCategoryController extends CPanelBaseController
             return $this->addCategory();
         }
 
-        return \Inertia\Inertia::render('cpanel/categories/Form', [
+        return Inertia::render('cpanel/categories/Form', [
             'entity' => [
                 'id' => $this->result->id,
                 'title' => $this->result->title,
@@ -72,7 +73,7 @@ class CPanelCategoryController extends CPanelBaseController
                 : null,
         ]);
 
-        return \Inertia\Inertia::render('cpanel/categories/List', [
+        return Inertia::render('cpanel/categories/List', [
             'categories_list' => $categories_list,
         ]);
     }
@@ -87,7 +88,7 @@ class CPanelCategoryController extends CPanelBaseController
                 : [],
         ];
 
-        return \Inertia\Inertia::render('cpanel/categories/Form', $props);
+        return Inertia::render('cpanel/categories/Form', $props);
     }
 
     public function multipleDelete(CategoryListRequest $request)

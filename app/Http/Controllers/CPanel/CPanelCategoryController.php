@@ -47,18 +47,21 @@ class CPanelCategoryController extends CPanelBaseController
         // id/author_id/title/meta_description/meta_keywords/canonical_url/
         // meta_noindex/description/slug (see CPanelCategoryRepository::$select_fields);
         // there is no parent_title on the row and no parent relation on the
-        // Category model. parent_category_id IS reachable via the Translatable
-        // trait's accessor (confirmed empirically: all seeded rows are roots,
-        // parent_category_id resolves to null; isset($row->parent_title) is
-        // false). Resolving the parent's title would require an extra
-        // lookup outside the repository, so — per the presentation-only
-        // mapping allowance — we surface parent_category_id itself and let
-        // the frontend render a dash when it's null.
+        // Category model, but parent_category_id IS reachable via the
+        // Translatable trait's accessor. Resolve each row's parent NAME via
+        // the same tree-wide parentOptions() lookup already used by
+        // addCategory()/edit() in this controller (id -> title), which keeps
+        // this a Controller -> Service call and avoids touching the
+        // repository/service layer for this presentation-only mapping.
+        $parentNames = collect($this->service->parentOptions())->keyBy('category_id');
+
         $categories_list->getCollection()->transform(fn ($c) => [
             'id' => $c->id,
             'title' => $c->title,
             'slug' => $c->slug,
-            'parent_title' => $c->parent_category_id !== null ? (string) $c->parent_category_id : null,
+            'parent_title' => $c->parent_category_id !== null
+                ? ($parentNames[$c->parent_category_id]->title ?? null)
+                : null,
         ]);
 
         return \Inertia\Inertia::render('cpanel/categories/List', [

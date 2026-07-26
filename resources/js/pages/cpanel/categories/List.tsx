@@ -65,6 +65,13 @@ export default function List({ categories_list }: ListProps) {
             </tr>
           </thead>
           <tbody>
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={5} className="border-b admin-sep px-4 py-8 text-center text-muted">
+                  {tr('cpanel/categories.empty', 'No categories yet')}
+                </td>
+              </tr>
+            )}
             {rows.map((r) => (
               <tr key={r.id} className="hover:bg-black/[.022]">
                 <td className="border-b admin-sep px-4 py-3">

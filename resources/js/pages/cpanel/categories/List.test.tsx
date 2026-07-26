@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 const del = vi.fn();
@@ -38,5 +38,18 @@ describe('Categories List', () => {
       '/agentic-cms-laravel-admin/categories/multipleDelete',
       expect.objectContaining({ data: { categories: [2], categories_action: 'delete' } }),
     );
+  });
+
+  it('hides the Delete action button for the protected id=1 row but shows it for others', () => {
+    render(<List {...props} />);
+    const rootRow = screen.getByText('Root').closest('tr')!;
+    const travelRow = screen.getByText('Travel').closest('tr')!;
+    expect(within(rootRow).queryByText('Delete')).not.toBeInTheDocument();
+    expect(within(travelRow).getByText('Delete')).toBeInTheDocument();
+  });
+
+  it('renders an empty-state message when there are no categories', () => {
+    render(<List categories_list={{ data: [], current_page: 1, last_page: 1, total: 0 }} />);
+    expect(screen.getByText('No categories yet')).toBeInTheDocument();
   });
 });

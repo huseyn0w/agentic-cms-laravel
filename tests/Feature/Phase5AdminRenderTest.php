@@ -61,7 +61,8 @@ class Phase5AdminRenderTest extends TestCase
         $routes = [
             'cpanel_add_new_user',
             'cpanel_add_user_role',
-            'cpanel_add_new_category',
+            // cpanel_add_new_category moved to Inertia (cpanel/categories/Form)
+            // in Phase 3 Task 5 — covered by Tests\Feature\CPanel\CategoryInertiaRenderTest instead.
             'cpanel_add_new_post',   // TinyMCE + datepicker + LFM
             'cpanel_add_new_page',   // TinyMCE + custom-fields + modals
             // NOTE: cpanel_add_new_menu renders 200 in the real app (MySQL) but

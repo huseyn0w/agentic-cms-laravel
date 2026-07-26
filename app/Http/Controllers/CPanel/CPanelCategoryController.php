@@ -30,13 +30,19 @@ class CPanelCategoryController extends CPanelBaseController
             return $this->addCategory();
         }
 
-        return view('cpanel.post_categories.edit_category',
-            [
-                'entity' => $this->result,
-                'parent_options' => $this->service->parentOptions((int) $id),
-                'translation_links' => get_entity_translation_links('categories', $id),
-            ]
-        );
+        return \Inertia\Inertia::render('cpanel/categories/Form', [
+            'entity' => [
+                'id' => $this->result->id,
+                'title' => $this->result->title,
+                'slug' => $this->result->slug,
+                'description' => $this->result->description,
+                'parent_category_id' => $this->result->parent_category_id,
+                'meta_description' => $this->result->meta_description ?? null,
+                'meta_keywords' => $this->result->meta_keywords ?? null,
+            ],
+            'parent_options' => $this->service->parentOptions((int) $id),
+            'translation_links' => get_entity_translation_links('categories', $id),
+        ]);
     }
 
     public function index()
@@ -71,15 +77,15 @@ class CPanelCategoryController extends CPanelBaseController
 
     public function addCategory()
     {
-        $array = [
+        $props = [
+            'entity' => null,
             'parent_options' => $this->service->parentOptions(),
+            'translation_links' => request()->route('lang')
+                ? get_entity_translation_links('categories', request()->id)
+                : [],
         ];
 
-        if (request()->route('lang')) {
-            $array['translation_links'] = get_entity_translation_links('categories', request()->id);
-        }
-
-        return view('cpanel.post_categories.new_category', $array);
+        return \Inertia\Inertia::render('cpanel/categories/Form', $props);
     }
 
     public function multipleDelete(CategoryListRequest $request)

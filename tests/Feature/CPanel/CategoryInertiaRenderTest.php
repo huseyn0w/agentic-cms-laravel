@@ -65,4 +65,37 @@ class CategoryInertiaRenderTest extends TestCase
                     return $child !== null && $child['parent_title'] === 'Travel';
                 }));
     }
+
+    public function test_new_form_renders_inertia_component(): void
+    {
+        $this->actingAs($this->admin)
+            ->get('/agentic-cms-laravel-admin/categories/new')
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/categories/Form')
+                ->where('entity', null)
+                ->has('parent_options'));
+    }
+
+    public function test_edit_form_renders_inertia_component_with_entity(): void
+    {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/categories/new', [
+            'title' => 'Travel',
+            'slug' => 'travel',
+            'description' => 'desc',
+            'meta_description' => 'md',
+            'meta_keywords' => 'mk',
+            'parent_category_id' => '',
+        ]);
+
+        $id = CategoryTranslation::where('locale', 'en')->where('slug', 'travel')->value('category_id');
+
+        $this->actingAs($this->admin)
+            ->get("/agentic-cms-laravel-admin/categories/{$id}/en")
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/categories/Form')
+                ->has('entity')
+                ->has('parent_options')
+                ->has('translation_links'));
+    }
 }

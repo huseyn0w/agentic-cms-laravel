@@ -61,7 +61,7 @@ export default function Form({ entity, parent_options, translation_links }: Form
               </div>
             )}
             <Button href={BASE} variant="outline" size="md">{tr('cpanel/categories.cancel', 'Cancel')}</Button>
-            <Button type="submit" variant="primary" size="md" loading={form.processing}>
+            <Button type="submit" variant="primary" size="md" loading={form.processing} data-testid="category-submit">
               {tr('cpanel/categories.save', 'Save')}
             </Button>
           </div>
@@ -89,6 +89,9 @@ export default function Form({ entity, parent_options, translation_links }: Form
                   </option>
                 ))}
               </select>
+              {form.errors.parent_category_id && (
+                <p className="mt-1.5 text-xs text-error">{form.errors.parent_category_id}</p>
+              )}
             </div>
             <div>
               <label htmlFor="description" className="mb-1.5 block text-xs font-semibold text-fg">
@@ -96,6 +99,9 @@ export default function Form({ entity, parent_options, translation_links }: Form
               </label>
               <textarea id="description" name="description" className="field-input min-h-[88px] w-full"
                 value={form.data.description} onChange={(e) => form.setData('description', e.target.value)} />
+              {form.errors.description && (
+                <p className="mt-1.5 text-xs text-error">{form.errors.description}</p>
+              )}
             </div>
           </section>
 
@@ -107,6 +113,9 @@ export default function Form({ entity, parent_options, translation_links }: Form
               </label>
               <textarea id="meta_description" name="meta_description" className="field-input min-h-[70px] w-full"
                 value={form.data.meta_description} onChange={(e) => form.setData('meta_description', e.target.value)} />
+              {form.errors.meta_description && (
+                <p className="mt-1.5 text-xs text-error">{form.errors.meta_description}</p>
+              )}
             </div>
             <TextField name="meta_keywords" label={tr('cpanel/categories.meta_keywords', 'Meta keywords')}
               value={form.data.meta_keywords} error={form.errors.meta_keywords}

@@ -30,6 +30,7 @@ describe('Categories Form', () => {
     const entity = { id: 7, title: 'City guides', slug: 'city-guides', description: 'x',
       parent_category_id: 5, meta_description: null, meta_keywords: null };
     render(<Form entity={entity} parent_options={parent_options} translation_links={{ Deutsch: 'agentic-cms-laravel-admin/categories/7/de' }} />);
+    expect(screen.getByTestId('category-title')).toHaveValue(entity.title);
     fireEvent.submit(screen.getByTestId('category-title').closest('form')!);
     expect(put).toHaveBeenCalledWith('/agentic-cms-laravel-admin/categories/7/update');
   });

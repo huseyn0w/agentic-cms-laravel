@@ -78,23 +78,23 @@ class CategoryInertiaRenderTest extends TestCase
 
     public function test_edit_form_renders_inertia_component_with_entity(): void
     {
-        $this->withoutMiddleware(VerifyCsrfToken::class);
         $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/categories/new', [
-            'title' => 'Travel',
-            'slug' => 'travel',
+            'title' => 'City Breaks',
+            'slug' => 'city-breaks',
             'description' => 'desc',
             'meta_description' => 'md',
             'meta_keywords' => 'mk',
             'parent_category_id' => '',
         ]);
 
-        $id = CategoryTranslation::where('locale', 'en')->where('slug', 'travel')->value('category_id');
+        $id = CategoryTranslation::where('locale', 'en')->where('slug', 'city-breaks')->value('category_id');
 
         $this->actingAs($this->admin)
             ->get("/agentic-cms-laravel-admin/categories/{$id}/en")
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('cpanel/categories/Form')
-                ->has('entity')
+                ->where('entity.title', 'City Breaks')
+                ->where('entity.slug', 'city-breaks')
                 ->has('parent_options')
                 ->has('translation_links'));
     }

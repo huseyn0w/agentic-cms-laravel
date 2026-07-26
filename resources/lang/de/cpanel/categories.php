@@ -43,4 +43,25 @@ return [
     'create_button_label' => 'Erstellen',
     'no_parent_category' => 'Keine',
 
+    // Additional keys consumed by the React admin screens (List.tsx / Form.tsx)
+    // via the flattened `cpanel/categories.*` i18n keys. Existing keys above
+    // are untouched — other Blade screens still depend on them.
+    'add_new' => 'Neue Kategorie',
+    'cancel' => 'Abbrechen',
+    'created' => 'Kategorie wurde erfolgreich erstellt',
+    'delete' => 'Löschen',
+    'delete_selected' => 'Auswahl löschen',
+    'deleted' => 'Kategorien wurden erfolgreich gelöscht',
+    'edit' => 'Bearbeiten',
+    'empty' => 'Noch keine Kategorien',
+    'meta_description' => 'Meta-Beschreibung',
+    'meta_keywords' => 'Meta-Schlagwörter',
+    'no_parent' => '— Keine (oberste Ebene) —',
+    'of' => 'von',
+    'parent' => 'Übergeordnet',
+    'save' => 'Speichern',
+    'seo' => 'SEO',
+    'selected' => 'ausgewählt',
+    'updated' => 'Kategorie wurde erfolgreich aktualisiert',
+
 ];

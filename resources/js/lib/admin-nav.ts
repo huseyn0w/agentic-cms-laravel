@@ -1,7 +1,6 @@
-export type Ability =
-  | 'see_admin_panel' | 'manage_posts' | 'manage_pages' | 'manage_services'
-  | 'manage_post_categories' | 'manage_comments' | 'manage_menus'
-  | 'manage_general_settings' | 'manage_users' | 'manage_user_roles';
+import type { Ability } from '@/lib/types';
+
+export type { Ability };
 
 export interface NavItem {
   key: string;          // i18n key, e.g. 'cpanel/menu.categories'

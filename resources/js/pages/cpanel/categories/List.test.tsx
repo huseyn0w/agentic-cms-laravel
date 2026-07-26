@@ -6,6 +6,7 @@ vi.mock('@inertiajs/react', () => ({
   Head: () => null,
   Link: ({ children, ...p }: any) => <a {...p}>{children}</a>,
   router: { delete: (...a: any[]) => del(...a) },
+  usePage: () => ({ props: { locale: { current: 'en' } } }),
 }));
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
 import List from './List';
@@ -51,5 +52,29 @@ describe('Categories List', () => {
   it('renders an empty-state message when there are no categories', () => {
     render(<List categories_list={{ data: [], current_page: 1, last_page: 1, total: 0 }} />);
     expect(screen.getByText('No categories yet')).toBeInTheDocument();
+  });
+
+  it('select-all selects every non-protected row and never the protected id=1, then unchecking clears', () => {
+    const multiRowProps = {
+      categories_list: {
+        data: [
+          { id: 1, title: 'Root', slug: 'root', parent_title: null },
+          { id: 2, title: 'Travel', slug: 'travel', parent_title: null },
+          { id: 3, title: 'Food', slug: 'food', parent_title: null },
+        ],
+        current_page: 1, last_page: 1, total: 3,
+      },
+    };
+    render(<List {...multiRowProps} />);
+    const selectAll = screen.getByLabelText('select-all');
+
+    fireEvent.click(selectAll);
+    expect(screen.getByLabelText('select-2')).toBeChecked();
+    expect(screen.getByLabelText('select-3')).toBeChecked();
+    expect(screen.queryByLabelText('select-1')).not.toBeInTheDocument();
+
+    fireEvent.click(selectAll);
+    expect(screen.getByLabelText('select-2')).not.toBeChecked();
+    expect(screen.getByLabelText('select-3')).not.toBeChecked();
   });
 });

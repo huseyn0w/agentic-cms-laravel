@@ -18,7 +18,9 @@ class CPanelCategoryController extends CPanelBaseController
     {
         $this->service->create($request);
 
-        return redirect()->route('cpanel_category_list')->with('category_added', ' ');
+        return redirect()->route('cpanel_category_list')
+            ->with('category_added', ' ')
+            ->with('success', __('cpanel/categories.created'));
 
     }
 
@@ -66,7 +68,7 @@ class CPanelCategoryController extends CPanelBaseController
             'title' => $c->title,
             'slug' => $c->slug,
             'parent_title' => $c->parent_category_id !== null
-                ? ($parentNames[$c->parent_category_id]->title ?? null)
+                ? $parentNames->get($c->parent_category_id)?->title
                 : null,
         ]);
 
@@ -92,11 +94,13 @@ class CPanelCategoryController extends CPanelBaseController
     {
         $result = $this->service->delete($request->categories);
 
-        return back()->with('message', $result);
+        return back()
+            ->with('message', $result)
+            ->with('success', __('cpanel/categories.deleted'));
     }
 
     public function updateCategory($id, CategoryRequest $request)
     {
-        return parent::update($id, $request);
+        return parent::update($id, $request)->with('success', __('cpanel/categories.updated'));
     }
 }

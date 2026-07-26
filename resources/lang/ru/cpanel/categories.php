@@ -43,4 +43,25 @@ return [
     'create_button_label' => 'Создать',
     'no_parent_category' => 'Нет',
 
+    // Additional keys consumed by the React admin screens (List.tsx / Form.tsx)
+    // via the flattened `cpanel/categories.*` i18n keys. Existing keys above
+    // are untouched — other Blade screens still depend on them.
+    'add_new' => 'Новая категория',
+    'cancel' => 'Отмена',
+    'created' => 'Категория успешно создана',
+    'delete' => 'Удалить',
+    'delete_selected' => 'Удалить выбранные',
+    'deleted' => 'Категории успешно удалены',
+    'edit' => 'Изменить',
+    'empty' => 'Категорий пока нет',
+    'meta_description' => 'Мета-описание',
+    'meta_keywords' => 'Мета-ключевые слова',
+    'no_parent' => '— Нет (верхний уровень) —',
+    'of' => 'из',
+    'parent' => 'Родитель',
+    'save' => 'Сохранить',
+    'seo' => 'SEO',
+    'selected' => 'выбрано',
+    'updated' => 'Категория успешно обновлена',
+
 ];

@@ -33,6 +33,7 @@
     },
     "dependencies": {
         "@inertiajs/react": "^3.6.1",
+        "@tinymce/tinymce-react": "^3.14.0",
         "i18next": "^25.10.10",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",

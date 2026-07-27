@@ -23,7 +23,7 @@ In scope:
 
 Out of scope (explicit):
 - All other cpanel resources (follow-on plans).
-- Public site theming to monochrome — the public site migrates to Inertia in **Phase 4**; it is re-themed to monochrome there, not now (re-theming throwaway Blade is waste). Tracked in the backlog.
+- Public site re-theming as separate work — not needed: the public Blade site reads the same `resources/css/tokens.css` (scope item 4 above), so it already flips to monochrome with the token swap. Remaining public work is a sweep for hardcoded warm classes (`bg-brand-*`, terracotta hexes) that bypass the tokens. Tracked in the backlog.
 - Rich editor (`@tinymce/tinymce-react`) and the media picker — not needed for Categories; arrive with Posts/Pages/Services.
 - Deleting legacy Blade admin views — happens in Phase 5.
 

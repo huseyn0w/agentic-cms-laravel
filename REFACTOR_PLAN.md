@@ -353,3 +353,21 @@ mail *is* the primary user action, not a side effect of a DB write.)
 | Factories | 1 (`UserFactory`) | exercised by 20+ test files | ✅ covered |
 | Helpers | `bootstrap/agentic-cms-laravel-helpers.php` | tests/Unit/HelpersTest.php | ✅ covered |
 | MCP tools | 33 (`app/Mcp/**`: 28 tools + 1 server + 4 concerns) | Mcp/AgenticCmsLaravelServerTest (5 tools + Concerns), Mcp/WriteThemeFileToolTest | ⚠️ → ✅ (security-critical `WriteThemeFileTool` path-traversal test added) |
+
+<!-- ADMIN-STYLE:BEGIN (canonical: DESIGN_SYSTEM.md → "Admin panel visual style") -->
+## Visual style — Vercel monochrome (whole system: public, auth, admin) (REQUIRED)
+
+The entire product surface — public site, auth screens, and admin panel/dashboard — uses the agentic-cms marketing-site visual language (reference: https://elman.group/agentic-cms/): clean, glossy, and **strictly monochrome** — black, white, and zinc grey only. NO colored brand accent (no violet/blue/terracotta), NO warm/cream tones, NO red as an accent.
+
+- **Surfaces:** white `#ffffff` app background; subtle panels `#fafafa` and `#f4f4f5`.
+- **Neutrals (zinc):** borders `#e4e4e7` / `#d4d4d8`; text `#0a0a0a` (primary), `#3f3f46` (secondary), `#71717a` (muted), `#a1a1aa` (faint).
+- **Accent is black `#0a0a0a`.** Primary buttons = black bg / white text. Active nav item = subtle `#f4f4f5` bg + black text/icon + a thin black inset indicator. Selected checkbox = black.
+- **Premium edges (do NOT use flat 1px grey lines — they look cheap):** give cards/inputs/nav a **gradient bevel border** (lighter at top → darker at bottom, e.g. `linear-gradient(180deg, rgba(9,9,11,.11), rgba(9,9,11,.045) 40%, rgba(9,9,11,.03))` via a padding-box/border-box background trick), a **layered floating shadow** (`0 1px 2px rgba(9,9,11,.04), 0 10px 30px -12px rgba(9,9,11,.14)`), and an **inset top highlight** (`inset 0 1px 0 rgba(255,255,255,.7)`). Table row separators stay very faint (`rgba(9,9,11,.06)`); rely on hover background, not hard lines.
+- **Semantic status colors only:** destructive/error red `#dc2626` and success green `#15803d`, used ONLY for delete affordances, validation errors, and success states — never decoration.
+- **Typography:** Geist / Geist Mono (system-ui / ui-monospace fallback). Tight negative letter-spacing on headings.
+- **Structure (Vercel):** left sidebar (light `#fafafa`, grouped nav with small uppercase group labels) + translucent sticky topbar (`backdrop-filter: blur(12–14px)`, breadcrumb, search, icon buttons, avatar) + content area (page header = title + primary action, then bordered white cards / data tables). Airy spacing, clear hierarchy, restraint.
+- **Logo/mark:** monochrome only — solid black mark with a white glyph. No gradient.
+- **Dark mode:** invert to near-black surfaces (`#0a0a0a` / `#17171a`) keeping the same zinc/white/black logic; on dark, white becomes the accent (white primary buttons).
+
+Apply across the entire product surface — public site (marketing pages, blog/content), auth screens (login, register, password reset), and admin (shell, list/table screens, forms, buttons, modals, and the stats dashboard). Implement natively per stack (idiomatic components + your CSS/Tailwind), tokens defined once and shared across public, auth, and admin. This monochrome look is the canonical style for the whole family, not just the admin. Full spec: `DESIGN_SYSTEM.md` → "Visual style — Vercel monochrome (whole system)".
+<!-- ADMIN-STYLE:END -->

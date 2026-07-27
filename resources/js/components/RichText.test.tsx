@@ -12,7 +12,7 @@ vi.mock('@tinymce/tinymce-react', () => ({
 // plugin.js files reference a bare `tinymce` global that only exists once
 // the real core has run, so each import needs its own no-op stub here.
 vi.mock('tinymce/tinymce', () => ({}));
-vi.mock('tinymce/themes/modern', () => ({}), { virtual: true });
+vi.mock('tinymce/themes/modern', () => ({}));
 vi.mock('tinymce/plugins/advlist', () => ({}));
 vi.mock('tinymce/plugins/autolink', () => ({}));
 vi.mock('tinymce/plugins/lists', () => ({}));

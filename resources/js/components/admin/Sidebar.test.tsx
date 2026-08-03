@@ -3,7 +3,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { Sidebar } from './Sidebar';
 
 vi.mock('@inertiajs/react', () => ({
-  Link: ({ children, ...p }: any) => <a {...p}>{children}</a>,
+  // Expose Inertia's prefetch/cacheFor as clean data attributes so tests can
+  // lock the instant-nav strategy without leaking unknown props onto the <a>.
+  Link: ({ children, prefetch, cacheFor, ...p }: any) => (
+    <a data-prefetch={String(prefetch)} data-cache-for={String(cacheFor)} {...p}>{children}</a>
+  ),
   usePage: () => ({ url: '/agentic-cms-laravel-admin/categories', component: 'cpanel/categories/List' }),
 }));
 
@@ -37,5 +41,12 @@ describe('Sidebar', () => {
     render(<Sidebar can={can({ manage_general_settings: false, manage_users: false })} />);
     expect(screen.queryByText('Settings')).not.toBeInTheDocument();
     expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('nav links prefetch on mount and cache for 15s (instant navigation)', () => {
+    render(<Sidebar can={can()} />);
+    const link = screen.getByText('Categories').closest('a')!;
+    expect(link).toHaveAttribute('data-prefetch', 'mount');
+    expect(link).toHaveAttribute('data-cache-for', '15s');
   });
 });

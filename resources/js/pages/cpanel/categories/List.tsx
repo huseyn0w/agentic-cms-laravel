@@ -46,7 +46,7 @@ export default function List({ categories_list }: ListProps) {
         <div>
           <h1 className="text-[22px] font-semibold tracking-tight">{tr('cpanel/menu.categories', 'Categories')}</h1>
         </div>
-        <Link href={`${BASE}/new`} prefetch
+        <Link href={`${BASE}/new`} prefetch="mount" cacheFor="15s"
           className="ml-auto inline-flex h-9 items-center gap-1.5 rounded-[10px] bg-primary px-3.5 text-[13px] font-semibold text-primary-contrast">
           + {tr('cpanel/categories.add_new', 'New category')}
         </Link>
@@ -98,7 +98,7 @@ export default function List({ categories_list }: ListProps) {
                 <td className="border-b admin-sep px-4 py-3 text-muted">{r.parent_title ?? '—'}</td>
                 <td className="border-b admin-sep px-4 py-3">
                   <div className="flex gap-3.5 text-[12.5px]">
-                    <Link href={`${BASE}/${r.id}/${locale.current}`} prefetch
+                    <Link href={`${BASE}/${r.id}/${locale.current}`} prefetch cacheFor="15s"
                       className="text-muted hover:text-fg">{tr('cpanel/categories.edit', 'Edit')}</Link>
                     {r.id !== PROTECTED_ID && (
                       <button onClick={() => del([r.id])} className="text-muted hover:text-error">

@@ -4,7 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 const del = vi.fn();
 vi.mock('@inertiajs/react', () => ({
   Head: () => null,
-  Link: ({ children, ...p }: any) => <a {...p}>{children}</a>,
+  // Expose prefetch/cacheFor as data attributes to lock the instant-nav strategy.
+  Link: ({ children, prefetch, cacheFor, ...p }: any) => (
+    <a data-prefetch={String(prefetch)} data-cache-for={String(cacheFor)} {...p}>{children}</a>
+  ),
   router: { delete: (...a: any[]) => del(...a) },
   usePage: () => ({ props: { locale: { current: 'en' } } }),
 }));
@@ -52,6 +55,17 @@ describe('Categories List', () => {
   it('renders an empty-state message when there are no categories', () => {
     render(<List categories_list={{ data: [], current_page: 1, last_page: 1, total: 0 }} />);
     expect(screen.getByText('No categories yet')).toBeInTheDocument();
+  });
+
+  it('prefetches the New link on mount and each row Edit link on hover, both cached 15s', () => {
+    render(<List {...props} />);
+    const newLink = screen.getByText(/New category/).closest('a')!;
+    expect(newLink).toHaveAttribute('data-prefetch', 'mount');
+    expect(newLink).toHaveAttribute('data-cache-for', '15s');
+    const travelRow = screen.getByText('Travel').closest('tr')!;
+    const editLink = within(travelRow).getByText('Edit').closest('a')!;
+    expect(editLink).toHaveAttribute('data-prefetch', 'true');
+    expect(editLink).toHaveAttribute('data-cache-for', '15s');
   });
 
   it('select-all selects every non-protected row and never the protected id=1, then unchecking clears', () => {

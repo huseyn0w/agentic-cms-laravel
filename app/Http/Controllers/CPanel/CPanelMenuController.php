@@ -46,22 +46,20 @@ class CPanelMenuController extends CPanelBaseController
 
     public function addMenu()
     {
-        $array = [
-            'terms_list' => $this->getTermsListForMenu(),
-        ];
-
-        if (request()->route('lang')) {
-            $array['translation_links'] = get_entity_translation_links('menus', request()->id);
-        }
-
-        return view('cpanel.menus.new_menu', $array);
+        return Inertia::render('cpanel/menus/Form', [
+            'entity' => null,
+            'terms_list' => $this->termsListForInertia(),
+            'translation_links' => request()->route('lang')
+                ? get_entity_translation_links('menus', request()->id)
+                : (object) [],
+        ]);
     }
 
     public function createMenu(MenuRequest $request)
     {
         $this->service->createFromRequest($request);
 
-        return redirect()->route('cpanel_menu_list')->with('menu_added', ' ');
+        return redirect()->route('cpanel_menu_list')->with('success', __('cpanel/menus.menu_added'));
     }
 
     public function editMenu($id)
@@ -72,9 +70,14 @@ class CPanelMenuController extends CPanelBaseController
             return $this->addMenu();
         }
 
-        return view('cpanel.menus.edit_menu', [
-            'entity' => $this->result,
-            'terms_list' => $this->getTermsListForMenu(),
+        return Inertia::render('cpanel/menus/Form', [
+            'entity' => [
+                'id' => $this->result->id,
+                'title' => $this->result->title,
+                'slug' => $this->result->slug,
+                'items' => json_decode($this->result->content, true) ?: [],
+            ],
+            'terms_list' => $this->termsListForInertia(),
             'translation_links' => get_entity_translation_links('menus', $id),
         ]);
     }
@@ -88,8 +91,30 @@ class CPanelMenuController extends CPanelBaseController
         ];
     }
 
+    /**
+     * Shape the post/page/category term sources into {title, slug} option lists
+     * the React menu builder consumes.
+     */
+    private function termsListForInertia(): array
+    {
+        $terms = $this->getTermsListForMenu();
+
+        $shape = fn ($collection) => collect($collection)
+            ->map(fn ($t) => ['title' => $t->title, 'slug' => $t->slug])
+            ->values()
+            ->all();
+
+        return [
+            'posts' => $shape($terms['posts']),
+            'pages' => $shape($terms['pages']),
+            'categories' => $shape($terms['categories']),
+        ];
+    }
+
     public function updateMenu($id, MenuRequest $request)
     {
-        return parent::update($id, $request);
+        parent::update($id, $request);
+
+        return back()->with('success', __('cpanel/menus.menu_updated'));
     }
 }

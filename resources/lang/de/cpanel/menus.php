@@ -38,6 +38,7 @@ return [
     'js_delete_confirmation' => 'Sind Sie sicher? Das Menü wird gelöscht',
     'js_error' => 'Es ist ein Fehler aufgetreten',
     'not_found' => 'Es wurden keine Menüs gefunden',
+    'cancel' => 'Abbrechen',
 
     // Accessible reorder controls (DESIGN_SYSTEM §5).
     'reorder' => 'Neu anordnen',

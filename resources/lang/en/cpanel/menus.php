@@ -38,6 +38,7 @@ return [
     'js_delete_confirmation' => 'Are you sure? Menu will be deleted',
     'js_error' => 'Some error occurred',
     'not_found' => 'No menus has been found',
+    'cancel' => 'Cancel',
 
     // Accessible reorder controls (DESIGN_SYSTEM §5).
     'reorder' => 'Reorder',

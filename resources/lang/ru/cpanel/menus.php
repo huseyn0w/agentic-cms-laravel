@@ -38,6 +38,7 @@ return [
     'js_delete_confirmation' => 'Вы уверены? Меню будет удалено',
     'js_error' => 'Произошла ошибка',
     'not_found' => 'Ни одного меню не было создано',
+    'cancel' => 'Отмена',
 
     // Accessible reorder controls (DESIGN_SYSTEM §5).
     'reorder' => 'Переместить',

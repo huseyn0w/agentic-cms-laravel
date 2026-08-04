@@ -7,6 +7,7 @@ use App\Http\Models\Menu;
 use App\Http\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -29,23 +30,25 @@ class MenuReorderTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
         $this->admin = User::where('username', 'admin')->firstOrFail();
     }
 
-    public function test_edit_menu_screen_ships_accessible_reorder_and_no_cdn(): void
+    public function test_edit_menu_screen_renders_the_inertia_builder_with_items(): void
     {
-        $html = $this->actingAs($this->admin)
+        // The builder moved from the Blade edit_menu + menu-reorder.js to the
+        // React cpanel/menus/Form. The keyboard-accessible reorder affordances
+        // (move up/down buttons + an aria-live region) and the CDN-free
+        // guarantee now live in that component; their behaviour is covered by
+        // resources/js/pages/cpanel/menus/Form.test.tsx. Here we assert the
+        // edit route renders the Inertia builder with the menu's parsed items.
+        $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/menus/1/en')
-            ->assertStatus(200)
-            ->getContent();
-
-        // Keyboard-accessible reorder affordances (self-hosted).
-        $this->assertStringContainsString('js/menu-reorder.js', $html);
-        $this->assertStringContainsString('id="menu-reorder-live"', $html);
-        $this->assertStringContainsString('aria-live="polite"', $html);
-
-        // §7: the drag-only jQuery UI CDN must be gone.
-        $this->assertStringNotContainsString('ajax.googleapis.com', $html);
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/menus/Form')
+                ->where('entity.id', 1)
+                ->has('entity.items')
+                ->has('terms_list.pages'));
     }
 
     public function test_reorder_persists_through_update_round_trip(): void

@@ -60,7 +60,12 @@ class MenuCrudTest extends TestCase
         // `id` over a join where both tables have an `id` column -> 500 on SQLite.
         $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/menus/new')
-            ->assertStatus(200);
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/menus/Form')
+                ->where('entity', null)
+                ->has('terms_list.pages')
+                ->has('terms_list.posts')
+                ->has('terms_list.categories'));
     }
 
     public function test_admin_can_create_a_menu(): void

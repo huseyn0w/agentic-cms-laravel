@@ -151,12 +151,14 @@ class CPanelPostController extends CPanelBaseController
     {
         $this->service->create($request);
 
-        return redirect()->route('cpanel_posts_list')->with('post_added', true);
+        return redirect()->route('cpanel_posts_list')
+            ->with('post_added', true)
+            ->with('success', __('cpanel/posts.created'));
     }
 
     public function updatePost($id, ValidatePostData $request)
     {
-        return parent::update($id, $request);
+        return parent::update($id, $request)->with('success', __('cpanel/posts.updated'));
     }
 
     public function revisions($id, $lang)
@@ -224,7 +226,8 @@ class CPanelPostController extends CPanelBaseController
 
         return redirect()
             ->route('cpanel_edit_post', ['id' => $id, 'lang' => $lang])
-            ->with('revision_restored', true);
+            ->with('revision_restored', true)
+            ->with('success', __('cpanel/revisions.restored_success'));
     }
 
     public function addPost()

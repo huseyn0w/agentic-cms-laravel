@@ -53,6 +53,7 @@ class PostCrudTest extends TestCase
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('cpanel_posts_list'));
+        $response->assertSessionHas('success');
 
         $translation = PostTranslation::where('slug', 'round-trip-post')->first();
         $this->assertNotNull($translation, 'Post translation was not persisted.');
@@ -76,6 +77,7 @@ class PostCrudTest extends TestCase
             ]));
 
         $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('success');
 
         $fresh = PostTranslation::where('slug', 'round-trip-post')->firstOrFail();
         $this->assertStringContainsString('edited body', $fresh->content);

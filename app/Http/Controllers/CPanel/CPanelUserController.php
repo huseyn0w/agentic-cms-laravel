@@ -43,12 +43,15 @@ class CPanelUserController extends CPanelBaseController
 
     public function editUser($id = null)
     {
-
         $id = $id ?? $this->user->id;
 
         $user = $this->service->getById($id);
 
-        return view('cpanel.users.profile', ['user' => $user, 'countries' => $this->countries, 'user_roles' => $this->user_roles]);
+        return Inertia::render('cpanel/users/Form', [
+            'entity' => $this->userEntity($user),
+            'countries' => $this->countryOptions(),
+            'user_roles' => $this->roleOptions(),
+        ]);
     }
 
     public function updateUser($id, ValidateUserSettings $request)
@@ -66,7 +69,11 @@ class CPanelUserController extends CPanelBaseController
 
     public function addUser()
     {
-        return view('cpanel.users.new_user', ['countries' => $this->countries, 'user_roles' => $this->user_roles]);
+        return Inertia::render('cpanel/users/Form', [
+            'entity' => null,
+            'countries' => $this->countryOptions(),
+            'user_roles' => $this->roleOptions(),
+        ]);
     }
 
     public function createUser(ValidateUserSettings $request)
@@ -74,5 +81,48 @@ class CPanelUserController extends CPanelBaseController
         parent::create($request);
 
         return redirect()->route('cpanel_all_users_list')->with('user_added', ' ');
+    }
+
+    /**
+     * Shape a User model into the flat prop the Inertia Form consumes.
+     * Nullable DB columns collapse to '' so the React form never binds null.
+     */
+    private function userEntity($user): array
+    {
+        return [
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'name' => $user->name ?? '',
+            'surname' => $user->surname ?? '',
+            'country' => $user->country ?? '',
+            'city' => $user->city ?? '',
+            'about_me' => $user->about_me ?? '',
+            'facebook_url' => $user->facebook_url ?? '',
+            'twitter_url' => $user->twitter_url ?? '',
+            'instagram_url' => $user->instagram_url ?? '',
+            'google_url' => $user->google_url ?? '',
+            'linkedin_url' => $user->linkedin_url ?? '',
+            'xing_url' => $user->xing_url ?? '',
+            'role_id' => $user->role_id,
+            'gender' => $user->gender ?? '',
+            'avatar' => $user->avatar ?? '',
+        ];
+    }
+
+    private function countryOptions(): array
+    {
+        return collect($this->countries)
+            ->map(fn ($c) => ['name' => $c['name']])
+            ->values()
+            ->all();
+    }
+
+    private function roleOptions(): array
+    {
+        return collect($this->user_roles)
+            ->map(fn ($r) => ['id' => $r->id, 'name' => $r->name])
+            ->values()
+            ->all();
     }
 }

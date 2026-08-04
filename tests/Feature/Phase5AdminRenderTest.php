@@ -35,7 +35,8 @@ class Phase5AdminRenderTest extends TestCase
             // Tests\Feature\CPanel\DashboardInertiaTest instead.
             // cpanel_category_list moved to Inertia (cpanel/categories/List)
             // in Phase 3 Task 4 — covered by Tests\Feature\CPanel\CategoryInertiaRenderTest instead.
-            'cpanel_myprofile',
+            // cpanel_myprofile moved to Inertia (cpanel/users/Form) in the Users
+            // slice — covered by Tests\Feature\CPanel\UserListInertiaRenderTest.
             'cpanel_all_media',
             // cpanel_all_users_list moved to Inertia (cpanel/users/List) in the
             // Users slice — covered by Tests\Feature\CPanel\UserListInertiaRenderTest.
@@ -63,7 +64,8 @@ class Phase5AdminRenderTest extends TestCase
     public function test_admin_create_forms_render_200(): void
     {
         $routes = [
-            'cpanel_add_new_user',
+            // cpanel_add_new_user moved to Inertia (cpanel/users/Form) in the
+            // Users slice — covered by Tests\Feature\CPanel\UserListInertiaRenderTest.
             'cpanel_add_user_role',
             // cpanel_add_new_category moved to Inertia (cpanel/categories/Form)
             // in Phase 3 Task 5 — covered by Tests\Feature\CPanel\CategoryInertiaRenderTest instead.

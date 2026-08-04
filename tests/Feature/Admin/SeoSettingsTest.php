@@ -8,6 +8,7 @@ use App\Http\Models\User;
 use App\Http\Models\UserRoles;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -25,6 +26,7 @@ class SeoSettingsTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
         $this->admin = User::where('username', 'admin')->firstOrFail();
     }
 
@@ -32,8 +34,10 @@ class SeoSettingsTest extends TestCase
     {
         $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/seo-settings')
-            ->assertStatus(200)
-            ->assertSee('SEO Settings');
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/settings/Seo')
+                ->has('seo_settings.title_separator')
+                ->where('seo_settings.sitemap_enabled', fn ($v) => is_bool($v)));
     }
 
     public function test_admin_can_persist_seo_settings(): void

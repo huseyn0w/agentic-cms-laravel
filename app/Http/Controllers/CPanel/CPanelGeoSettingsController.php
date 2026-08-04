@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CPanel;
 
 use App\Http\Requests\ValidateGeoSettings;
 use App\Services\CPanel\GeoSettingsService;
+use Inertia\Inertia;
 
 /**
  * Admin GEO settings page (global, singleton row id = 1).
@@ -19,15 +20,31 @@ class CPanelGeoSettingsController extends CPanelBaseController
 
     public function index()
     {
-        $geo_settings = $this->service->currentOrNew();
+        $geo = $this->service->currentOrNew();
 
-        return view('cpanel.settings.geo-settings', compact('geo_settings'));
+        return Inertia::render('cpanel/settings/Geo', [
+            'geo_settings' => [
+                'business_name' => $geo->business_name,
+                'business_type' => $geo->business_type ?? 'Organization',
+                'description' => $geo->description,
+                'founder_name' => $geo->founder_name,
+                'services' => $geo->services,
+                'service_area' => $geo->service_area,
+                'contact_email' => $geo->contact_email,
+                'contact_phone' => $geo->contact_phone,
+                'address' => $geo->address,
+                'same_as' => $geo->same_as,
+                'faq' => $geo->faq,
+                'emit_jsonld' => (bool) ($geo->emit_jsonld ?? true),
+                'include_in_llms' => (bool) ($geo->include_in_llms ?? true),
+            ],
+        ]);
     }
 
     public function store(ValidateGeoSettings $request)
     {
-        $result = $this->service->save($request);
+        $this->service->save($request);
 
-        return back()->with('message', $result);
+        return back()->with('success', __('cpanel/settings.geo_settings_updates_success'));
     }
 }

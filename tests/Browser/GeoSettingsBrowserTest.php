@@ -25,6 +25,14 @@ class GeoSettingsBrowserTest extends DuskTestCase
 
     public function test_admin_fills_geo_settings_and_it_reaches_llms_txt(): void
     {
+        // The GEO admin form migrated from Blade to an Inertia/React SPA form in
+        // the Settings slice. This legacy Dusk scenario selects the submit via
+        // `form[action*="geo-settings"]`, which an Inertia form (no action
+        // attribute) cannot satisfy, and it is explicitly superseded by the
+        // Pest 4 browser test tests/Browser/GeoSettingsTest.php (data-testid
+        // driven, SPA-compatible). Skipped pending the Dusk suite's retirement.
+        $this->markTestSkipped('Superseded by the Pest 4 browser GeoSettingsTest after the Inertia migration.');
+
         $admin = User::where('username', 'admin')->firstOrFail();
 
         $this->browse(function (Browser $browser) use ($admin) {

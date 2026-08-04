@@ -7,6 +7,7 @@ use App\Http\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -23,6 +24,7 @@ class GeoSettingsTest extends TestCase
     {
         parent::setUp();
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
     }
 
     private function saveGeo(array $overrides = []): CPanelGeoSettings
@@ -94,10 +96,11 @@ class GeoSettingsTest extends TestCase
 
         $this->actingAs($admin)
             ->get(route('cpanel_geo_settings'))
-            ->assertStatus(200)
-            ->assertSee('GEO')
-            ->assertSee('name="business_type"', false)
-            ->assertSee('name="services"', false);
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/settings/Geo')
+                ->has('geo_settings.business_type')
+                ->has('geo_settings.services')
+                ->where('geo_settings.emit_jsonld', fn ($v) => is_bool($v)));
     }
 
     public function test_admin_can_persist_geo_settings(): void

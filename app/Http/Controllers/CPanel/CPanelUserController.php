@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CPanel;
 use App\Http\Requests\UserListRequest;
 use App\Http\Requests\ValidateUserSettings;
 use App\Services\CPanel\CPanelUserService;
+use Inertia\Inertia;
 
 class CPanelUserController extends CPanelBaseController
 {
@@ -24,7 +25,20 @@ class CPanelUserController extends CPanelBaseController
     {
         $users_list = $this->service->list($this->per_page);
 
-        return view('cpanel.users.users_list', compact('users_list'));
+        $users_list->getCollection()->transform(fn ($u) => [
+            'id' => $u->id,
+            'username' => $u->username,
+            'email' => $u->email,
+            'name' => $u->name,
+            'surname' => $u->surname,
+            'country' => $u->country,
+            'city' => $u->city,
+            'role' => $u->role?->name,
+        ]);
+
+        return Inertia::render('cpanel/users/List', [
+            'users_list' => $users_list,
+        ]);
     }
 
     public function editUser($id = null)

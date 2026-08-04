@@ -7,6 +7,7 @@ use App\Http\Models\User;
 use App\Http\Models\UserRoles;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -25,7 +26,45 @@ class RoleCrudTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
         $this->admin = User::where('username', 'admin')->firstOrFail();
+    }
+
+    public function test_roles_list_renders_inertia_with_shaped_rows(): void
+    {
+        $this->actingAs($this->admin)
+            ->get('/agentic-cms-laravel-admin/roles')
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/roles/List')
+                ->has('roles_list.data.0.id')
+                ->has('roles_list.data.0.name'));
+    }
+
+    public function test_new_role_form_renders_inertia_with_permission_options(): void
+    {
+        $this->actingAs($this->admin)
+            ->get('/agentic-cms-laravel-admin/roles/new')
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/roles/Form')
+                ->where('entity', null)
+                ->has('permission_options.0.name')
+                ->has('permission_options.0.label'));
+    }
+
+    public function test_edit_role_form_renders_inertia_with_enabled_permissions(): void
+    {
+        $role = UserRoles::create([
+            'name' => 'Editorish',
+            'permissions' => json_encode(['manage_posts' => 1, 'manage_users' => 0]),
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get('/agentic-cms-laravel-admin/roles/'.$role->id)
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/roles/Form')
+                ->where('entity.name', 'Editorish')
+                ->where('entity.permissions', fn ($perms) => collect($perms)->contains('manage_posts')
+                    && ! collect($perms)->contains('manage_users')));
     }
 
     public function test_admin_can_create_a_role(): void
@@ -72,9 +111,11 @@ class RoleCrudTest extends TestCase
             'permissions' => json_encode([]),
         ]);
 
+        // Row delete now redirects back (Inertia router.delete) instead of the
+        // legacy jQuery-AJAX 'ok' echo.
         $this->actingAs($this->admin)
             ->delete('/agentic-cms-laravel-admin/roles/'.$role->id.'/delete')
-            ->assertOk();
+            ->assertRedirect();
 
         $this->assertDatabaseMissing('user_roles', ['id' => $role->id]);
     }

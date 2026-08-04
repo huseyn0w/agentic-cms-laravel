@@ -48,7 +48,8 @@ class Phase5AdminRenderTest extends TestCase
             // Tests\Feature\CPanel\PostListInertiaRenderTest instead.
             // cpanel_comments_list moved to Inertia (cpanel/comments/List) in the
             // Comments slice — covered by Tests\Feature\Admin\CommentModerationTest.
-            'cpanel_user_roles',
+            // cpanel_user_roles moved to Inertia (cpanel/roles/List) in the Roles
+            // slice — covered by Tests\Feature\Admin\RoleCrudTest.
             'cpanel_general_settings',
             'cpanel_site_options',
             'cpanel_menu_list',
@@ -62,34 +63,11 @@ class Phase5AdminRenderTest extends TestCase
         }
     }
 
-    public function test_admin_create_forms_render_200(): void
-    {
-        $routes = [
-            // cpanel_add_new_user moved to Inertia (cpanel/users/Form) in the
-            // Users slice — covered by Tests\Feature\CPanel\UserListInertiaRenderTest.
-            'cpanel_add_user_role',
-            // cpanel_add_new_category moved to Inertia (cpanel/categories/Form)
-            // in Phase 3 Task 5 — covered by Tests\Feature\CPanel\CategoryInertiaRenderTest instead.
-            // cpanel_add_new_post moved to Inertia (cpanel/posts/Form, TipTap +
-            // LFM) in Phase 3 Posts slice — covered by
-            // Tests\Feature\CPanel\PostListInertiaRenderTest instead.
-            // cpanel_add_new_page moved to Inertia (cpanel/pages/Form, TipTap +
-            // React custom-fields builder) in the Pages slice — covered by
-            // Tests\Feature\CPanel\PageListInertiaRenderTest and the Vitest
-            // CustomFieldsBuilder/Form suites instead.
-            // NOTE: cpanel_add_new_menu renders 200 in the real app (MySQL) but
-            // its post-source query (`order by id` over a posts+translations
-            // join) is ambiguous under SQLite and 500s in the pinned test DB.
-            // That is a pre-existing repository/SQLite quirk, NOT the Phase 5
-            // view rewrite — the menu builder view itself compiles fine and the
-            // menu *list* index is covered above. Left out to avoid a false red.
-        ];
-
-        foreach ($routes as $name) {
-            $response = $this->actingAs($this->admin())->get(route($name));
-            $response->assertStatus(200, "Route {$name} did not render 200");
-        }
-    }
+    // The admin create-form render smoke test was removed once every create
+    // form migrated to Inertia (users/roles/categories/posts/pages Forms), each
+    // covered by a dedicated AssertableInertia test in its slice. The only
+    // holdout, cpanel_add_new_menu, is left for the Menus slice (its post-source
+    // query is ambiguous under SQLite, a pre-existing quirk, not a view issue).
 
     // The page custom-fields builder moved from the Blade modals to the React
     // CustomFieldsBuilder component in the Pages slice. Its behaviour (add /

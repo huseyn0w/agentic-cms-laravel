@@ -27,4 +27,6 @@ return [
     'js_delete_confirmation' => 'Are you sure? Role will be deleted',
     'js_error' => 'Some error occurred',
     'not_found' => 'No roles has been found',
+    'cancel' => 'Cancel',
+    'save' => 'Save',
 ];

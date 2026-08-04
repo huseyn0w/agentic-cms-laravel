@@ -113,7 +113,7 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['auth', 'see_admin_panel
         Route::get('/', 'CPanelRoleController@index')->name('cpanel_user_roles');
         Route::get('/{id}', 'CPanelRoleController@editRole')->name('cpanel_edit_user_role')->where('id', '[0-9]+');
         Route::put('/{id}/update', 'CPanelRoleController@updateRole')->name('cpanel_update_user_role')->where('id', '[0-9]+');
-        Route::delete('/{id}/delete', 'CPanelRoleController@deleteAjax')->name('cpanel_delete_user_role')->where('id', '[0-9]+');
+        Route::delete('/{id}/delete', 'CPanelRoleController@deleteRole')->name('cpanel_delete_user_role')->where('id', '[0-9]+');
         Route::get('/new', 'CPanelRoleController@addRole')->name('cpanel_add_user_role');
         Route::post('/new', 'CPanelRoleController@createRole')->name('cpanel_save_user_role');
     });

@@ -27,4 +27,6 @@ return [
     'js_delete_confirmation' => 'Sind Sie sicher? Die Rolle wird gelöscht',
     'js_error' => 'Es ist ein Fehler aufgetreten',
     'not_found' => 'Es wurden keine Rollen gefunden',
+    'cancel' => 'Abbrechen',
+    'save' => 'Speichern',
 ];

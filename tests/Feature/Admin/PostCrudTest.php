@@ -97,6 +97,39 @@ class PostCrudTest extends TestCase
         $this->assertNotNull(Post::withTrashed()->find($postId), 'Soft deleted post row should remain.');
     }
 
+    public function test_bulk_delete_endpoint_soft_deletes_with_the_payload_the_list_sends(): void
+    {
+        // Guards the exact contract the Inertia list posts: DELETE
+        // /posts/multipleDelete with { posts:[...], posts_action:'delete' }.
+        // PostListRequest requires posts_action, so a missing field silently
+        // rejects the whole delete — this test pins the shape.
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
+        $postId = PostTranslation::where('slug', 'round-trip-post')->firstOrFail()->post_id;
+
+        $this->actingAs($this->admin)
+            ->delete('/agentic-cms-laravel-admin/posts/multipleDelete', [
+                'posts' => [$postId],
+                'posts_action' => 'delete',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertNull(Post::find($postId), 'Bulk delete should soft delete the post.');
+        $this->assertNotNull(Post::withTrashed()->find($postId), 'Soft deleted row should remain.');
+    }
+
+    public function test_bulk_delete_without_action_is_rejected_and_deletes_nothing(): void
+    {
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload());
+        $postId = PostTranslation::where('slug', 'round-trip-post')->firstOrFail()->post_id;
+
+        $this->actingAs($this->admin)
+            ->from('/agentic-cms-laravel-admin/posts')
+            ->delete('/agentic-cms-laravel-admin/posts/multipleDelete', ['posts' => [$postId]])
+            ->assertSessionHasErrors('posts_action');
+
+        $this->assertNotNull(Post::find($postId), 'A malformed bulk delete must not remove the post.');
+    }
+
     public function test_admin_can_restore_a_soft_deleted_post(): void
     {
         // Single restore: GET /posts/{id}/restore must actually restore (the

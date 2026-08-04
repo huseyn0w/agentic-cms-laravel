@@ -35,8 +35,10 @@ export default function List({ posts_list, trashed }: ListProps) {
   const bulkDelete = (list: number[]) => {
     if (list.length === 0) return;
     if (!window.confirm(tr('cpanel/posts.js_delete_confirmation', 'Delete selected posts?'))) return;
+    // PostListRequest requires a posts_action in {delete,destroy,restore};
+    // the live-mode bulk delete is the 'delete' action.
     router.delete(`${BASE}/multipleDelete`, {
-      data: { posts: list },
+      data: { posts: list, posts_action: 'delete' },
       preserveScroll: true,
       onSuccess: () => setSelected([]),
     });

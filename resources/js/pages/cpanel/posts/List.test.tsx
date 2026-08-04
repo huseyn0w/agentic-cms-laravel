@@ -45,7 +45,7 @@ describe('Posts List', () => {
     fireEvent.click(screen.getByTestId('bulk-delete-confirm'));
     expect(del).toHaveBeenCalledWith(
       '/agentic-cms-laravel-admin/posts/multipleDelete',
-      expect.objectContaining({ data: { posts: [2] } }),
+      expect.objectContaining({ data: { posts: [2], posts_action: 'delete' } }),
     );
   });
 
@@ -55,7 +55,7 @@ describe('Posts List', () => {
     fireEvent.click(within(row).getByText('Delete'));
     expect(del).toHaveBeenCalledWith(
       '/agentic-cms-laravel-admin/posts/multipleDelete',
-      expect.objectContaining({ data: { posts: [1] } }),
+      expect.objectContaining({ data: { posts: [1], posts_action: 'delete' } }),
     );
   });
 

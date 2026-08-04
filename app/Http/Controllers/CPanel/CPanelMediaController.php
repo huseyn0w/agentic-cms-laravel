@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CPanel;
 
 use App\Services\CPanel\CPanelMediaService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CPanelMediaController extends CPanelBaseController
 {
@@ -14,7 +15,12 @@ class CPanelMediaController extends CPanelBaseController
 
     public function index()
     {
-        return view('cpanel.media.media');
+        return Inertia::render('cpanel/media/Index', [
+            // LFM owns the library UI (browse/rename/crop/delete) inside the
+            // iframe; the dropzone posts to LFM's own upload endpoint.
+            'library_src' => '/filemanager',
+            'upload_endpoint' => '/filemanager/upload?type=Files&working_dir=%2F',
+        ]);
     }
 
     /**

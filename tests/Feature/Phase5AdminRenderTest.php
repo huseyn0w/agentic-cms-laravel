@@ -37,7 +37,8 @@ class Phase5AdminRenderTest extends TestCase
             // in Phase 3 Task 4 — covered by Tests\Feature\CPanel\CategoryInertiaRenderTest instead.
             // cpanel_myprofile moved to Inertia (cpanel/users/Form) in the Users
             // slice — covered by Tests\Feature\CPanel\UserListInertiaRenderTest.
-            'cpanel_all_media',
+            // cpanel_all_media moved to Inertia (cpanel/media/Index — LFM iframe
+            // + dropzone) in the Media slice — covered by MediaRouteGuardTest.
             // cpanel_all_users_list moved to Inertia (cpanel/users/List) in the
             // Users slice — covered by Tests\Feature\CPanel\UserListInertiaRenderTest.
             // cpanel_pages_list + cpanel_trashed_pages_list moved to Inertia

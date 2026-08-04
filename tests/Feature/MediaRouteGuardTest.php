@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Http\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -19,13 +20,18 @@ class MediaRouteGuardTest extends TestCase
     {
         parent::setUp();
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
     }
 
     public function test_admin_can_access_media(): void
     {
         $admin = User::where('username', 'admin')->firstOrFail();
 
-        $this->actingAs($admin)->get('/agentic-cms-laravel-admin/media')->assertStatus(200);
+        $this->actingAs($admin)->get('/agentic-cms-laravel-admin/media')
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/media/Index')
+                ->where('library_src', '/filemanager')
+                ->has('upload_endpoint'));
     }
 
     public function test_user_without_permission_is_denied_media(): void

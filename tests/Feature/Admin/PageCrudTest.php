@@ -133,6 +133,36 @@ class PageCrudTest extends TestCase
         $this->assertSame('1', $stored['cta']['value']['target']);
     }
 
+    public function test_repeater_custom_field_nested_structure_round_trips(): void
+    {
+        // A repeater stores rows of items; the theme reads it as
+        // get_field('slides', ...) -> { 'row-0': { title: {...} }, ... }.
+        $repeater = [
+            'slides' => [
+                'type' => 'repeater',
+                'admin_label' => 'Slides',
+                'value' => [
+                    'row-0' => ['title' => ['type' => 'text', 'admin_label' => 'Title', 'value' => 'First']],
+                    'row-1' => ['title' => ['type' => 'text', 'admin_label' => 'Title', 'value' => 'Second']],
+                ],
+            ],
+        ];
+
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload([
+            'slug' => 'repeater-page',
+            'custom_fields' => $repeater,
+        ]))->assertSessionHasNoErrors();
+
+        $stored = json_decode(
+            PageTranslation::where('slug', 'repeater-page')->firstOrFail()->custom_fields,
+            true
+        );
+
+        $this->assertSame('repeater', $stored['slides']['type']);
+        $this->assertSame('First', $stored['slides']['value']['row-0']['title']['value']);
+        $this->assertSame('Second', $stored['slides']['value']['row-1']['title']['value']);
+    }
+
     public function test_validation_blocks_invalid_page(): void
     {
         $response = $this->actingAs($this->admin)

@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RichText } from '@/components/RichText';
 import { MediaField } from '@/components/MediaField';
+import { RepeaterField } from '@/components/admin/RepeaterField';
+import type { RepeaterRows } from '@/components/admin/RepeaterField';
 
 export type CustomFieldType = 'text' | 'textarea' | 'image' | 'link' | 'category' | 'repeater';
 export interface LinkValue {
@@ -54,7 +56,7 @@ export function slugify(input: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-const ADDABLE: Exclude<CustomFieldType, 'repeater'>[] = ['text', 'textarea', 'image', 'link', 'category'];
+const ADDABLE: CustomFieldType[] = ['text', 'textarea', 'image', 'link', 'category', 'repeater'];
 
 /**
  * React port of the page custom-fields builder. Fields are stored as an
@@ -72,7 +74,7 @@ export function CustomFieldsBuilder({ value, onChange, categories }: CustomField
     [value],
   );
 
-  const [addType, setAddType] = useState<Exclude<CustomFieldType, 'repeater'>>('text');
+  const [addType, setAddType] = useState<CustomFieldType>('text');
   const [addLabel, setAddLabel] = useState('');
   const [addName, setAddName] = useState('');
 
@@ -84,8 +86,11 @@ export function CustomFieldsBuilder({ value, onChange, categories }: CustomField
     onChange(next);
   };
 
-  const defaultValueFor = (type: CustomFieldType): CustomFieldValue =>
-    type === 'link' ? { label: '', url: '', target: '0' } : '';
+  const defaultValueFor = (type: CustomFieldType): CustomFieldValue => {
+    if (type === 'link') return { label: '', url: '', target: '0' };
+    if (type === 'repeater') return {};
+    return '';
+  };
 
   const addField = () => {
     const key = slugify(addName || addLabel);
@@ -108,16 +113,25 @@ export function CustomFieldsBuilder({ value, onChange, categories }: CustomField
       <div className="flex flex-col gap-3">
         {fields.map((f) => (
           <div key={f.key} className="rounded-[10px] admin-bevel p-3" data-testid={`cf-${f.key}`}>
+            {f.type === 'repeater' ? (
+              <RepeaterField
+                fieldKey={f.key}
+                admin_label={f.admin_label}
+                value={(f.value ?? {}) as RepeaterRows}
+                onChange={(rows) => updateValue(f.key, rows)}
+                onDelete={() => removeField(f.key)}
+                tr={tr}
+              />
+            ) : (
+              <>
             <div className="mb-2 flex items-center gap-2">
               <span className="text-xs font-semibold text-fg">{f.admin_label}</span>
               <span className="rounded bg-surface-2 px-1.5 py-0.5 text-[10px] uppercase text-faint">{f.type}</span>
               <code className="text-[10px] text-faint">{f.key}</code>
-              {f.type !== 'repeater' && (
-                <button type="button" onClick={() => removeField(f.key)}
-                  className="ml-auto text-xs text-muted hover:text-error" data-testid={`cf-remove-${f.key}`}>
-                  {tr('cpanel/custom-fields.remove', 'Remove')}
-                </button>
-              )}
+              <button type="button" onClick={() => removeField(f.key)}
+                className="ml-auto text-xs text-muted hover:text-error" data-testid={`cf-remove-${f.key}`}>
+                {tr('cpanel/custom-fields.remove', 'Remove')}
+              </button>
             </div>
 
             {f.type === 'text' && (
@@ -151,11 +165,7 @@ export function CustomFieldsBuilder({ value, onChange, categories }: CustomField
               <LinkFieldEditor value={f.value as LinkValue} onChange={(v) => updateValue(f.key, v)}
                 fieldKey={f.key} tr={tr} />
             )}
-
-            {f.type === 'repeater' && (
-              <p className="text-xs text-muted" data-testid={`cf-repeater-${f.key}`}>
-                {tr('cpanel/custom-fields.repeater_preserved', 'Repeater group (preserved — inline editing coming soon).')}
-              </p>
+              </>
             )}
           </div>
         ))}
@@ -190,7 +200,7 @@ export function CustomFieldsBuilder({ value, onChange, categories }: CustomField
   );
 }
 
-function LinkFieldEditor({
+export function LinkFieldEditor({
   value, onChange, fieldKey, tr,
 }: {
   value: LinkValue;

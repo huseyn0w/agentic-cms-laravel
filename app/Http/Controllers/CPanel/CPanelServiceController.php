@@ -81,12 +81,33 @@ class CPanelServiceController extends CPanelBaseController
             return $this->addService();
         }
 
-        return view('cpanel.services.edit_service',
-            [
-                'entity' => $this->result,
-                'translation_links' => get_entity_translation_links('services', $id),
-            ]
-        );
+        return Inertia::render('cpanel/services/Form', [
+            'entity' => $this->serviceEntity($this->result),
+            'translation_links' => get_entity_translation_links('services', $id),
+        ]);
+    }
+
+    /**
+     * Shape a service (translatable model) into the flat prop the React form
+     * consumes. Field names match ValidateServiceData. Presentation-only.
+     */
+    private function serviceEntity($s): array
+    {
+        return [
+            'id' => $s->id,
+            'title' => $s->title,
+            'slug' => $s->slug,
+            'icon' => $s->icon ?? '',
+            'excerpt' => $s->excerpt ?? '',
+            'content' => $s->content ?? '',
+            'thumbnail' => $s->thumbnail ?? '',
+            'meta_keywords' => $s->meta_keywords ?? '',
+            'meta_description' => $s->meta_description ?? '',
+            'canonical_url' => $s->canonical_url ?? '',
+            'meta_noindex' => (bool) $s->meta_noindex,
+            'sort_order' => (int) $s->sort_order,
+            'status' => (int) $s->status,
+        ];
     }
 
     public function createService(ValidateServiceData $request)
@@ -103,12 +124,11 @@ class CPanelServiceController extends CPanelBaseController
 
     public function addService()
     {
-        $array = [];
-
-        if (request()->route('lang')) {
-            $array['translation_links'] = get_entity_translation_links('services', request()->id);
-        }
-
-        return view('cpanel.services.new_service', $array);
+        return Inertia::render('cpanel/services/Form', [
+            'entity' => null,
+            'translation_links' => request()->route('lang')
+                ? get_entity_translation_links('services', request()->id)
+                : [],
+        ]);
     }
 }

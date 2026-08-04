@@ -44,6 +44,24 @@ it('creates a service via the admin endpoint', function () {
         ->and($translation->locale)->toBe('en');
 });
 
+it('accepts the JSON payload the Inertia form sends (empty url fields, integer sort_order)', function () {
+    // The React form submits JSON with empty strings for optional url fields
+    // (thumbnail/canonical_url) and an integer sort_order. Empty strings become
+    // null via ConvertEmptyStringsToNull, so nullable|url must pass.
+    $this->actingAs($this->admin)
+        ->from('/agentic-cms-laravel-admin/services/new')
+        ->postJson('/agentic-cms-laravel-admin/services/new', servicePayload([
+            'slug' => 'json-service',
+            'thumbnail' => '',
+            'canonical_url' => '',
+            'icon' => '',
+            'sort_order' => 3,
+        ]))
+        ->assertSessionHasNoErrors();
+
+    expect(ServiceTranslation::where('slug', 'json-service')->exists())->toBeTrue();
+});
+
 it('updates a service via the admin endpoint', function () {
     $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/services/new', servicePayload());
     $translation = ServiceTranslation::where('slug', 'seo-audit')->firstOrFail();
@@ -95,7 +113,9 @@ it('renders the admin services list', function () {
 it('renders the new-service form', function () {
     $this->actingAs($this->admin)
         ->get(route('cpanel_add_new_service'))
-        ->assertOk();
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('cpanel/services/Form')
+            ->where('entity', null));
 });
 
 it('renders the edit-service form', function () {
@@ -104,6 +124,8 @@ it('renders the edit-service form', function () {
 
     $this->actingAs($this->admin)
         ->get(route('cpanel_edit_service', ['id' => $serviceId, 'lang' => 'en']))
-        ->assertOk()
-        ->assertSee('SEO Audit');
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('cpanel/services/Form')
+            ->where('entity.title', 'SEO Audit')
+            ->where('entity.slug', 'seo-audit'));
 });

@@ -110,6 +110,23 @@ class PageCrudTest extends TestCase
         );
     }
 
+    public function test_create_accepts_integer_author_id_as_the_inertia_form_sends_it(): void
+    {
+        // The React form submits JSON (Inertia), so author_id arrives as an
+        // integer — not the form-encoded string the old Blade form sent. The
+        // rule must accept it (regression guard: it was `string`, which 422'd
+        // every real create/update through the UI).
+        $this->actingAs($this->admin)
+            ->from('/agentic-cms-laravel-admin/pages/new')
+            ->postJson('/agentic-cms-laravel-admin/pages/new', $this->payload([
+                'slug' => 'int-author-page',
+                'author_id' => $this->admin->id, // integer, not (string)
+            ]))
+            ->assertSessionHasNoErrors();
+
+        $this->assertNotNull(PageTranslation::where('slug', 'int-author-page')->first());
+    }
+
     public function test_custom_fields_round_trip_through_the_observer(): void
     {
         // The React builder sends custom_fields as an associative structure;

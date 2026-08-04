@@ -46,14 +46,32 @@ interface CustomFieldsBuilderProps {
   categories: CategoryOption[];
 }
 
+// Transliteration subset mirroring the legacy url_slug() char map, scoped to
+// the locales this admin ships (en/de/ru + common European/Ukrainian). Keeping
+// the same mappings means a key derived here matches one the old jQuery builder
+// would have produced for the same label.
+const TRANSLIT: Record<string, string> = {
+  à: 'a', á: 'a', â: 'a', ã: 'a', ä: 'a', å: 'a', æ: 'ae', ç: 'c',
+  è: 'e', é: 'e', ê: 'e', ë: 'e', ì: 'i', í: 'i', î: 'i', ï: 'i',
+  ð: 'd', ñ: 'n', ò: 'o', ó: 'o', ô: 'o', õ: 'o', ö: 'o', ő: 'o',
+  ø: 'o', ù: 'u', ú: 'u', û: 'u', ü: 'u', ű: 'u', ý: 'y', þ: 'th', ÿ: 'y', ß: 'ss',
+  // Russian
+  а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'yo', ж: 'zh',
+  з: 'z', и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o',
+  п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'ts',
+  ч: 'ch', ш: 'sh', щ: 'sh', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya',
+  // Ukrainian extras
+  є: 'ye', і: 'i', ї: 'yi', ґ: 'g',
+};
+
 /** Kebab-case slug used as the field key (mirrors the legacy url_slug()). */
 export function slugify(input: string): string {
-  return input
+  const transliterated = input
     .toString()
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/./g, (ch) => (ch in TRANSLIT ? TRANSLIT[ch] : ch));
+  return transliterated.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
 const ADDABLE: CustomFieldType[] = ['text', 'textarea', 'image', 'link', 'category', 'repeater'];

@@ -35,6 +35,12 @@ describe('slugify', () => {
     expect(slugify('About Big Text!')).toBe('about-big-text');
     expect(slugify('  Trim--Me  ')).toBe('trim-me');
   });
+
+  it('transliterates non-latin labels instead of dropping them', () => {
+    // Cyrillic would otherwise slugify to '' → a silent no-op on add.
+    expect(slugify('Заголовок')).toBe('zagolovok');
+    expect(slugify('Überschrift')).toBe('uberschrift');
+  });
 });
 
 describe('CustomFieldsBuilder', () => {

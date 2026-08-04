@@ -40,8 +40,8 @@ class ValidatePostData extends AgenticCmsLaravelRequest
     {
 
         $rules = [
-            'title' => ['string', 'required', 'max:20'],
-            'slug' => ['required', 'string', 'max:20'],
+            'title' => ['string', 'required', 'max:255'],
+            'slug' => ['required', 'string', 'max:255'],
             'content' => 'nullable|string',
             'preview' => 'nullable|string',
             'author_id' => 'required|integer|exists:users,id',

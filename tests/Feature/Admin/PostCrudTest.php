@@ -121,6 +121,25 @@ class PostCrudTest extends TestCase
         $this->assertNotNull(Post::find($postId), 'A live post must not be force-deleted via destroy.');
     }
 
+    public function test_admin_can_create_a_post_with_a_long_title_and_slug(): void
+    {
+        // Regression: title/slug were capped at max:20, which rejected real
+        // headlines. They must accept up to 255 characters.
+        $longTitle = str_repeat('A', 120);
+        $longSlug = str_repeat('a', 120);
+
+        $response = $this->actingAs($this->admin)
+            ->from('/agentic-cms-laravel-admin/posts/new')
+            ->post('/agentic-cms-laravel-admin/posts/new', $this->postPayload([
+                'title' => $longTitle,
+                'slug' => $longSlug,
+            ]));
+
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('cpanel_posts_list'));
+        $this->assertSame($longTitle, PostTranslation::where('slug', $longSlug)->value('title'));
+    }
+
     public function test_validation_blocks_post_without_required_fields(): void
     {
         $response = $this->actingAs($this->admin)

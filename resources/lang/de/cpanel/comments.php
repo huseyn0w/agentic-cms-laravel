@@ -33,5 +33,6 @@ return [
     'js_unapprove_confirmation' => 'Sind Sie sicher? Die Freigabe des Kommentars wird zurückgenommen',
     'js_error' => 'Es ist ein Fehler aufgetreten',
     'not_found' => 'Es wurden keine Kommentare gefunden',
+    'selected' => 'ausgewählt',
 
 ];

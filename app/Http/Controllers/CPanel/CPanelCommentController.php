@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CPanel;
 
 use App\Http\Requests\CPanelCommentsRequest;
 use App\Services\CPanel\CPanelCommentService;
+use Inertia\Inertia;
 
 class CPanelCommentController extends CPanelBaseController
 {
@@ -17,44 +18,43 @@ class CPanelCommentController extends CPanelBaseController
     {
         $comments_list = $this->service->list($this->per_page);
 
-        return view('cpanel.comments.comments_list', compact('comments_list'));
+        $comments_list->getCollection()->transform(fn ($c) => [
+            'id' => $c->id,
+            'post_title' => $c->post?->title,
+            'comment' => $c->comment,
+            'author' => $c->user?->username,
+            'date' => $c->created_at?->format('d.m.Y'),
+            'status' => (int) $c->status,
+        ]);
+
+        return Inertia::render('cpanel/comments/List', [
+            'comments_list' => $comments_list,
+        ]);
     }
 
     public function approve(int $id)
     {
         $this->validateCommentID($id);
 
-        $result = $this->service->approve($id);
+        $this->service->approve($id);
 
-        if ($result) {
-            echo trans('cpanel/controller.ok');
-        } else {
-            echo $result;
-        }
-
+        return back()->with('success', __('cpanel/comments.js_approve'));
     }
 
     public function unApprove(int $id)
     {
-
         $this->validateCommentID($id);
 
-        $result = $this->service->unApprove($id);
+        $this->service->unApprove($id);
 
-        if ($result) {
-            echo trans('cpanel/controller.ok');
-        } else {
-            echo $result;
-            echo trans('cpanel/controller.problem');
-        }
-
+        return back()->with('success', __('cpanel/comments.js_unapprove'));
     }
 
     public function multipleDelete(CPanelCommentsRequest $request)
     {
-        $result = $this->service->delete($request->comments);
+        $this->service->delete($request->comments);
 
-        return back()->with('deleted', $result);
+        return back()->with('success', __('cpanel/comments.js_delete'));
     }
 
     public function validateCommentID($id)

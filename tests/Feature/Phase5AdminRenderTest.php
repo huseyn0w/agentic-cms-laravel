@@ -46,7 +46,8 @@ class Phase5AdminRenderTest extends TestCase
             // cpanel_posts_list + cpanel_trashed_posts_list moved to Inertia
             // (cpanel/posts/List) in Phase 3 Posts slice — covered by
             // Tests\Feature\CPanel\PostListInertiaRenderTest instead.
-            'cpanel_comments_list',
+            // cpanel_comments_list moved to Inertia (cpanel/comments/List) in the
+            // Comments slice — covered by Tests\Feature\Admin\CommentModerationTest.
             'cpanel_user_roles',
             'cpanel_general_settings',
             'cpanel_site_options',

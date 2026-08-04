@@ -33,5 +33,6 @@ return [
     'js_unapprove_confirmation' => 'Are you sure? Comment will be unapproved',
     'js_error' => 'Some error occurred',
     'not_found' => 'No comments has been found',
+    'selected' => 'selected',
 
 ];

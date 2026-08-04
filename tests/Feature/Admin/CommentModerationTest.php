@@ -8,6 +8,7 @@ use App\Http\Models\User;
 use App\Http\Models\UserRoles;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -25,6 +26,7 @@ class CommentModerationTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
         $this->admin = User::where('username', 'admin')->firstOrFail();
     }
 
@@ -45,16 +47,28 @@ class CommentModerationTest extends TestCase
 
         $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/comments')
-            ->assertStatus(200);
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/comments/List')
+                ->has('comments_list.data')
+                ->where('comments_list.data', function ($rows) {
+                    $row = collect($rows)->first();
+
+                    return $row !== null
+                        && array_key_exists('comment', $row)
+                        && array_key_exists('author', $row)
+                        && array_key_exists('status', $row);
+                }));
     }
 
     public function test_admin_can_approve_a_comment(): void
     {
         $comment = $this->makeComment(0);
 
+        // Row action now moves through Inertia's router.put -> redirect back
+        // (was a jQuery-AJAX echo of 'ok' before the Inertia migration).
         $this->actingAs($this->admin)
             ->put('/agentic-cms-laravel-admin/comments/'.$comment->id.'/approve')
-            ->assertOk();
+            ->assertRedirect();
 
         $this->assertSame(1, (int) $comment->fresh()->status);
     }
@@ -65,7 +79,7 @@ class CommentModerationTest extends TestCase
 
         $this->actingAs($this->admin)
             ->put('/agentic-cms-laravel-admin/comments/'.$comment->id.'/unapprove')
-            ->assertOk();
+            ->assertRedirect();
 
         $this->assertSame(0, (int) $comment->fresh()->status);
     }

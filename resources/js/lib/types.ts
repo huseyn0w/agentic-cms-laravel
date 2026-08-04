@@ -37,3 +37,19 @@ export interface SharedProps {
     messages: Record<string, string>;
     [key: string]: unknown;
 }
+
+/**
+ * Shape of a Laravel LengthAwarePaginator as Inertia serializes it. Meta beyond
+ * data/current_page/last_page/total is optional so partial test fixtures still
+ * satisfy the type.
+ */
+export interface Paginator<T> {
+    data: T[];
+    current_page: number;
+    last_page: number;
+    total: number;
+    from?: number | null;
+    to?: number | null;
+    prev_page_url?: string | null;
+    next_page_url?: string | null;
+}

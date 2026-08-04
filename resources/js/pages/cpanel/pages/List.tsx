@@ -2,7 +2,8 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminLayout } from '@/layouts/AdminLayout';
-import type { SharedProps } from '@/lib/types';
+import { Pagination } from '@/components/admin/Pagination';
+import type { Paginator, SharedProps } from '@/lib/types';
 import type { ReactElement } from 'react';
 
 interface Row {
@@ -13,7 +14,7 @@ interface Row {
   status: number;
 }
 interface ListProps {
-  pages_list: { data: Row[]; current_page: number; last_page: number; total: number };
+  pages_list: Paginator<Row>;
   trashed: boolean;
 }
 
@@ -177,9 +178,7 @@ export default function List({ pages_list, trashed }: ListProps) {
             ))}
           </tbody>
         </table>
-        <div className="flex items-center px-4 py-3 text-[12.5px] text-muted">
-          {rows.length} {tr('cpanel/pages.of', 'of')} {pages_list.total}
-        </div>
+        <Pagination meta={pages_list} />
       </div>
     </>
   );

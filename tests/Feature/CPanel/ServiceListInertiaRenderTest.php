@@ -50,6 +50,11 @@ class ServiceListInertiaRenderTest extends TestCase
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('cpanel/services/List')
                 ->where('trashed', false)
+                // Paginator meta must survive the controller's row transform so
+                // the <Pagination> pager can navigate.
+                ->where('services_list.current_page', 1)
+                ->has('services_list.last_page')
+                ->has('services_list.next_page_url')
                 ->where('services_list.data', function ($rows) {
                     $row = collect($rows)->firstWhere('title', 'Visible service');
 

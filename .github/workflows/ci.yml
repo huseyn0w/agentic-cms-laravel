@@ -63,7 +63,7 @@ jobs:
   # job needs to render the app).
   # ---------------------------------------------------------------------------
   build:
-    name: Build assets (Vite)
+    name: Build · Type-check · Test (Vite)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76,6 +76,12 @@ jobs:
 
       - name: Install npm dependencies
         run: npm ci
+
+      - name: Type-check (tsc)
+        run: npx tsc --noEmit
+
+      - name: Unit tests (Vitest)
+        run: npm test
 
       - name: Build
         run: npm run build

@@ -14,12 +14,12 @@ interface RevisionsProps {
   revisions: { data: RevisionRow[]; current_page: number; last_page: number; total: number };
 }
 
-const BASE = '/agentic-cms-laravel-admin/posts';
+const BASE = '/agentic-cms-laravel-admin/pages';
 
 export default function Revisions({ entity_id, lang, revisions }: RevisionsProps) {
   return <RevisionsView base={BASE} entity_id={entity_id} lang={lang} revisions={revisions} />;
 }
 
 Revisions.layout = (page: ReactElement) => (
-  <AdminLayout breadcrumb="Admin / Posts / Revisions">{page}</AdminLayout>
+  <AdminLayout breadcrumb="Admin / Pages / Revisions">{page}</AdminLayout>
 );

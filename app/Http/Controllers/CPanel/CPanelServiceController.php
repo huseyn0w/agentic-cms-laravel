@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CPanel;
 use App\Http\Requests\ServiceListRequest;
 use App\Http\Requests\ValidateServiceData;
 use App\Services\CPanel\CPanelServiceService;
+use Inertia\Inertia;
 
 class CPanelServiceController extends CPanelBaseController
 {
@@ -16,16 +17,31 @@ class CPanelServiceController extends CPanelBaseController
 
     public function index()
     {
-        $services_list = $this->service->list($this->per_page);
-
-        return view('cpanel.services.services_list', compact('services_list'));
+        return $this->renderList($this->service->list($this->per_page), false);
     }
 
     public function trashedServices()
     {
-        $services_list = $this->service->trashed($this->per_page);
+        return $this->renderList($this->service->trashed($this->per_page), true);
+    }
 
-        return view('cpanel.services.services_list', compact('services_list'));
+    /**
+     * Shape the service paginator into plain rows and render the Inertia list.
+     * Presentation-only mapping — the service/repository/observers are untouched.
+     */
+    private function renderList($services_list, bool $trashed)
+    {
+        $services_list->getCollection()->transform(fn ($s) => [
+            'id' => $s->id,
+            'title' => $s->title,
+            'sort_order' => (int) $s->sort_order,
+            'status' => (int) $s->status,
+        ]);
+
+        return Inertia::render('cpanel/services/List', [
+            'services_list' => $services_list,
+            'trashed' => $trashed,
+        ]);
     }
 
     public function multipleActions(ServiceListRequest $request)

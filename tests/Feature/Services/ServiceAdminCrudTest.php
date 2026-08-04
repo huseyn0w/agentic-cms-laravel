@@ -6,12 +6,14 @@ use App\Http\Models\ServiceTranslation;
 use App\Http\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->withoutMiddleware(VerifyCsrfToken::class);
     $this->seed(DatabaseSeeder::class);
+    config(['inertia.testing.ensure_pages_exist' => false]);
     $this->admin = User::where('username', 'admin')->firstOrFail();
 });
 
@@ -82,11 +84,12 @@ it('renders the admin services list', function () {
     $this->actingAs($this->admin)
         ->post('/agentic-cms-laravel-admin/services/new', servicePayload());
 
-    $response = $this->actingAs($this->admin)
-        ->get(route('cpanel_services_list'));
-
-    $response->assertOk();
-    $response->assertSee('SEO Audit');
+    $this->actingAs($this->admin)
+        ->get(route('cpanel_services_list'))
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('cpanel/services/List')
+            ->where('trashed', false)
+            ->where('services_list.data', fn ($rows) => collect($rows)->contains('title', 'SEO Audit')));
 });
 
 it('renders the new-service form', function () {

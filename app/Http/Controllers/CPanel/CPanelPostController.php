@@ -168,15 +168,22 @@ class CPanelPostController extends CPanelBaseController
         }
 
         $data = $this->service->revisionsFor((int) $id, $lang);
+        $revisions = $data['revisions'];
 
-        return view('cpanel.revisions.list', [
+        // Version labels count down from the newest across the whole history,
+        // so they stay stable per revision regardless of the current page.
+        $offset = $revisions->total() - ($revisions->firstItem() - 1);
+        $revisions->getCollection()->transform(fn ($r, $i) => [
+            'id' => $r->id,
+            'version' => $offset - $i,
+            'author' => $r->author?->username,
+            'created_at' => Carbon::parse($r->created_at)->format('d.m.Y H:i'),
+        ]);
+
+        return Inertia::render('cpanel/posts/Revisions', [
             'entity_id' => (int) $id,
             'lang' => $lang,
-            'current' => $data['current'],
-            'revisions' => $data['revisions'],
-            'edit_route' => 'cpanel_edit_post',
-            'diff_route' => 'cpanel_post_revision_diff',
-            'restore_route' => 'cpanel_restore_post_revision',
+            'revisions' => $revisions,
         ]);
     }
 
@@ -192,14 +199,14 @@ class CPanelPostController extends CPanelBaseController
             abort(404);
         }
 
-        return view('cpanel.revisions.diff', [
+        return Inertia::render('cpanel/posts/RevisionDiff', [
             'entity_id' => (int) $id,
             'lang' => $lang,
-            'current' => $data['current'],
-            'revision' => $data['revision'],
+            'revision' => [
+                'id' => $data['revision']->id,
+                'created_at' => Carbon::parse($data['revision']->created_at)->format('d.m.Y H:i'),
+            ],
             'fields' => $data['fields'],
-            'list_route' => 'cpanel_post_revisions',
-            'restore_route' => 'cpanel_restore_post_revision',
         ]);
     }
 

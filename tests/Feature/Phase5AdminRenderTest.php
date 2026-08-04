@@ -69,7 +69,10 @@ class Phase5AdminRenderTest extends TestCase
             // cpanel_add_new_post moved to Inertia (cpanel/posts/Form, TipTap +
             // LFM) in Phase 3 Posts slice — covered by
             // Tests\Feature\CPanel\PostListInertiaRenderTest instead.
-            'cpanel_add_new_page',   // TinyMCE + custom-fields + modals
+            // cpanel_add_new_page moved to Inertia (cpanel/pages/Form, TipTap +
+            // React custom-fields builder) in the Pages slice — covered by
+            // Tests\Feature\CPanel\PageListInertiaRenderTest and the Vitest
+            // CustomFieldsBuilder/Form suites instead.
             // NOTE: cpanel_add_new_menu renders 200 in the real app (MySQL) but
             // its post-source query (`order by id` over a posts+translations
             // join) is ambiguous under SQLite and 500s in the pinned test DB.
@@ -84,16 +87,11 @@ class Phase5AdminRenderTest extends TestCase
         }
     }
 
-    public function test_page_form_includes_custom_field_modals_and_hooks(): void
-    {
-        $response = $this->actingAs($this->admin())->get(route('cpanel_add_new_page'));
-        $response->assertStatus(200);
-        // Custom-fields builder hooks must survive the rewrite.
-        $response->assertSee('id="custom_text_modal"', false);
-        $response->assertSee('data-toggle="modal"', false);
-        $response->assertSee('id="custom_fields_cover"', false);
-        $response->assertSee('class="my-editor', false); // TinyMCE target
-    }
+    // The page custom-fields builder moved from the Blade modals to the React
+    // CustomFieldsBuilder component in the Pages slice. Its behaviour (add /
+    // edit / remove fields, the 5 simple types, repeater passthrough) is covered
+    // by resources/js/components/admin/CustomFieldsBuilder.test.tsx, and the
+    // custom_fields round-trip by Tests\Feature\Admin\PageCrudTest.
 
     // Write-flow round-trips (settings + roles) are covered by the green
     // CPanelWriteFlowSmokeTest; the controllers/repositories are untouched by

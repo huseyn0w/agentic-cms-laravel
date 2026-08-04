@@ -108,6 +108,31 @@ class PageCrudTest extends TestCase
         );
     }
 
+    public function test_custom_fields_round_trip_through_the_observer(): void
+    {
+        // The React builder sends custom_fields as an associative structure;
+        // PageObserver json-encodes it and the theme reads it via get_field().
+        $customFields = [
+            'headline' => ['type' => 'text', 'admin_label' => 'Headline', 'value' => 'Welcome'],
+            'cta' => ['type' => 'link', 'admin_label' => 'CTA', 'value' => [
+                'label' => 'Go', 'url' => 'https://example.com', 'target' => '1',
+            ]],
+        ];
+
+        $this->actingAs($this->admin)->post('/agentic-cms-laravel-admin/pages/new', $this->payload([
+            'slug' => 'cf-page',
+            'custom_fields' => $customFields,
+        ]))->assertSessionHasNoErrors();
+
+        $translation = PageTranslation::where('slug', 'cf-page')->firstOrFail();
+        $stored = json_decode($translation->custom_fields, true);
+
+        $this->assertSame('Welcome', $stored['headline']['value']);
+        $this->assertSame('text', $stored['headline']['type']);
+        $this->assertSame('https://example.com', $stored['cta']['value']['url']);
+        $this->assertSame('1', $stored['cta']['value']['target']);
+    }
+
     public function test_validation_blocks_invalid_page(): void
     {
         $response = $this->actingAs($this->admin)

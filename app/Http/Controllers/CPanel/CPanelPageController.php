@@ -92,15 +92,76 @@ class CPanelPageController extends CPanelBaseController
             return $this->addPage();
         }
 
-        return view('cpanel.pages.edit_page',
-            [
-                'entity' => $this->result,
-                'users_list' => $this->users_list,
-                'page_templates' => $this->page_templates,
-                'categories_list' => get_post_categories_list(['category_id', 'title']),
-                'translation_links' => get_entity_translation_links('pages', $id),
-            ]
-        );
+        return Inertia::render('cpanel/pages/Form', [
+            'entity' => $this->pageEntity($this->result),
+            'templates' => $this->templateOptions(),
+            'authors' => $this->authorOptions(),
+            'categories_list' => $this->categoryOptions(),
+            'translation_links' => get_entity_translation_links('pages', $id),
+        ]);
+    }
+
+    /**
+     * Shape a page (translatable model) into the flat prop the React form
+     * consumes. Field names match ValidatePageData. custom_fields is decoded
+     * back into the associative structure the builder + theme share.
+     */
+    private function pageEntity($p): array
+    {
+        return [
+            'id' => $p->id,
+            'title' => $p->title,
+            'slug' => $p->slug,
+            'content' => $p->content ?? '',
+            'author_id' => $p->author_id,
+            'meta_keywords' => $p->meta_keywords ?? '',
+            'meta_description' => $p->meta_description ?? '',
+            'canonical_url' => $p->canonical_url ?? '',
+            'meta_noindex' => (bool) $p->meta_noindex,
+            'status' => (int) $p->status,
+            'template' => $p->template ?? '',
+            'updated_at' => optional($p->updated_at)->format('Y-m-d H:i:s') ?? '',
+            'custom_fields' => $this->decodeCustomFields($p->custom_fields),
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private function decodeCustomFields($raw): array
+    {
+        if (empty($raw)) {
+            return [];
+        }
+
+        $decoded = is_array($raw) ? $raw : json_decode($raw, true);
+
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    /** @return array<int, array{value: string, label: string}> */
+    private function templateOptions(): array
+    {
+        $templates = $this->page_templates ?: [];
+
+        return collect($templates)
+            ->map(fn ($label, $file) => ['value' => $file, 'label' => $label])
+            ->values()
+            ->all();
+    }
+
+    private function authorOptions(): array
+    {
+        return collect($this->users_list)
+            ->map(fn ($u) => ['id' => $u->id, 'username' => $u->username])
+            ->values()
+            ->all();
+    }
+
+    private function categoryOptions(): array
+    {
+        return collect(get_post_categories_list(['category_id', 'title']))
+            ->map(fn ($c) => ['category_id' => $c->category_id, 'title' => $c->title])
+            ->values()
+            ->all();
     }
 
     public function createPage(ValidatePageData $request)
@@ -172,16 +233,14 @@ class CPanelPageController extends CPanelBaseController
 
     public function addPage()
     {
-        $array = [
-            'users_list' => $this->users_list,
-            'page_templates' => $this->page_templates,
-            'categories_list' => get_post_categories_list(['category_id', 'title']),
-        ];
-
-        if (request()->route('lang')) {
-            $array['translation_links'] = get_entity_translation_links('pages', request()->id);
-        }
-
-        return view('cpanel.pages.new_page', $array);
+        return Inertia::render('cpanel/pages/Form', [
+            'entity' => null,
+            'templates' => $this->templateOptions(),
+            'authors' => $this->authorOptions(),
+            'categories_list' => $this->categoryOptions(),
+            'translation_links' => request()->route('lang')
+                ? get_entity_translation_links('pages', request()->id)
+                : [],
+        ]);
     }
 }

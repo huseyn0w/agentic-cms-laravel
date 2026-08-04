@@ -5,6 +5,8 @@ namespace App\Http\Controllers\CPanel;
 use App\Http\Requests\PostListRequest;
 use App\Http\Requests\ValidatePostData;
 use App\Services\CPanel\CPanelPostService;
+use Carbon\Carbon;
+use Inertia\Inertia;
 
 class CPanelPostController extends CPanelBaseController
 {
@@ -19,16 +21,32 @@ class CPanelPostController extends CPanelBaseController
 
     public function index()
     {
-        $posts_list = $this->service->list($this->per_page);
-
-        return view('cpanel.posts.posts_list', compact('posts_list'));
+        return $this->renderList($this->service->list($this->per_page), false);
     }
 
     public function trashedPosts()
     {
-        $posts_list = $this->service->trashed($this->per_page);
+        return $this->renderList($this->service->trashed($this->per_page), true);
+    }
 
-        return view('cpanel.posts.posts_list', compact('posts_list'));
+    /**
+     * Shape the post paginator into plain rows and render the Inertia list.
+     * Presentation-only mapping — the service/repository/observers are untouched.
+     */
+    private function renderList($posts_list, bool $trashed)
+    {
+        $posts_list->getCollection()->transform(fn ($p) => [
+            'id' => $p->id,
+            'title' => $p->title,
+            'author' => $p->author?->username,
+            'created_at' => Carbon::parse($p->created_at)->format('d.m.Y'),
+            'status' => (int) $p->status,
+        ]);
+
+        return Inertia::render('cpanel/posts/List', [
+            'posts_list' => $posts_list,
+            'trashed' => $trashed,
+        ]);
     }
 
     public function multipleDelete(PostListRequest $request)

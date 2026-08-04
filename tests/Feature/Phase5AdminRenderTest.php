@@ -38,7 +38,9 @@ class Phase5AdminRenderTest extends TestCase
             'cpanel_myprofile',
             'cpanel_all_media',
             'cpanel_all_users_list',
-            'cpanel_pages_list',
+            // cpanel_pages_list + cpanel_trashed_pages_list moved to Inertia
+            // (cpanel/pages/List) in the Pages slice — covered by
+            // Tests\Feature\CPanel\PageListInertiaRenderTest instead.
             // cpanel_posts_list + cpanel_trashed_posts_list moved to Inertia
             // (cpanel/posts/List) in Phase 3 Posts slice — covered by
             // Tests\Feature\CPanel\PostListInertiaRenderTest instead.

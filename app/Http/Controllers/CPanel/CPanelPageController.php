@@ -5,6 +5,8 @@ namespace App\Http\Controllers\CPanel;
 use App\Http\Requests\PageListRequest;
 use App\Http\Requests\ValidatePageData;
 use App\Services\CPanel\CPanelPageService;
+use Carbon\Carbon;
+use Inertia\Inertia;
 
 class CPanelPageController extends CPanelBaseController
 {
@@ -22,16 +24,32 @@ class CPanelPageController extends CPanelBaseController
 
     public function index()
     {
-        $pages_list = $this->service->list($this->per_page);
-
-        return view('cpanel.pages.pages_list', compact('pages_list'));
+        return $this->renderList($this->service->list($this->per_page), false);
     }
 
     public function trashedPages()
     {
-        $pages_list = $this->service->trashed($this->per_page);
+        return $this->renderList($this->service->trashed($this->per_page), true);
+    }
 
-        return view('cpanel.pages.pages_list', compact('pages_list'));
+    /**
+     * Shape the page paginator into plain rows and render the Inertia list.
+     * Presentation-only mapping — the service/repository/observers are untouched.
+     */
+    private function renderList($pages_list, bool $trashed)
+    {
+        $pages_list->getCollection()->transform(fn ($p) => [
+            'id' => $p->id,
+            'title' => $p->title,
+            'author' => $p->author?->username,
+            'created_at' => Carbon::parse($p->created_at)->format('d.m.Y'),
+            'status' => (int) $p->status,
+        ]);
+
+        return Inertia::render('cpanel/pages/List', [
+            'pages_list' => $pages_list,
+            'trashed' => $trashed,
+        ]);
     }
 
     public function multipleDelete(PageListRequest $request)

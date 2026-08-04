@@ -74,4 +74,30 @@ class PostListInertiaRenderTest extends TestCase
                 ->where('trashed', true)
                 ->where('posts_list.data', fn ($rows) => collect($rows)->contains('title', 'Trash me')));
     }
+
+    public function test_new_form_renders_inertia_component_with_options(): void
+    {
+        $this->actingAs($this->admin)
+            ->get('/agentic-cms-laravel-admin/posts/new')
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/posts/Form')
+                ->where('entity', null)
+                ->has('categories_list')
+                ->has('authors'));
+    }
+
+    public function test_edit_form_renders_inertia_component_with_entity(): void
+    {
+        $postId = $this->createPost('Editable', 'editable');
+
+        $this->actingAs($this->admin)
+            ->get('/agentic-cms-laravel-admin/posts/'.$postId.'/en')
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/posts/Form')
+                ->where('entity.title', 'Editable')
+                ->where('entity.slug', 'editable')
+                ->has('entity.category')
+                ->has('categories_list')
+                ->has('authors'));
+    }
 }

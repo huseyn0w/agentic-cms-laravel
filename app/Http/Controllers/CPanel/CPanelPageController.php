@@ -168,13 +168,14 @@ class CPanelPageController extends CPanelBaseController
     {
         parent::create($request);
 
-        return redirect()->route('cpanel_pages_list')->with('page_added', ' ');
-
+        return redirect()->route('cpanel_pages_list')
+            ->with('page_added', ' ')
+            ->with('success', __('cpanel/pages.created'));
     }
 
     public function updatePage($id, ValidatePageData $request)
     {
-        return parent::update($id, $request);
+        return parent::update($id, $request)->with('success', __('cpanel/pages.updated'));
     }
 
     public function revisions($id, $lang)
@@ -228,7 +229,8 @@ class CPanelPageController extends CPanelBaseController
 
         return redirect()
             ->route('cpanel_edit_page', ['id' => $id, 'lang' => $lang])
-            ->with('revision_restored', true);
+            ->with('revision_restored', true)
+            ->with('success', __('cpanel/revisions.restored_success'));
     }
 
     public function addPage()

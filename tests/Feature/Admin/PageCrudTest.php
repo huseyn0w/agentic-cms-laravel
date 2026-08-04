@@ -51,6 +51,7 @@ class PageCrudTest extends TestCase
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
+        $response->assertSessionHas('success');
 
         $translation = PageTranslation::where('slug', 'about-page')->first();
         $this->assertNotNull($translation);
@@ -69,6 +70,7 @@ class PageCrudTest extends TestCase
             ]));
 
         $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('success');
         $fresh = PageTranslation::where('slug', 'about-page')->firstOrFail();
         $this->assertStringContainsString('updated page body', $fresh->content);
     }

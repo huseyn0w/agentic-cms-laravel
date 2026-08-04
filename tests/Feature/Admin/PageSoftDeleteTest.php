@@ -10,6 +10,7 @@ use App\Http\Models\UserRoles;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -28,6 +29,7 @@ class PageSoftDeleteTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
         $this->admin = User::where('username', 'admin')->firstOrFail();
     }
 
@@ -81,17 +83,21 @@ class PageSoftDeleteTest extends TestCase
             ->assertDontSee('Live Page');
     }
 
-    public function test_trashed_tab_renders_restore_and_destroy_affordances(): void
+    public function test_trashed_tab_renders_the_inertia_list_in_trashed_mode(): void
     {
+        // The trashed list is now an Inertia page; its restore/destroy
+        // affordances are React buttons (covered by the Vitest Pages/List
+        // suite). Here we assert the server renders the list component in
+        // trashed mode with the soft-deleted row present.
         $pageId = $this->createPage();
         $this->actingAs($this->admin)->delete('/agentic-cms-laravel-admin/pages/'.$pageId.'/delete');
 
         $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/pages/trashed')
-            ->assertOk()
-            ->assertSee(__('cpanel/pages.restore_page'))
-            ->assertSee(__('cpanel/pages.destroy_page'))
-            ->assertSee(route('cpanel_restore_page', $pageId), false);
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/pages/List')
+                ->where('trashed', true)
+                ->where('pages_list.data', fn ($rows) => collect($rows)->contains('title', 'Trashable Page')));
     }
 
     public function test_admin_can_restore_a_soft_deleted_page(): void

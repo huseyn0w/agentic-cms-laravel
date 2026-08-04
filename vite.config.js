@@ -21,8 +21,17 @@ export default defineConfig({
                 'resources/css/admin.css',
                 'resources/js/admin.js',
             ],
+            // Inertia SSR entry — built by `vite build --ssr` into
+            // bootstrap/ssr/ssr.js and run by `php artisan inertia:start-ssr`.
+            // Scaffolded in Phase 4; not enabled on any route yet.
+            ssr: 'resources/js/ssr.tsx',
             refresh: true,
         }),
         react(),
     ],
+    // Bundle everything into the standalone Node SSR build so it runs without a
+    // node_modules resolution step in production.
+    ssr: {
+        noExternal: true,
+    },
 });

@@ -114,12 +114,14 @@ class CPanelServiceController extends CPanelBaseController
     {
         parent::create($request);
 
-        return redirect()->route('cpanel_services_list')->with('service_added', ' ');
+        return redirect()->route('cpanel_services_list')
+            ->with('service_added', ' ')
+            ->with('success', __('cpanel/services.created'));
     }
 
     public function updateService($id, ValidateServiceData $request)
     {
-        return parent::update($id, $request);
+        return parent::update($id, $request)->with('success', __('cpanel/services.updated'));
     }
 
     public function addService()

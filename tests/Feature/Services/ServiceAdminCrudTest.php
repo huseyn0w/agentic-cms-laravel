@@ -37,6 +37,7 @@ it('creates a service via the admin endpoint', function () {
 
     $response->assertSessionHasNoErrors();
     $response->assertRedirect(route('cpanel_services_list'));
+    $response->assertSessionHas('success');
 
     $translation = ServiceTranslation::where('slug', 'seo-audit')->first();
     expect($translation)->not->toBeNull()
@@ -72,6 +73,7 @@ it('updates a service via the admin endpoint', function () {
         ]));
 
     $response->assertSessionHasNoErrors();
+    $response->assertSessionHas('success');
 
     $fresh = ServiceTranslation::where('slug', 'seo-audit')->firstOrFail();
     expect($fresh->content)->toContain('edited body');

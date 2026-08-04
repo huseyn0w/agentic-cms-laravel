@@ -39,8 +39,8 @@ class ValidatePageData extends AgenticCmsLaravelRequest
     public function rules()
     {
         $rules = [
-            'title' => ['required', 'string', 'max:20'],
-            'slug' => ['required', 'string', 'max:20'],
+            'title' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255'],
             'author_id' => 'required|string|exists:users,id',
             'created_at' => 'sometimes|required|string',
             'updated_at' => 'sometimes|required|string',

@@ -89,6 +89,25 @@ class PageCrudTest extends TestCase
         $this->assertSame(1, PageTranslation::where('slug', 'about-page')->count());
     }
 
+    public function test_admin_can_create_a_page_with_a_long_title_and_slug(): void
+    {
+        $longTitle = str_repeat('a', 120);
+        $longSlug = str_repeat('b', 120);
+
+        $response = $this->actingAs($this->admin)
+            ->from('/agentic-cms-laravel-admin/pages/new')
+            ->post('/agentic-cms-laravel-admin/pages/new', $this->payload([
+                'title' => $longTitle,
+                'slug' => $longSlug,
+            ]));
+
+        $response->assertSessionHasNoErrors();
+        $this->assertNotNull(
+            PageTranslation::where('slug', $longSlug)->first(),
+            'A 120-char title/slug must be accepted (was capped at max:20).'
+        );
+    }
+
     public function test_validation_blocks_invalid_page(): void
     {
         $response = $this->actingAs($this->admin)

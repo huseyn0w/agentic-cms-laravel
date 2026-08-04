@@ -22,23 +22,28 @@ class ValidateGeneralSettings extends FormRequest
      *
      * @return array
      */
+    protected function prepareForValidation()
+    {
+        // Normalise the two toggles to real booleans before validation. This
+        // accepts the legacy Blade "on"/absent as well as the JSON true/false
+        // the Inertia form sends (the old `=== 'on'` check silently persisted
+        // every Inertia-ticked box as 0).
+        $this->merge([
+            'membership' => $this->boolean('membership'),
+            'email_verification' => $this->boolean('email_verification'),
+        ]);
+    }
+
     public function rules()
     {
-        // HTML checkboxes submit "on" when ticked and nothing when unticked;
-        // normalise both toggles to 0/1 before validation.
-        $this->request->add([
-            'membership' => $this->request->get('membership') === 'on' ? '1' : '0',
-            'email_verification' => $this->request->get('email_verification') === 'on' ? '1' : '0',
-        ]);
-
         return [
             'website_name' => 'required|string',
             'tagline' => 'required|string',
             'posts_per_page' => 'required|integer',
             'comments_per_page' => 'required|integer',
             'contact_email' => 'required|email',
-            'membership' => 'required|in:0,1',
-            'email_verification' => 'required|in:0,1',
+            'membership' => 'boolean',
+            'email_verification' => 'boolean',
             'active_template_name' => 'nullable|string',
         ];
     }

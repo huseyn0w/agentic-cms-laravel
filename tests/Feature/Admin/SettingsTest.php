@@ -9,6 +9,7 @@ use App\Http\Models\User;
 use App\Http\Models\UserRoles;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -26,6 +27,7 @@ class SettingsTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
         $this->admin = User::where('username', 'admin')->firstOrFail();
     }
 
@@ -33,7 +35,33 @@ class SettingsTest extends TestCase
     {
         $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/general-settings')
-            ->assertStatus(200);
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/settings/General')
+                ->has('general_settings.website_name')
+                ->where('general_settings.membership', fn ($v) => is_bool($v))
+                ->has('templates'));
+    }
+
+    public function test_general_settings_persists_json_boolean_toggle(): void
+    {
+        // Inertia sends checkboxes as JSON booleans; the request must coerce
+        // them (the old `=== 'on'` check would have stored ticked as 0).
+        $this->actingAs($this->admin)
+            ->postJson('/agentic-cms-laravel-admin/general-settings', [
+                'website_name' => 'Bool Site',
+                'tagline' => 'T',
+                'posts_per_page' => 7,
+                'comments_per_page' => 4,
+                'contact_email' => 'b@example.com',
+                'membership' => true,
+                'email_verification' => false,
+                'active_template_name' => 'default',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $settings = CPanelGeneralSettings::first();
+        $this->assertSame(1, (int) $settings->membership);
+        $this->assertSame(0, (int) $settings->email_verification);
     }
 
     public function test_admin_can_persist_general_settings(): void
@@ -59,7 +87,10 @@ class SettingsTest extends TestCase
     {
         $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/site-options')
-            ->assertStatus(200);
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/settings/SiteOptions')
+                ->has('site_options.logo_url')
+                ->has('site_options.copyright'));
     }
 
     public function test_admin_can_persist_site_options(): void

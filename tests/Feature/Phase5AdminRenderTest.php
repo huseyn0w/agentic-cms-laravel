@@ -50,8 +50,9 @@ class Phase5AdminRenderTest extends TestCase
             // Comments slice — covered by Tests\Feature\Admin\CommentModerationTest.
             // cpanel_user_roles moved to Inertia (cpanel/roles/List) in the Roles
             // slice — covered by Tests\Feature\Admin\RoleCrudTest.
-            'cpanel_general_settings',
-            'cpanel_site_options',
+            // cpanel_general_settings + cpanel_site_options moved to Inertia
+            // (cpanel/settings/General + SiteOptions) in the Settings slice —
+            // covered by Tests\Feature\Admin\SettingsTest.
             'cpanel_menu_list',
         ];
 

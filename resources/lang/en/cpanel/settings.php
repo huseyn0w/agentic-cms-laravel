@@ -10,6 +10,10 @@
 return [
 
     'general_settings_headline' => 'Website settings',
+    'tab_general' => 'General',
+    'tab_site_options' => 'Site options',
+    'tab_seo' => 'SEO',
+    'tab_geo' => 'GEO',
     'site_options_headline' => 'Site Options',
     'general_settings_updates_success' => 'Settings has been updated',
     'site_options_updates_success' => 'Options has been updated',

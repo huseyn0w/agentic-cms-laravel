@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CPanel;
 
 use App\Http\Requests\ValidateSiteOptions;
 use App\Services\CPanel\SiteOptionsService;
+use Inertia\Inertia;
 
 class CPanelSiteOptionsController extends CPanelBaseController
 {
@@ -15,15 +16,22 @@ class CPanelSiteOptionsController extends CPanelBaseController
 
     public function index()
     {
-        $site_options = $this->service->current();
+        $options = $this->service->current();
 
-        return view('cpanel.settings.site-options', compact('site_options'));
+        return Inertia::render('cpanel/settings/SiteOptions', [
+            'site_options' => [
+                'logo_url' => $options->logo_url,
+                'copyright' => $options->copyright,
+                'linkedin_url' => $options->linkedin_url,
+                'github_url' => $options->github_url,
+            ],
+        ]);
     }
 
     public function store(ValidateSiteOptions $request)
     {
-        $result = $this->service->update(1, $request);
+        $this->service->update(1, $request);
 
-        return back()->with('message', $result);
+        return back()->with('success', __('cpanel/settings.site_options_updates_success'));
     }
 }

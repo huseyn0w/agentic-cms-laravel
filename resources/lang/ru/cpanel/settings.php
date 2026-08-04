@@ -10,6 +10,10 @@
 return [
 
     'general_settings_headline' => 'Настройки сайта',
+    'tab_general' => 'Основные',
+    'tab_site_options' => 'Опции сайта',
+    'tab_seo' => 'SEO',
+    'tab_geo' => 'GEO',
     'site_options_headline' => 'Опции сайта',
     'general_settings_updates_success' => 'Настройки были обновлены',
     'site_options_updates_success' => 'Опции были обновлены',

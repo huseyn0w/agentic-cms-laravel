@@ -39,8 +39,9 @@ class Phase5AdminRenderTest extends TestCase
             'cpanel_all_media',
             'cpanel_all_users_list',
             'cpanel_pages_list',
-            'cpanel_posts_list',
-            'cpanel_trashed_posts_list',
+            // cpanel_posts_list + cpanel_trashed_posts_list moved to Inertia
+            // (cpanel/posts/List) in Phase 3 Posts slice — covered by
+            // Tests\Feature\CPanel\PostListInertiaRenderTest instead.
             'cpanel_comments_list',
             'cpanel_user_roles',
             'cpanel_general_settings',
@@ -63,7 +64,9 @@ class Phase5AdminRenderTest extends TestCase
             'cpanel_add_user_role',
             // cpanel_add_new_category moved to Inertia (cpanel/categories/Form)
             // in Phase 3 Task 5 — covered by Tests\Feature\CPanel\CategoryInertiaRenderTest instead.
-            'cpanel_add_new_post',   // TinyMCE + datepicker + LFM
+            // cpanel_add_new_post moved to Inertia (cpanel/posts/Form, TipTap +
+            // LFM) in Phase 3 Posts slice — covered by
+            // Tests\Feature\CPanel\PostListInertiaRenderTest instead.
             'cpanel_add_new_page',   // TinyMCE + custom-fields + modals
             // NOTE: cpanel_add_new_menu renders 200 in the real app (MySQL) but
             // its post-source query (`order by id` over a posts+translations

@@ -9,6 +9,7 @@ use App\Http\Models\User;
 use App\Http\Models\UserRoles;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -27,6 +28,7 @@ class PostRevisionTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware(VerifyCsrfToken::class);
         $this->seed(DatabaseSeeder::class);
+        config(['inertia.testing.ensure_pages_exist' => false]);
         $this->admin = User::where('username', 'admin')->firstOrFail();
     }
 
@@ -196,8 +198,11 @@ class PostRevisionTest extends TestCase
         $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/revisions/en')
             ->assertOk()
-            ->assertSee('v1')
-            ->assertSee($this->admin->username);
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/posts/Revisions')
+                ->where('revisions.data', fn ($rows) => collect($rows)->contains(
+                    fn ($r) => $r['version'] === 1 && $r['author'] === $this->admin->username
+                )));
     }
 
     public function test_revision_diff_page_renders_and_marks_changes(): void
@@ -210,8 +215,14 @@ class PostRevisionTest extends TestCase
         $this->actingAs($this->admin)
             ->get('/agentic-cms-laravel-admin/posts/'.$translation->post_id.'/revisions/'.$revision->id.'/compare/en')
             ->assertOk()
-            ->assertSee('original body')
-            ->assertSee('edited body');
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('cpanel/posts/RevisionDiff')
+                ->where('fields', fn ($fields) => collect($fields)->contains(
+                    fn ($f) => $f['field'] === 'content'
+                        && $f['changed'] === true
+                        && str_contains((string) $f['old'], 'original body')
+                        && str_contains((string) $f['current'], 'edited body')
+                )));
     }
 
     public function test_cannot_restore_a_revision_belonging_to_another_post(): void

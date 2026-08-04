@@ -114,7 +114,7 @@ export default function List({ users_list }: ListProps) {
                   <td className="border-b admin-sep px-4 py-3">
                     <div className="flex gap-3.5 text-[12.5px]">
                       <Link href={`${BASE}/${r.id}`} prefetch cacheFor="15s" className="text-muted hover:text-fg">
-                        {tr('cpanel/users.edit', 'Edit')}
+                        {tr('cpanel/users.edit_user', 'Edit')}
                       </Link>
                       <button onClick={() => del([r.id])} className="text-muted hover:text-error">
                         {tr('cpanel/users.delete_user', 'Delete')}

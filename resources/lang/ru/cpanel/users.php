@@ -58,5 +58,9 @@ return [
     'js_delete_confirmation' => 'Вы уверены? Пользователь будет удален',
     'js_delete_success' => 'Пользователь был успешно удален',
     'js_delete_error' => 'Произошла ошибка',
+    'cancel' => 'Отмена',
+    'save' => 'Сохранить',
+    'selected' => 'выбрано',
+    'avatar' => 'Аватар',
 
 ];

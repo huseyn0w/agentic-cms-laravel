@@ -58,5 +58,9 @@ return [
     'js_delete_confirmation' => 'Are you sure? User will be deleted',
     'js_delete_success' => 'User has been successfully deleted',
     'js_delete_error' => 'Some problem occurred',
+    'cancel' => 'Cancel',
+    'save' => 'Save',
+    'selected' => 'selected',
+    'avatar' => 'Avatar',
 
 ];

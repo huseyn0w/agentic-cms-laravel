@@ -41,13 +41,15 @@ interface FormProps {
 
 const BASE = '/agentic-cms-laravel-admin/users';
 
+// [form field, i18n key suffix, English fallback]. The lang file keys the
+// social labels without the `_url` suffix (facebook, google, ...).
 const SOCIALS = [
-  ['facebook_url', 'Facebook'],
-  ['google_url', 'Google'],
-  ['twitter_url', 'Twitter'],
-  ['instagram_url', 'Instagram'],
-  ['linkedin_url', 'LinkedIn'],
-  ['xing_url', 'Xing'],
+  ['facebook_url', 'facebook', 'Facebook'],
+  ['google_url', 'google', 'Google'],
+  ['twitter_url', 'twitter', 'Twitter'],
+  ['instagram_url', 'instagram', 'Instagram'],
+  ['linkedin_url', 'linkedin', 'LinkedIn'],
+  ['xing_url', 'xing', 'Xing'],
 ] as const;
 
 export default function Form({ entity, countries, user_roles }: FormProps) {
@@ -170,8 +172,8 @@ export default function Form({ entity, countries, user_roles }: FormProps) {
             <div className="mt-2 border-t admin-sep pt-4">
               <h3 className="mb-3 text-[13px] font-semibold">{tr('cpanel/users.social_profiles', 'Social profiles')}</h3>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {SOCIALS.map(([field, label]) => (
-                  <TextField key={field} name={field} label={tr(`cpanel/users.${field}`, label)} placeholder="https://"
+                {SOCIALS.map(([field, key, label]) => (
+                  <TextField key={field} name={field} label={tr(`cpanel/users.${key}`, label)} placeholder="https://"
                     value={form.data[field]} error={form.errors[field]}
                     onChange={(e) => form.setData(field, e.target.value)} />
                 ))}

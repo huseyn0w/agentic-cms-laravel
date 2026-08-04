@@ -58,5 +58,9 @@ return [
     'js_delete_confirmation' => 'Sind Sie sicher? Der Benutzer wird gelöscht',
     'js_delete_success' => 'Benutzer wurde erfolgreich gelöscht',
     'js_delete_error' => 'Es ist ein Problem aufgetreten',
+    'cancel' => 'Abbrechen',
+    'save' => 'Speichern',
+    'selected' => 'ausgewählt',
+    'avatar' => 'Avatar',
 
 ];

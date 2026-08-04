@@ -56,8 +56,9 @@ class CPanelUserController extends CPanelBaseController
 
     public function updateUser($id, ValidateUserSettings $request)
     {
-        return parent::update($id, $request);
+        parent::update($id, $request);
 
+        return back()->with('success', __('cpanel/users.updated_success'));
     }
 
     public function multipleDelete(UserListRequest $request)
@@ -80,7 +81,7 @@ class CPanelUserController extends CPanelBaseController
     {
         parent::create($request);
 
-        return redirect()->route('cpanel_all_users_list')->with('user_added', ' ');
+        return redirect()->route('cpanel_all_users_list')->with('success', __('cpanel/users.user_added'));
     }
 
     /**

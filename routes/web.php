@@ -186,7 +186,7 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['auth', 'see_admin_panel
         Route::get('/{id}/{lang}', 'CPanelMenuController@editMenu')->name('cpanel_edit_menu')->where('id', '[0-9]+');
         Route::put('/{id}/update', 'CPanelMenuController@updateMenu')->name('cpanel_update_menu')->where('id', '[0-9]+');
         Route::delete('/multipleDelete', 'CPanelMenuController@multipleDelete')->name('cpanel_menus_bulk_delete');
-        Route::delete('/{id}/delete', 'CPanelMenuController@deleteAjax')->name('cpanel_ajax_soft_delete_menu')->where('id', '[0-9]+');
+        Route::delete('/{id}/delete', 'CPanelMenuController@deleteMenu')->name('cpanel_ajax_soft_delete_menu')->where('id', '[0-9]+');
         Route::get('/new', 'CPanelMenuController@addMenu')->name('cpanel_add_new_menu');
         Route::post('/new/{id?}', 'CPanelMenuController@createMenu')->name('cpanel_save_new_menu')->where('id', '[0-9]+');
     });

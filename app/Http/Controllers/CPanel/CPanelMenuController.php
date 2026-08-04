@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CPanel;
 
 use App\Http\Requests\MenuRequest;
 use App\Services\CPanel\CPanelMenuService;
+use Inertia\Inertia;
 
 class CPanelMenuController extends CPanelBaseController
 {
@@ -26,7 +27,21 @@ class CPanelMenuController extends CPanelBaseController
     {
         $menus_list = $this->service->list($this->per_page);
 
-        return view('cpanel.menus.menus_list', compact('menus_list'));
+        $menus_list->getCollection()->transform(fn ($m) => [
+            'id' => $m->id,
+            'title' => $m->title,
+        ]);
+
+        return Inertia::render('cpanel/menus/List', [
+            'menus_list' => $menus_list,
+        ]);
+    }
+
+    public function deleteMenu($id)
+    {
+        $this->service->delete($id);
+
+        return back()->with('success', __('cpanel/menus.js_delete'));
     }
 
     public function addMenu()

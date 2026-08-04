@@ -3,6 +3,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
 import { initI18n, syncI18n } from '@/lib/i18n';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import type { SharedProps } from '@/lib/types';
 
 const appName = import.meta.env.VITE_APP_NAME ?? 'Agentic CMS';
@@ -37,7 +38,11 @@ createInertiaApp({
         });
 
         if (el) {
-            createRoot(el).render(<App {...props} />);
+            createRoot(el).render(
+                <ErrorBoundary>
+                    <App {...props} />
+                </ErrorBoundary>,
+            );
         }
     },
     progress: {

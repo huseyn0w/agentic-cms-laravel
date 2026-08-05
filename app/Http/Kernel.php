@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\AdminPanelMiddleware;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
+use App\Http\Middleware\EnableSsrOnPublicRoutes;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\EnsureEmailIsVerifiedWhenRequired;
 use App\Http\Middleware\EnsureRegistrationEnabled;
@@ -68,6 +69,9 @@ class Kernel extends HttpKernel
             VerifyCsrfToken::class,
             SubstituteBindings::class,
             Localization::class,
+            // Decides whether this request gets server-rendered. Must run before
+            // Inertia builds the response, which is what reads the flag it writes.
+            EnableSsrOnPublicRoutes::class,
             HandleInertiaRequests::class,
         ],
 

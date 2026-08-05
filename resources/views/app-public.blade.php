@@ -37,6 +37,15 @@
          from the Blade era; see partials/seo-meta.blade.php. --}}
     @include(config('app.template_name').'.partials.seo-meta')
 
+    {{-- Page-specific JSON-LD a controller passes via withViewData (e.g. the
+         services ItemList). The body is React and ships no JSON-LD, so any
+         structured data a crawler must read is server-rendered here. --}}
+    @isset($jsonLd)
+        @foreach($jsonLd as $block)
+            {!! json_ld($block) !!}
+        @endforeach
+    @endisset
+
     @isset($author)<meta name="author" content="{{ $author }}">@endisset
 
     <meta name="csrf-token" content="{{ csrf_token() }}">

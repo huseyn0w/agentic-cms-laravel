@@ -49,8 +49,10 @@ it('excludes draft services from llms.txt', function () {
 it('emits Service JSON-LD on the services index', function () {
     seoService('managed-hosting', 1);
 
+    // The ItemList is server-rendered via json_ld() now (pretty-printed, so a
+    // space after the colon); the services index body itself is React.
     $this->get('/services')
         ->assertOk()
-        ->assertSee('"@type":"Service"', false)
+        ->assertSee('"@type": "Service"', false)
         ->assertSee('Managed hosting', false);
 });

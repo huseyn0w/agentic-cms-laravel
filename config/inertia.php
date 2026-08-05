@@ -85,6 +85,8 @@ return [
                 'tags_first_page',    // tag archive
                 'tags_display_pages', // tag archive, paginated
                 'tags_localized',     // tag archive, /{locale}/tag/{slug}
+                'services_index', // services grid
+                'services_show',  // service detail
             ],
 
         ],

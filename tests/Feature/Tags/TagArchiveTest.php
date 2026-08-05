@@ -30,11 +30,15 @@ class TagArchiveTest extends TestCase
         $post = Post::findOrFail(1);
         app(TagRepository::class)->syncToPost($post, ['Laravel']);
 
-        $response = $this->get('/tag/laravel');
-
-        $response->assertStatus(200);
-        $response->assertSee('Laravel', false);
-        $response->assertSee($post->title, false);
+        // The tag archive is Inertia now; its title + posts ride in props.
+        $this->get('/tag/laravel')->assertOk()->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('public/Archive')
+                ->where('archive.title', 'Laravel')
+                ->where('archive.posts', fn ($posts) => collect($posts)->contains(
+                    fn ($p) => $p['title'] === $post->title
+                ))
+        );
     }
 
     public function test_unknown_tag_returns_404(): void

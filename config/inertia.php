@@ -79,6 +79,12 @@ return [
                 // still Blade until their slices, harmless here.
                 'posts',           // blog post detail
                 'posts_localized', // same, /{locale}/posts/{slug}
+                'categories_first_page',    // category archive
+                'categories_display_pages', // category archive, paginated
+                'categories_localized',     // category archive, /{locale}/category/{slug}
+                'tags_first_page',    // tag archive
+                'tags_display_pages', // tag archive, paginated
+                'tags_localized',     // tag archive, /{locale}/tag/{slug}
             ],
 
         ],

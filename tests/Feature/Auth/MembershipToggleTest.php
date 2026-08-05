@@ -6,6 +6,7 @@ use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Models\CPanel\CPanelGeneralSettings;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -81,15 +82,23 @@ class MembershipToggleTest extends TestCase
 
     public function test_header_hides_register_link_when_membership_off(): void
     {
+        // The homepage header is React now; membership drives the shell prop the
+        // PublicLayout reads to show/hide the register link (see PublicLayout.test.tsx).
         $this->setMembership(false);
-        $html = $this->get('/')->getContent();
-        $this->assertStringNotContainsString(route('register'), $html);
+
+        $this->get('/')->assertOk()->assertInertia(
+            fn (AssertableInertia $page) => $page->where('shell.general.membership', false)
+        );
     }
 
     public function test_header_shows_register_link_when_membership_on(): void
     {
         $this->setMembership(true);
-        $html = $this->get('/')->getContent();
-        $this->assertStringContainsString(route('register'), $html);
+
+        $this->get('/')->assertOk()->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('shell.general.membership', true)
+                ->has('shell.auth.registerUrl')
+        );
     }
 }

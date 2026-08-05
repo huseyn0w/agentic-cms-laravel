@@ -6,6 +6,7 @@ use App\Http\Models\Post;
 use App\Repositories\TagRepository;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -19,6 +20,7 @@ class TagArchiveTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config(['inertia.testing.ensure_pages_exist' => false]);
         $this->seed(DatabaseSeeder::class);
         app()->setLocale('en');
     }
@@ -45,10 +47,14 @@ class TagArchiveTest extends TestCase
         $post = Post::findOrFail(1);
         app(TagRepository::class)->syncToPost($post, ['Laravel']);
 
-        $response = $this->get('/posts/'.$post->slug);
-
-        $response->assertStatus(200);
-        $response->assertSee('Laravel', false);
-        $response->assertSee('tag/laravel', false);
+        // The post detail is Inertia now; its tags ride in the props (the React
+        // page links each to /tag/{slug}), not in Blade markup.
+        $this->get('/posts/'.$post->slug)->assertOk()->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('public/Post')
+                ->where('post.tags', fn ($tags) => collect($tags)->contains(
+                    fn ($tag) => $tag['name'] === 'Laravel' && str_contains($tag['url'], 'tag/laravel')
+                ))
+        );
     }
 }

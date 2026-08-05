@@ -77,6 +77,8 @@ return [
                 // moves off Blade; SSR renders only these for crawlers.
                 'front_pages', // homepage (home template) — other page templates
                 // still Blade until their slices, harmless here.
+                'posts',           // blog post detail
+                'posts_localized', // same, /{locale}/posts/{slug}
             ],
 
         ],

@@ -1,30 +1,17 @@
-/* Premium monochrome edges — Phase 3 admin. */
+/* Flat monochrome (Vercel/Geist) — admin surfaces. */
 @layer components {
   .admin-card {
-    border: 1px solid transparent; border-radius: 13px;
-    background:
-      linear-gradient(var(--surface), var(--surface)) padding-box,
-      linear-gradient(180deg, rgba(9,9,11,.11), rgba(9,9,11,.045) 40%, rgba(9,9,11,.03)) border-box;
-    box-shadow: 0 1px 2px rgba(9,9,11,.04), 0 10px 30px -12px rgba(9,9,11,.14), inset 0 1px 0 rgba(255,255,255,.7);
+    border: 1px solid var(--border); border-radius: var(--radius-md);
+    background: var(--surface); box-shadow: none;
   }
+  /* Small raised control (used by the RichText/TipTap toolbar active button). */
   .admin-bevel {
-    border: 1px solid transparent;
-    background:
-      linear-gradient(#fff,#fbfbfc) padding-box,
-      linear-gradient(180deg, rgba(9,9,11,.11), rgba(9,9,11,.045) 40%, rgba(9,9,11,.03)) border-box;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--surface); box-shadow: none;
   }
   .admin-nav-active {
-    background:
-      linear-gradient(#fff,#fff) padding-box,
-      linear-gradient(180deg, rgba(9,9,11,.11), rgba(9,9,11,.045) 40%, rgba(9,9,11,.03)) border-box;
-    border: 1px solid transparent;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 1px 2px rgba(9,9,11,.06);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--surface-3); box-shadow: none;
   }
-  .dark .admin-card, .dark .admin-bevel, .dark .admin-nav-active {
-    background: linear-gradient(var(--surface-2), var(--surface-2)) padding-box,
-                linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03)) border-box;
-    box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px -12px rgba(0,0,0,.6);
-  }
-  .admin-sep { border-color: rgba(9,9,11,.06); }
+  .admin-sep { border-color: var(--border); }
 }

@@ -4,6 +4,8 @@
   --text:#0a0a0a; --text-muted:#3f3f46; --text-subtle:#71717a; --text-faint:#a1a1aa;
   --primary:#0a0a0a; --primary-hover:#242427; --primary-contrast:#ffffff;
   --accent:#0a0a0a; --border:#e4e4e7; --border-strong:#d4d4d8; --ring:#0a0a0a;
+  /* admin-only accent (Vercel blue) for links + focus; public stays monochrome */
+  --accent-blue:#0070f3; --accent-blue-hover:#0060df;
   --success:#15803d; --success-bg:#e7f6ec; --warning:#a9701a; --warning-bg:#f6eedd;
   --error:#dc2626; --error-bg:#fbeaea;
   /* radius */
@@ -24,4 +26,7 @@
   --accent:#ffffff; --border:#2a2a2e; --border-strong:#3a3a40; --ring:#ffffff;
   --success:#4ade80; --success-bg:#12251a; --warning:#d6a24c; --warning-bg:#2a2113;
   --error:#f87171; --error-bg:#2a1513;
+  --accent-blue:#3291ff; --accent-blue-hover:#52a8ff;
 }
+/* Admin adopts the blue accent for focus rings; public keeps the mono ring. */
+.theme-admin { --ring:var(--accent-blue); }

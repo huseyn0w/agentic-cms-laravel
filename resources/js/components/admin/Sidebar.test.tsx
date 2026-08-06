@@ -32,9 +32,11 @@ describe('Sidebar', () => {
     expect(screen.getByText('Categories')).toBeInTheDocument();
   });
 
-  it('marks the active item from the current component', () => {
+  it('marks the active item as a solid pill from the current component', () => {
     render(<Sidebar can={can()} />);
-    expect(screen.getByText('Categories').closest('a')).toHaveClass('admin-nav-active');
+    const link = screen.getByText('Categories').closest('a')!;
+    expect(link).toHaveClass('bg-primary');
+    expect(link).toHaveClass('text-primary-contrast');
   });
 
   it('hides the group label when every item in the group is filtered out', () => {

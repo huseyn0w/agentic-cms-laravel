@@ -27,8 +27,8 @@ export function Sidebar({ can }: { can: Record<Ability, boolean> }) {
               const active = component === item.component || component.startsWith(`${item.component}/`);
               return (
                 <Link key={item.key} href={item.href} prefetch="mount" cacheFor="15s"
-                  className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm ${
-                    active ? 'admin-nav-active font-semibold text-fg' : 'text-muted hover:bg-black/[.035] hover:text-fg'
+                  className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors ${
+                    active ? 'bg-primary font-semibold text-primary-contrast' : 'text-muted hover:bg-black/[.035] hover:text-fg'
                   }`}>
                   {label(item.key, item.fallback)}
                 </Link>

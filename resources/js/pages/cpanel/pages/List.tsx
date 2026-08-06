@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { Pagination } from '@/components/admin/Pagination';
+import { StatusPill } from '@/components/admin/StatusPill';
 import type { Paginator, SharedProps } from '@/lib/types';
 import type { ReactElement } from 'react';
 
@@ -61,7 +62,9 @@ export default function List({ pages_list, trashed }: ListProps) {
 
   const tab = (isActive: boolean) =>
     `-mb-px border-b-2 px-4 py-2 text-[13px] transition ${
-      isActive ? 'border-primary font-semibold text-fg' : 'border-transparent text-muted hover:text-fg'
+      isActive
+        ? 'border-[color:var(--accent-blue)] font-semibold text-fg'
+        : 'border-transparent text-muted hover:text-fg'
     }`;
 
   return (
@@ -135,19 +138,19 @@ export default function List({ pages_list, trashed }: ListProps) {
               </tr>
             )}
             {rows.map((r) => (
-              <tr key={r.id} className="hover:bg-black/[.022]">
+              <tr key={r.id} className="transition-colors hover:bg-surface-2">
                 <td className="border-b admin-sep px-4 py-3">
                   <input type="checkbox" aria-label={`select-${r.id}`}
                     checked={selected.includes(r.id)} onChange={() => toggle(r.id)} />
                 </td>
-                <td className="border-b admin-sep px-4 py-3 font-semibold">{r.title}</td>
+                <td className="border-b admin-sep px-4 py-3 font-medium tracking-tight">{r.title}</td>
                 <td className="border-b admin-sep px-4 py-3 text-muted">{r.author ?? '—'}</td>
-                <td className="whitespace-nowrap border-b admin-sep px-4 py-3 text-muted">{r.created_at}</td>
+                <td className="whitespace-nowrap border-b admin-sep px-4 py-3 tabular-nums text-faint">{r.created_at}</td>
                 <td className="border-b admin-sep px-4 py-3">
                   {r.status === 1 ? (
-                    <span className="text-success">{tr('cpanel/pages.page_published', 'Published')}</span>
+                    <StatusPill tone="success" label={tr('cpanel/pages.page_published', 'Published')} />
                   ) : (
-                    <span className="text-muted">{tr('cpanel/pages.page_pending', 'Private')}</span>
+                    <StatusPill tone="muted" label={tr('cpanel/pages.page_pending', 'Private')} />
                   )}
                 </td>
                 <td className="border-b admin-sep px-4 py-3">
@@ -164,7 +167,7 @@ export default function List({ pages_list, trashed }: ListProps) {
                     ) : (
                       <>
                         <Link href={`${BASE}/${r.id}/${locale.current}`} prefetch cacheFor="15s"
-                          className="text-muted hover:text-fg">
+                          className="font-medium text-muted hover:text-[color:var(--accent-blue)]">
                           {tr('cpanel/pages.edit_page', 'Edit')}
                         </Link>
                         <button onClick={() => bulkDelete([r.id])} className="text-muted hover:text-error">

@@ -86,20 +86,20 @@ export default function List({ categories_list }: ListProps) {
               </tr>
             )}
             {rows.map((r) => (
-              <tr key={r.id} className="hover:bg-black/[.022]">
+              <tr key={r.id} className="transition-colors hover:bg-surface-2">
                 <td className="border-b admin-sep px-4 py-3">
                   {r.id !== PROTECTED_ID && (
                     <input type="checkbox" aria-label={`select-${r.id}`}
                       checked={selected.includes(r.id)} onChange={() => toggle(r.id)} />
                   )}
                 </td>
-                <td className="border-b admin-sep px-4 py-3 font-semibold">{r.title}</td>
-                <td className="border-b admin-sep px-4 py-3 font-mono text-xs text-muted">{r.slug}</td>
+                <td className="border-b admin-sep px-4 py-3 font-medium tracking-tight">{r.title}</td>
+                <td className="border-b admin-sep px-4 py-3 font-mono text-xs text-faint">{r.slug}</td>
                 <td className="border-b admin-sep px-4 py-3 text-muted">{r.parent_title ?? '—'}</td>
                 <td className="border-b admin-sep px-4 py-3">
                   <div className="flex gap-3.5 text-[12.5px]">
                     <Link href={`${BASE}/${r.id}/${locale.current}`} prefetch cacheFor="15s"
-                      className="text-muted hover:text-fg">{tr('cpanel/categories.edit', 'Edit')}</Link>
+                      className="font-medium text-muted hover:text-[color:var(--accent-blue)]">{tr('cpanel/categories.edit', 'Edit')}</Link>
                     {r.id !== PROTECTED_ID && (
                       <button onClick={() => del([r.id])} className="text-muted hover:text-error">
                         {tr('cpanel/categories.delete', 'Delete')}

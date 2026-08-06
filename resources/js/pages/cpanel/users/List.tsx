@@ -97,23 +97,26 @@ export default function List({ users_list }: ListProps) {
                 </tr>
               )}
               {rows.map((r) => (
-                <tr key={r.id} className="hover:bg-black/[.022]">
+                <tr key={r.id} className="transition-colors hover:bg-surface-2">
                   <td className="border-b admin-sep px-4 py-3">
                     <input type="checkbox" aria-label={`select-${r.id}`}
                       checked={selected.includes(r.id)} onChange={() => toggle(r.id)} />
                   </td>
-                  <td className="border-b admin-sep px-4 py-3 font-semibold">{r.username}</td>
+                  <td className="border-b admin-sep px-4 py-3 font-medium tracking-tight">{r.username}</td>
                   <td className="border-b admin-sep px-4 py-3 text-muted">{r.email}</td>
                   <td className="border-b admin-sep px-4 py-3 text-muted">{r.name ?? '—'}</td>
                   <td className="border-b admin-sep px-4 py-3 text-muted">{r.surname ?? '—'}</td>
                   <td className="border-b admin-sep px-4 py-3 text-muted">{r.country ?? '—'}</td>
                   <td className="border-b admin-sep px-4 py-3 text-muted">{r.city ?? '—'}</td>
                   <td className="border-b admin-sep px-4 py-3">
-                    <span className="rounded bg-surface-2 px-2 py-0.5 text-[11px] text-fg">{r.role ?? '—'}</span>
+                    <span className="inline-flex items-center rounded-full bg-surface-3 px-2.5 py-0.5 text-[11.5px] font-medium text-subtle">
+                      {r.role ?? '—'}
+                    </span>
                   </td>
                   <td className="border-b admin-sep px-4 py-3">
                     <div className="flex gap-3.5 text-[12.5px]">
-                      <Link href={`${BASE}/${r.id}`} prefetch cacheFor="15s" className="text-muted hover:text-fg">
+                      <Link href={`${BASE}/${r.id}`} prefetch cacheFor="15s"
+                        className="font-medium text-muted hover:text-[color:var(--accent-blue)]">
                         {tr('cpanel/users.edit_user', 'Edit')}
                       </Link>
                       <button onClick={() => del([r.id])} className="text-muted hover:text-error">

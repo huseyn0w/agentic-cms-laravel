@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { Pagination } from '@/components/admin/Pagination';
+import { StatusPill } from '@/components/admin/StatusPill';
 import type { Paginator, SharedProps } from '@/lib/types';
 import type { ReactElement } from 'react';
 
@@ -66,17 +67,11 @@ export default function List({ posts_list, trashed }: ListProps) {
         : 'border-transparent text-muted hover:text-fg'
     }`;
 
-  const StatusPill = ({ status }: { status: number }) =>
+  const statusPill = (status: number) =>
     status === 1 ? (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-success-bg px-2.5 py-0.5 text-[11.5px] font-semibold text-success">
-        <span className="h-1.5 w-1.5 rounded-full bg-current opacity-80" />
-        {tr('cpanel/posts.status_published', 'Published')}
-      </span>
+      <StatusPill tone="success" label={tr('cpanel/posts.status_published', 'Published')} />
     ) : (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-3 px-2.5 py-0.5 text-[11.5px] font-semibold text-subtle">
-        <span className="h-1.5 w-1.5 rounded-full bg-current opacity-70" />
-        {tr('cpanel/posts.status_private', 'Private')}
-      </span>
+      <StatusPill tone="muted" label={tr('cpanel/posts.status_private', 'Private')} />
     );
 
   return (
@@ -158,9 +153,7 @@ export default function List({ posts_list, trashed }: ListProps) {
                 <td className="border-b admin-sep px-4 py-3 font-medium tracking-tight">{r.title}</td>
                 <td className="border-b admin-sep px-4 py-3 text-muted">{r.author ?? '—'}</td>
                 <td className="whitespace-nowrap border-b admin-sep px-4 py-3 tabular-nums text-faint">{r.created_at}</td>
-                <td className="border-b admin-sep px-4 py-3">
-                  <StatusPill status={r.status} />
-                </td>
+                <td className="border-b admin-sep px-4 py-3">{statusPill(r.status)}</td>
                 <td className="border-b admin-sep px-4 py-3">
                   <div className="flex gap-3.5 text-[12.5px]">
                     {trashed ? (

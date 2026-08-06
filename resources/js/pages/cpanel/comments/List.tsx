@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { Pagination } from '@/components/admin/Pagination';
+import { StatusPill } from '@/components/admin/StatusPill';
 import type { Paginator } from '@/lib/types';
 import type { ReactElement } from 'react';
 
@@ -90,7 +91,7 @@ export default function List({ comments_list }: ListProps) {
                 </tr>
               )}
               {rows.map((r) => (
-                <tr key={r.id} className="hover:bg-black/[.022]">
+                <tr key={r.id} className="transition-colors hover:bg-surface-2">
                   <td className="border-b admin-sep px-4 py-3">
                     <input type="checkbox" aria-label={`select-${r.id}`}
                       checked={selected.includes(r.id)} onChange={() => toggle(r.id)} />
@@ -98,16 +99,12 @@ export default function List({ comments_list }: ListProps) {
                   <td className="border-b admin-sep px-4 py-3 text-muted">{r.post_title ?? '—'}</td>
                   <td className="max-w-[360px] border-b admin-sep px-4 py-3 text-fg">{r.comment}</td>
                   <td className="border-b admin-sep px-4 py-3 text-muted">{r.author ?? '—'}</td>
-                  <td className="whitespace-nowrap border-b admin-sep px-4 py-3 text-muted">{r.date}</td>
+                  <td className="whitespace-nowrap border-b admin-sep px-4 py-3 tabular-nums text-faint">{r.date}</td>
                   <td className="border-b admin-sep px-4 py-3">
                     {r.status === 1 ? (
-                      <span className="rounded bg-surface-2 px-2 py-0.5 text-[11px] font-semibold text-fg">
-                        {tr('cpanel/comments.status_approved', 'Approved')}
-                      </span>
+                      <StatusPill tone="success" label={tr('cpanel/comments.status_approved', 'Approved')} />
                     ) : (
-                      <span className="rounded bg-surface-2 px-2 py-0.5 text-[11px] font-semibold text-muted">
-                        {tr('cpanel/comments.status_pending', 'Pending')}
-                      </span>
+                      <StatusPill tone="warning" label={tr('cpanel/comments.status_pending', 'Pending')} />
                     )}
                   </td>
                   <td className="border-b admin-sep px-4 py-3">

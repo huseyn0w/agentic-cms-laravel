@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4cdb1c6be89d46fc64ab272b748c4113",
+    "content-hash": "e0ca9bee36c6a15316596111620d7f2d",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -962,85 +962,6 @@
                 }
             ],
             "time": "2025-12-03T09:33:47+00:00"
-        },
-        {
-            "name": "genealabs/laravel-model-caching",
-            "version": "13.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mike-bronner/laravel-model-caching.git",
-                "reference": "51c30d696816b5fae682702adf19704d8d40f504"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mike-bronner/laravel-model-caching/zipball/51c30d696816b5fae682702adf19704d8d40f504",
-                "reference": "51c30d696816b5fae682702adf19704d8d40f504",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/cache": "^11.0|^12.0|^13.0",
-                "illuminate/config": "^11.0|^12.0|^13.0",
-                "illuminate/console": "^11.0|^12.0|^13.0",
-                "illuminate/container": "^11.0|^12.0|^13.0",
-                "illuminate/database": "^11.0|^12.0|^13.0",
-                "illuminate/http": "^11.0|^12.0|^13.0",
-                "illuminate/support": "^11.0|^12.0|^13.0",
-                "mikebronner/laravel-pivot-events": "*",
-                "php": ">=8.2"
-            },
-            "replace": {
-                "mikebronner/laravel-model-caching": "self.version"
-            },
-            "require-dev": {
-                "aws/aws-sdk-php": "^3.322.9",
-                "doctrine/dbal": "^3.3|^4.2",
-                "fakerphp/faker": "^1.11",
-                "larastan/larastan": "^2.0|^3.0",
-                "laravel/boost": "^2.0",
-                "laravel/pint": "^1.27",
-                "mikebronner/development-settings": "^0.1.15",
-                "orchestra/testbench": "^9.0|^10.0|^11.0",
-                "pestphp/pest": "^3.0|^4.0",
-                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
-                "phpunit/phpunit": "^10.5|^11.5|^12.5",
-                "predis/predis": "^2.0|^3.0",
-                "slevomat/coding-standard": "^7.0|^8.14",
-                "squizlabs/php_codesniffer": "^3.6|^4.0",
-                "symfony/thanks": "^1.2"
-            },
-            "suggest": {
-                "aws/aws-sdk-php": "Required for DynamoDB cache store support (^3.322)"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "GeneaLabs\\LaravelModelCaching\\Providers\\Service"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GeneaLabs\\LaravelModelCaching\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Bronner",
-                    "email": "hello@genealabs.com"
-                }
-            ],
-            "description": "Automatic caching for Eloquent models.",
-            "support": {
-                "issues": "https://github.com/mike-bronner/laravel-model-caching/issues",
-                "source": "https://github.com/mike-bronner/laravel-model-caching/tree/13.1.4"
-            },
-            "abandoned": "mike-bronner/laravel-model-caching",
-            "time": "2026-06-07T17:15:54+00:00"
         },
         {
             "name": "google/recaptcha",
@@ -3420,6 +3341,84 @@
                 "source": "https://github.com/mewebstudio/Purifier/tree/3.4.4"
             },
             "time": "2026-04-15T16:41:08+00:00"
+        },
+        {
+            "name": "mike-bronner/laravel-model-caching",
+            "version": "13.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mike-bronner/laravel-model-caching.git",
+                "reference": "a294cf7b66dbbac35dd6bc46f52628a86c0cb560"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mike-bronner/laravel-model-caching/zipball/a294cf7b66dbbac35dd6bc46f52628a86c0cb560",
+                "reference": "a294cf7b66dbbac35dd6bc46f52628a86c0cb560",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/cache": "^11.0|^12.0|^13.0",
+                "illuminate/config": "^11.0|^12.0|^13.0",
+                "illuminate/console": "^11.0|^12.0|^13.0",
+                "illuminate/container": "^11.0|^12.0|^13.0",
+                "illuminate/database": "^11.0|^12.0|^13.0",
+                "illuminate/http": "^11.0|^12.0|^13.0",
+                "illuminate/support": "^11.0|^12.0|^13.0",
+                "mikebronner/laravel-pivot-events": "*",
+                "php": ">=8.2"
+            },
+            "replace": {
+                "genealabs/laravel-model-caching": "self.version",
+                "mikebronner/laravel-model-caching": "self.version"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^3.322.9",
+                "doctrine/dbal": "^3.3|^4.2",
+                "fakerphp/faker": "^1.11",
+                "larastan/larastan": "^2.0|^3.0",
+                "laravel/boost": "^2.0",
+                "laravel/pint": "^1.27",
+                "orchestra/testbench": "^9.0|^10.0|^11.0",
+                "pestphp/pest": "^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "phpunit/phpunit": "^10.5|^11.5|^12.5",
+                "predis/predis": "^2.0|^3.0",
+                "slevomat/coding-standard": "^7.0|^8.14",
+                "squizlabs/php_codesniffer": "^3.6|^4.0",
+                "symfony/thanks": "^1.2"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Required for DynamoDB cache store support (^3.322)"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "GeneaLabs\\LaravelModelCaching\\Providers\\Service"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GeneaLabs\\LaravelModelCaching\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mike Bronner",
+                    "email": "hello@genealabs.com"
+                }
+            ],
+            "description": "Automatic caching for Eloquent models.",
+            "support": {
+                "issues": "https://github.com/mike-bronner/laravel-model-caching/issues",
+                "source": "https://github.com/mike-bronner/laravel-model-caching/tree/13.1.7"
+            },
+            "time": "2026-08-01T15:56:33+00:00"
         },
         {
             "name": "mikebronner/laravel-pivot-events",

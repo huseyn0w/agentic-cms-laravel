@@ -638,7 +638,7 @@ function get_general_settings($key = null)
  */
 function get_seo_settings($key = null)
 {
-    // Reads go through genealabs/model-caching (Cachable on the model): cached
+    // Reads go through the model-caching package (Cachable on the model): cached
     // in production, fresh in tests where the cache is disabled. No local
     // static cache — that would leak stale state across requests in-process.
     try {

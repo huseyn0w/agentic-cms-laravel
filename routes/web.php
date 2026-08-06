@@ -94,6 +94,10 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['auth', 'see_admin_panel
         Route::put('/toggle', 'CPanelPluginController@toggle')->name('cpanel_toggle_plugin');
     });
 
+    Route::prefix('security')->middleware('manage_general_settings')->group(function () {
+        Route::get('/', 'CPanelSecurityController@index')->name('cpanel_security');
+    });
+
     // The profile controller resolves the user from Auth when no id is
     // supplied (see CPanelUserController::editUser), so this route can only
     // ever surface the authenticated user's own profile.

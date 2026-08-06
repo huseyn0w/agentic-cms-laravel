@@ -27,6 +27,7 @@ export const NAV_GROUPS: NavGroup[] = [
   ]},
   { labelKey: 'cpanel/menu.settings', fallback: 'Settings', items: [
     { key: 'cpanel/menu.settings', fallback: 'Settings', href: `${A}/general-settings`, component: 'cpanel/settings', ability: 'manage_general_settings' },
+    { key: 'cpanel/menu.security', fallback: 'Security', href: `${A}/security`, component: 'cpanel/security', ability: 'manage_general_settings' },
     { key: 'cpanel/menu.users', fallback: 'Users', href: `${A}/users`, component: 'cpanel/users', ability: 'manage_users' },
   ]},
 ];

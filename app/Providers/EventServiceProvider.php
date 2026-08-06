@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\CommentSubmitted;
+use App\Listeners\AuthAuditSubscriber;
 use App\Listeners\CaptureMediaMetadata;
 use App\Listeners\SendCommentNotification;
 use App\Listeners\SendVerificationNotificationIfEnabled;
@@ -29,6 +30,16 @@ class EventServiceProvider extends ServiceProvider
         FileWasUploaded::class => [
             CaptureMediaMetadata::class,
         ],
+    ];
+
+    /**
+     * Event subscribers. AuthAuditSubscriber records login / failed-login /
+     * logout / lockout events into the security audit log.
+     *
+     * @var array<int, class-string>
+     */
+    protected $subscribe = [
+        AuthAuditSubscriber::class,
     ];
 
     /**

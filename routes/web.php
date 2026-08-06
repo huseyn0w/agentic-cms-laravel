@@ -231,7 +231,7 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
 |--------------------------------------------------------------------------
 */
 
-Route::group([], function () {
+Route::group(['middleware' => 'site_lockdown'], function () {
 
     Route::prefix('search')->group(function () {
         Route::get('/', 'PageController@search')->name('get_search_page');

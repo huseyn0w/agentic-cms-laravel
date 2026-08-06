@@ -60,7 +60,8 @@ class SecuritySettingsTest extends TestCase
                     ->where('hsts_max_age', 15552000)
                     ->where('csp', '')
                     ->where('csp_report_only', false)
-                    ->where('admin_ip_allowlist', '')));
+                    ->where('admin_ip_allowlist', '')
+                    ->where('site_lockdown_enabled', false)));
     }
 
     public function test_screen_ships_the_current_request_ip(): void
@@ -171,6 +172,21 @@ class SecuritySettingsTest extends TestCase
             'id' => 1,
             'admin_ip_allowlist' => "203.0.113.9\n10.0.0.0/8",
         ]);
+    }
+
+    public function test_saving_persists_the_site_lockdown_toggle(): void
+    {
+        $this->actingAs($this->admin())->post(self::SAVE, [
+            'login_throttle_enabled' => true,
+            'login_max_attempts' => 5,
+            'login_decay_minutes' => 1,
+            'login_block_enabled' => false,
+            'login_block_threshold' => 10,
+            'login_block_minutes' => 60,
+            'site_lockdown_enabled' => true,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('security_settings', ['id' => 1, 'site_lockdown_enabled' => 1]);
     }
 
     public function test_block_threshold_must_be_at_least_max_attempts(): void

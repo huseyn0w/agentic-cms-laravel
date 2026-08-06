@@ -7,6 +7,7 @@ use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\EnableSsrOnPublicRoutes;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\EnforceSiteLockdown;
 use App\Http\Middleware\EnsureEmailIsVerifiedWhenRequired;
 use App\Http\Middleware\EnsureRegistrationEnabled;
 use App\Http\Middleware\HandleInertiaRequests;
@@ -107,6 +108,7 @@ class Kernel extends HttpKernel
         'manage_general_settings' => ManageGeneralSettings::class,
         'require_2fa' => RequireTwoFactorEnrollment::class,
         'restrict_admin_ip' => RestrictAdminByIp::class,
+        'site_lockdown' => EnforceSiteLockdown::class,
         'auth' => Authenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'bindings' => SubstituteBindings::class,

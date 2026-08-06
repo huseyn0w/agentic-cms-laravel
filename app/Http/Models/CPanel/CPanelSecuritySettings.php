@@ -37,6 +37,7 @@ class CPanelSecuritySettings extends Model
         'csp',
         'csp_report_only',
         'admin_ip_allowlist',
+        'site_lockdown_enabled',
     ];
 
     protected $casts = [
@@ -55,5 +56,6 @@ class CPanelSecuritySettings extends Model
         'hsts_enabled' => 'boolean',
         'hsts_max_age' => 'integer',
         'csp_report_only' => 'boolean',
+        'site_lockdown_enabled' => 'boolean',
     ];
 }

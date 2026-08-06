@@ -34,6 +34,7 @@ class ValidateSecuritySettings extends FormRequest
             'password_check_hibp' => $this->boolean('password_check_hibp'),
             'hsts_enabled' => $this->boolean('hsts_enabled'),
             'csp_report_only' => $this->boolean('csp_report_only'),
+            'site_lockdown_enabled' => $this->boolean('site_lockdown_enabled'),
         ]);
     }
 
@@ -57,6 +58,7 @@ class ValidateSecuritySettings extends FormRequest
             'csp' => 'sometimes|nullable|string|max:4000',
             'csp_report_only' => 'boolean',
             'admin_ip_allowlist' => 'sometimes|nullable|string|max:4000',
+            'site_lockdown_enabled' => 'boolean',
         ];
     }
 }

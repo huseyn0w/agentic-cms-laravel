@@ -91,6 +91,14 @@ describe('public Post', () => {
         del.mockClear();
     });
 
+    it('hides the preview banner by default and shows it in preview mode', () => {
+        const { rerender } = render(<Post {...(props() as any)} />);
+        expect(screen.queryByTestId('preview-banner')).not.toBeInTheDocument();
+
+        rerender(<Post {...(props({ preview: true }) as any)} />);
+        expect(screen.getByTestId('preview-banner')).toBeInTheDocument();
+    });
+
     it('renders title, prose content, byline and tags', () => {
         render(<Post {...(props() as any)} />);
         expect(screen.getByRole('heading', { level: 1, name: 'Introducing the CMS' })).toBeInTheDocument();

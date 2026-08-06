@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Inertia\Inertia;
 
 /*
@@ -168,6 +169,10 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['auth', 'see_admin_panel
         // Restore (GET /{id}/restore) must precede the greedy /{id}/{lang} editor
         // route, or it is shadowed (matched as editPost with lang="restore").
         Route::get('/{id}/restore', 'CPanelPostController@restore')->name('cpanel_restore_post')->where('id', '[0-9]+');
+        // Admin preview (GET /{id}/preview) renders the public post page for a
+        // draft/scheduled post; like restore, it must precede the greedy
+        // /{id}/{lang} editor route or it is shadowed as editPost(lang="preview").
+        Route::get('/{id}/preview', [PostController::class, 'preview'])->name('cpanel_preview_post')->where('id', '[0-9]+');
         Route::get('/{id}/{lang}', 'CPanelPostController@editPost')->name('cpanel_edit_post')->where('id', '[0-9]+');
         Route::put('/{id}/update', 'CPanelPostController@updatePost')->name('cpanel_update_post')->where('id', '[0-9]+');
         Route::get('/{id}/revisions/{lang}', 'CPanelPostController@revisions')->name('cpanel_post_revisions')->where('id', '[0-9]+');

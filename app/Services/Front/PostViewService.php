@@ -27,6 +27,16 @@ class PostViewService extends BaseCrudService
     }
 
     /**
+     * Resolve a post by id for the admin-only preview screen (drafts and
+     * future-scheduled posts included). Null when it has no translation in
+     * the current locale. See PostRepository::resolveByIdForPreview.
+     */
+    public function previewById(int $id)
+    {
+        return $this->repo->resolveByIdForPreview($id);
+    }
+
+    /**
      * Related posts for the post-detail "Related posts" block (FEATURE_MATRIX
      * §1): other published posts sharing a category/tag, in the current locale.
      */

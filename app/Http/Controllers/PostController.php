@@ -26,11 +26,43 @@ class PostController extends BaseController
             return $result;
         }
 
+        return $this->renderPostPage();
+    }
+
+    /**
+     * Admin-only preview of a single post by id. Renders the exact public post
+     * page for a draft or future-scheduled post that the public site hides.
+     * Gated behind auth + manage_posts by the route; forced noindex and flagged
+     * so the React page shows a preview banner. Never a public/signed URL.
+     */
+    public function preview(int $id): Response|HttpResponse
+    {
+        $this->data = $this->service->previewById($id);
+
+        if (is_null($this->data)) {
+            throwNotFound();
+        }
+
+        // Belt-and-suspenders: the route is already admin-gated, but force the
+        // <head> to noindex so a preview can never be indexed.
+        $this->data->meta_noindex = true;
+
+        return $this->renderPostPage(true);
+    }
+
+    /**
+     * Render the public post detail page from $this->data. Shared by the public
+     * slug route (index) and the admin preview route (preview); `$preview`
+     * toggles the preview banner in the React page.
+     */
+    private function renderPostPage(bool $preview = false): Response
+    {
         $post = $this->data;
         $localePrefix = get_current_lang() === config('app.locale') ? '' : get_current_lang().'/';
         $base = rtrim(config('app.url'), '/');
 
         return Inertia::render('public/Post', [
+            'preview' => $preview,
             'currentUserId' => Auth::id(),
             'post' => [
                 'id' => $post->id,

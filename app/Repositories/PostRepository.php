@@ -263,4 +263,34 @@ class PostRepository extends BaseRepository
 
         return $data;
     }
+
+    /**
+     * Resolve a post by id for the admin preview screen. Mirrors the public
+     * read (same locale join, select fields, eager relations and comments)
+     * but intentionally SKIPS applyFrontReadScope, so an editor can preview a
+     * draft or a future-scheduled post that the public site would hide. Never
+     * exposed on a public route — the caller gates it behind manage_posts.
+     * Null when the post has no translation in the current locale.
+     */
+    public function resolveByIdForPreview(int $id)
+    {
+        $this->select_fields_ready_array = $this->generateSelectFieldsArray($this->select_fields);
+        $this->locale = get_current_lang();
+
+        $data = $this->model::join($this->translated_table, $this->main_table.'.id', '=', $this->translated_table.'.'.$this->translated_table_join_column)
+            ->select($this->select_fields_ready_array)
+            ->where($this->translated_table.'.locale', $this->locale)
+            ->where($this->main_table.'.id', $id)
+            ->with($this->eager_relations)
+            ->first();
+
+        if (is_null($data)) {
+            return null;
+        }
+
+        $comments_per_page = get_comments_count_per_page();
+        $data->setRelation('comments', $data->comments()->with('replies')->with('user')->orderBy('id', 'DESC')->paginate($comments_per_page));
+
+        return $data;
+    }
 }

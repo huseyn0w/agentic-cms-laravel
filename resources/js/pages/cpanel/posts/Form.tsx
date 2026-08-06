@@ -97,6 +97,12 @@ export default function Form({ entity, categories_list, authors, translation_lin
           <h1 className="text-[22px] font-semibold tracking-tight">{heading}</h1>
           <div className="ml-auto flex items-center gap-2.5">
             {entity && (
+              <a href={`${BASE}/${entity.id}/preview`} target="_blank" rel="noopener noreferrer"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-strong bg-transparent px-4 text-base font-medium text-fg transition-colors hover:bg-surface-2">
+                {tr('cpanel/posts.preview', 'Preview')}
+              </a>
+            )}
+            {entity && (
               <Button href={`${BASE}/${entity.id}/revisions/${locale.current}`} variant="outline" size="md">
                 {tr('cpanel/revisions.revisions_link', 'Revisions')}
               </Button>

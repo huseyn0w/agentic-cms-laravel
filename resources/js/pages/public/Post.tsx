@@ -29,6 +29,7 @@ interface CommentNode {
 
 interface PostProps {
     shell: Shell;
+    preview?: boolean;
     currentUserId: number | null;
     post: {
         id: number;
@@ -67,12 +68,21 @@ const HeartIcon = () => (
  * server-rendered by Blade (seo-meta detects the posts route) — no <Head> here.
  * The thread renders the create form plus owner/admin inline edit + delete.
  */
-export default function Post({ shell, currentUserId, post, related, comments, commentForm }: PostProps) {
+export default function Post({ shell, preview = false, currentUserId, post, related, comments, commentForm }: PostProps) {
     const { t } = useTranslation();
     const tr = (k: string, f: string) => (t(k) === k ? f : t(k));
 
     return (
         <PublicLayout shell={shell}>
+            {preview && (
+                <div
+                    data-testid="preview-banner"
+                    className="sticky top-0 z-50 flex items-center justify-center gap-2 bg-[var(--text)] px-4 py-2 text-center text-xs font-medium text-[var(--bg)]"
+                >
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-current opacity-70" />
+                    {tr('cpanel/posts.preview_banner', 'Preview — draft, not published. This page is not indexed.')}
+                </div>
+            )}
             <article className="mx-auto max-w-[720px] px-5 py-14 sm:px-8 sm:py-16">
                 {post.category && (
                     <a href={post.category.url} className="transition-colors hover:text-[var(--primary)]">

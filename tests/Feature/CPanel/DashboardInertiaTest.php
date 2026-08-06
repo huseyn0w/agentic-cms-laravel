@@ -31,4 +31,24 @@ class DashboardInertiaTest extends TestCase
                 ->has('users')
                 ->has('comments'));
     }
+
+    /**
+     * The shared auth.can map drives the admin sidebar. The Administrator role
+     * holds every permission, so each ability must resolve true — the abilities
+     * are authorized through the UserRoles-bound UserPolicy, so the shared map
+     * must check them against that model (regression: an empty map hid the whole
+     * sidebar nav).
+     */
+    public function test_admin_shared_abilities_reflect_role_permissions(): void
+    {
+        $admin = User::where('username', 'admin')->firstOrFail();
+
+        $this->actingAs($admin)
+            ->get('/agentic-cms-laravel-admin')
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->where('auth.can.see_admin_panel', true)
+                ->where('auth.can.manage_posts', true)
+                ->where('auth.can.manage_users', true)
+                ->where('auth.can.manage_menus', true));
+    }
 }

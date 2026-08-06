@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Models\UserRoles;
 use App\Services\Front\PublicShell;
 use App\Support\I18n\TranslationDictionary;
 use Illuminate\Http\Request;
@@ -131,8 +132,12 @@ class HandleInertiaRequests extends Middleware
 
         $can = [];
 
+        // These abilities are authorized through UserPolicy, which is registered
+        // against the UserRoles model — so the model MUST be passed, otherwise
+        // the Gate has no policy to resolve and every ability comes back false
+        // (which silently emptied the admin sidebar).
         foreach (self::ABILITIES as $ability) {
-            $can[$ability] = $user !== null && $user->can($ability);
+            $can[$ability] = $user !== null && $user->can($ability, UserRoles::class);
         }
 
         return $can;

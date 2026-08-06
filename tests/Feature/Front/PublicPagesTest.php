@@ -49,10 +49,10 @@ class PublicPagesTest extends TestCase
     public function test_mobile_drawer_is_aria_modal(): void
     {
         // DESIGN_SYSTEM §5/§8: the focus-trapped mobile drawer must be a modal.
-        // The homepage header is React now (its drawer is covered by
-        // PublicLayout.test.tsx); this guards the Blade header still served by
-        // the un-migrated pages. Retire when the last page leaves Blade.
-        $html = $this->get('/contact')->assertStatus(200)->getContent();
+        // The migrated pages' header is React now (its drawer is covered by
+        // PublicLayout.test.tsx); the search page is the last public page still
+        // on the Blade header, so it guards that until search migrates too.
+        $html = $this->get('/search')->assertStatus(200)->getContent();
 
         $this->assertStringContainsString('id="mobile-drawer"', $html);
         $this->assertStringContainsString('aria-modal="true"', $html);

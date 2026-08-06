@@ -59,9 +59,11 @@ export default function Archive({ shell, archive }: ArchiveProps) {
                     <>
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {archive.posts.map((post) => (
-                                <a
+                                <Link
                                     key={post.url}
                                     href={post.url}
+                                    prefetch="hover"
+                                    cacheFor="30s"
                                     data-testid="archive-post"
                                     className="group flex flex-col overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface)] transition hover:border-[var(--border-strong)] hover:shadow-card"
                                 >
@@ -73,7 +75,7 @@ export default function Archive({ shell, archive }: ArchiveProps) {
                                         <h2 className="mt-2 font-serif text-lg font-medium text-[var(--text)]">{post.title}</h2>
                                         {post.excerpt && <p className="mt-2 line-clamp-3 text-sm text-[var(--text-muted)]">{post.excerpt}</p>}
                                     </div>
-                                </a>
+                                </Link>
                             ))}
                         </div>
 

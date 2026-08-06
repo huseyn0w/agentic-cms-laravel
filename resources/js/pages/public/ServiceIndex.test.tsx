@@ -2,6 +2,9 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
+vi.mock('@inertiajs/react', () => ({
+    Link: ({ children, prefetch, cacheFor, ...p }: any) => <a {...p}>{children}</a>,
+}));
 
 import ServiceIndex from './ServiceIndex';
 import type { Shell } from '@/layouts/PublicLayout';

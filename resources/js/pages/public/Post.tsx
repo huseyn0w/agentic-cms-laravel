@@ -128,11 +128,11 @@ export default function Post({ shell, currentUserId, post, related, comments, co
                         <h2 className="font-serif text-2xl text-[var(--text)]">{tr('default/post.related_posts', 'Related posts')}</h2>
                         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {related.map((r) => (
-                                <a key={r.url} href={r.url} className="group block rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 transition hover:border-[var(--border-strong)]">
+                                <Link key={r.url} href={r.url} prefetch="hover" cacheFor="30s" className="group block rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 transition hover:border-[var(--border-strong)]">
                                     <p className="font-mono text-xs text-[var(--text-muted)]">{r.date}</p>
                                     <h3 className="mt-1 font-serif text-lg font-medium text-[var(--text)]">{r.title}</h3>
                                     {r.excerpt && <p className="mt-1 line-clamp-2 text-sm text-[var(--text-muted)]">{r.excerpt}</p>}
-                                </a>
+                                </Link>
                             ))}
                         </div>
                     </section>

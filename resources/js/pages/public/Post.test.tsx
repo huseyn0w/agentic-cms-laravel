@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const post = vi.fn();
 
 vi.mock('@inertiajs/react', () => ({
-    Link: ({ children, ...p }: any) => <a {...p}>{children}</a>,
+    Link: ({ children, prefetch, cacheFor, preserveScroll, ...p }: any) => <a {...p}>{children}</a>,
     useForm: (initial: any) => ({
         data: initial,
         errors: {},

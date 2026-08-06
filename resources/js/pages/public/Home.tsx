@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import type { Shell } from '@/layouts/PublicLayout';
 
@@ -82,9 +83,11 @@ export default function Home({ shell, page, hero, postsSection, about }: HomePro
 
                     <div className="grid gap-8 sm:grid-cols-2">
                         {postsSection.posts.map((post) => (
-                            <a
+                            <Link
                                 key={post.url}
                                 href={post.url}
+                                prefetch="hover"
+                                cacheFor="30s"
                                 data-testid="post-link"
                                 className="group block overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface)] transition hover:border-[var(--border-strong)] hover:shadow-card"
                             >
@@ -100,7 +103,7 @@ export default function Home({ shell, page, hero, postsSection, about }: HomePro
                                     <h3 className="mt-2 font-serif text-xl font-medium text-[var(--text)]">{post.title}</h3>
                                     {post.excerpt && <p className="mt-2 line-clamp-2 text-sm text-[var(--text-muted)]">{post.excerpt}</p>}
                                 </div>
-                            </a>
+                            </Link>
                         ))}
                     </div>
                 </section>

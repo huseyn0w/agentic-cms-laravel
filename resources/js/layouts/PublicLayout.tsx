@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 
@@ -6,7 +7,29 @@ const THEME_KEY = 'agentic-cms-theme';
 export interface MenuItem {
     title: string;
     url: string;
+    /** true = our own migrated Inertia page → prefetching client nav; false = full load. */
+    internal: boolean;
     children: MenuItem[];
+}
+
+/**
+ * A nav link that navigates instantly (Inertia, hover-prefetched) when the
+ * target is one of our migrated pages, and does an ordinary full-page load
+ * otherwise — custom/external links or pages still on Blade.
+ */
+function NavLink({ item, className }: { item: MenuItem; className: string }) {
+    if (item.internal) {
+        return (
+            <Link href={item.url} prefetch="hover" cacheFor="30s" className={className}>
+                {item.title}
+            </Link>
+        );
+    }
+    return (
+        <a href={item.url} className={className}>
+            {item.title}
+        </a>
+    );
 }
 
 export interface LanguageLink {
@@ -104,13 +127,11 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                         data-testid="primary-nav"
                     >
                         {shell.menu.map((item) => (
-                            <a
+                            <NavLink
                                 key={item.title + item.url}
-                                href={item.url}
+                                item={item}
                                 className="rounded-md px-3 py-2 text-sm text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
-                            >
-                                {item.title}
-                            </a>
+                            />
                         ))}
                     </nav>
 
@@ -211,13 +232,11 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                     >
                         <nav className="flex flex-col gap-0.5 py-2" aria-label="Mobile primary" data-testid="mobile-nav">
                             {shell.menu.map((item) => (
-                                <a
+                                <NavLink
                                     key={item.title + item.url}
-                                    href={item.url}
+                                    item={item}
                                     className="rounded-md px-2 py-2 text-sm text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
-                                >
-                                    {item.title}
-                                </a>
+                                />
                             ))}
                             <a href={shell.searchUrl} className="rounded-md px-2 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text)]">
                                 Search

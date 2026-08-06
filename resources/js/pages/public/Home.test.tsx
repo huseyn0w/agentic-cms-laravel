@@ -1,5 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@inertiajs/react', () => ({
+    Link: ({ children, prefetch, cacheFor, ...p }: any) => <a {...p}>{children}</a>,
+}));
+
 import Home from './Home';
 import type { Shell } from '@/layouts/PublicLayout';
 
@@ -9,7 +14,7 @@ const shell: Shell = {
     logoUrl: null,
     searchUrl: 'https://example.test/search',
     currentLang: 'EN',
-    menu: [{ title: 'About', url: 'https://example.test/about', children: [] }],
+    menu: [{ title: 'About', url: 'https://example.test/about', internal: true, children: [] }],
     languages: [
         { code: 'EN', url: 'https://example.test', title: 'English', icon: null, current: true },
         { code: 'RU', url: 'https://example.test/ru', title: 'Russian', icon: null, current: false },

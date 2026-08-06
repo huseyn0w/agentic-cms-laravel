@@ -1,5 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@inertiajs/react', () => ({
+    Link: ({ children, prefetch, cacheFor, ...p }: any) => <a {...p}>{children}</a>,
+}));
+
 import { PublicLayout } from './PublicLayout';
 import type { Shell } from './PublicLayout';
 
@@ -10,7 +15,7 @@ function makeShell(overrides: Partial<Shell> = {}): Shell {
         logoUrl: null,
         searchUrl: 'https://example.test/search',
         currentLang: 'EN',
-        menu: [{ title: 'About', url: 'https://example.test/about', children: [] }],
+        menu: [{ title: 'About', url: 'https://example.test/about', internal: false, children: [] }],
         languages: [{ code: 'EN', url: 'https://example.test', title: 'English', icon: null, current: true }],
         general: { websiteName: 'AgenticCms-Laravel', membership: true },
         site: { copyright: null, linkedinUrl: null, githubUrl: null },

@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import type { Shell } from '@/layouts/PublicLayout';
@@ -49,15 +50,15 @@ export default function ServiceIndex({ shell, heading, emptyText, services }: Se
                                     </div>
                                 )}
                                 <h2 className="font-serif text-xl leading-snug text-[var(--text)]">
-                                    <a href={service.url} className="transition-colors hover:text-[var(--primary)]">
+                                    <Link href={service.url} prefetch="hover" cacheFor="30s" className="transition-colors hover:text-[var(--primary)]">
                                         {service.title}
-                                    </a>
+                                    </Link>
                                 </h2>
                                 {service.excerpt && <p className="mt-3 line-clamp-3 text-sm text-[var(--text-muted)]">{service.excerpt}</p>}
                                 <div className="mt-5">
-                                    <a href={service.url} className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--primary)] transition-colors hover:underline">
+                                    <Link href={service.url} prefetch="hover" cacheFor="30s" className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--primary)] transition-colors hover:underline">
                                         {tr('services.read_more', 'Read more')} →
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         ))}

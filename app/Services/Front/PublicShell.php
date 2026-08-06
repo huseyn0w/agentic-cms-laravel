@@ -77,9 +77,15 @@ class PublicShell
                 ? $this->mapMenuItems($item['children'])
                 : [];
 
+            $type = (string) ($item['type'] ?? '');
+
             return [
                 'title' => $item['title'] ?? '',
-                'url' => $this->menuItemUrl((string) ($item['type'] ?? ''), (string) ($item['slug'] ?? '/')),
+                'url' => $this->menuItemUrl($type, (string) ($item['slug'] ?? '/')),
+                // The client uses Inertia navigation only for our own migrated
+                // page types; custom links may be external or point at a page
+                // still on Blade, so they stay full-page loads.
+                'internal' => in_array($type, ['pages', 'posts', 'categories'], true),
                 'children' => $children,
             ];
         }, array_values($items));

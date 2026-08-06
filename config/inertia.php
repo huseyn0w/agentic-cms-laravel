@@ -87,6 +87,7 @@ return [
                 'tags_localized',     // tag archive, /{locale}/tag/{slug}
                 'services_index', // services grid
                 'services_show',  // service detail
+                'show_user',      // public user profile
             ],
 
         ],

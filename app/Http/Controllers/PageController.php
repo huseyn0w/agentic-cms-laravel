@@ -9,6 +9,7 @@ use App\Services\Front\PageViewService;
 use App\Services\Front\PublicShell;
 use App\Services\Front\SearchService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -36,19 +37,59 @@ class PageController extends BaseController
             ? (json_decode($this->data->custom_fields, true) ?: [])
             : [];
 
-        // The home template is on Inertia (Phase 4); the remaining page
-        // templates stay on Blade until their own slices.
-        if ($this->data->template === 'home') {
-            return $this->renderHome($customFields);
-        }
+        // All page templates are on Inertia (Phase 4).
+        return match ($this->data->template) {
+            'home' => $this->renderHome($customFields),
+            'contacts' => $this->renderContact(),
+            default => $this->renderPage(),
+        };
+    }
 
-        $data = ['data' => $this->data];
+    /** A standard content page (title + prose body). */
+    private function renderPage(): Response
+    {
+        return Inertia::render('public/Page', [
+            'shell' => $this->shell->build(),
+            'page' => [
+                'title' => $this->data->title,
+                'lead' => $this->data->meta_description ?: null,
+                'content' => $this->data->content ?: null,
+            ],
+            'crumbs' => $this->homeCrumbs($this->data->title),
+        ])
+            ->rootView('app-public')
+            ->withViewData(['data' => $this->data]);
+    }
 
-        if (! empty($customFields)) {
-            $data['custom_fields'] = $customFields;
-        }
+    /** The contact page: a form that posts to sendMail. */
+    private function renderContact(): Response
+    {
+        $user = Auth::user();
 
-        return view('default.pages.'.$this->data->template, $data);
+        return Inertia::render('public/Contact', [
+            'shell' => $this->shell->build(),
+            'title' => $this->data->title,
+            'crumbs' => $this->homeCrumbs($this->data->title),
+            'action' => route('sendform'),
+            'csrfToken' => csrf_token(),
+            'captchaHtml' => app('captcha')->render(),
+            'prefill' => $user ? [
+                'first_name' => $user->name,
+                'last_name' => $user->surname,
+                'email' => $user->email,
+            ] : null,
+        ])
+            ->rootView('app-public')
+            ->withViewData(['data' => $this->data]);
+    }
+
+    /** Home -> current title breadcrumb, matching the Blade banner. */
+    private function homeCrumbs(string $title): array
+    {
+        return [
+            ['label' => get_general_settings('website_name') ?: config('app.name'), 'url' => rtrim(config('app.url'), '/')],
+            ['label' => $title, 'url' => null],
+        ];
     }
 
     /**

@@ -22,6 +22,7 @@ use App\Http\Middleware\ManageRoles;
 use App\Http\Middleware\ManageServices;
 use App\Http\Middleware\ManageUsers;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RequireTwoFactorEnrollment;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
@@ -101,6 +102,7 @@ class Kernel extends HttpKernel
         'see_admin_panel' => AdminPanelMiddleware::class,
         'manage_categories' => ManageCategories::class,
         'manage_general_settings' => ManageGeneralSettings::class,
+        'require_2fa' => RequireTwoFactorEnrollment::class,
         'auth' => Authenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'bindings' => SubstituteBindings::class,

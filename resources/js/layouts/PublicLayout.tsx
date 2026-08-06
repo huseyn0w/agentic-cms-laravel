@@ -61,11 +61,27 @@ export interface Shell {
     };
 }
 
+/** The gradient wordmark: a small gradient tile + the site name in Geist. */
+function Wordmark({ shell }: { shell: Shell }) {
+    if (shell.logoUrl) {
+        return <img src={shell.logoUrl} alt="" height={32} className="h-8 w-auto" />;
+    }
+    return (
+        <span className="flex items-center gap-2.5">
+            <span
+                className="h-7 w-7 shrink-0 rounded-[8px] shadow-[0_1px_2px_rgba(9,9,11,0.14)]"
+                style={{ backgroundImage: 'var(--grad)' }}
+                aria-hidden="true"
+            />
+            <span className="text-[17px] font-semibold tracking-[-0.02em] text-[var(--text)]">{shell.wordmark}</span>
+        </span>
+    );
+}
+
 /**
- * The public site shell: sticky header + footer, rendered from shell props by
- * PublicShell (PHP). Links are plain <a> full-page loads, not Inertia <Link>,
- * because during the strangler migration most targets (posts, inner pages) are
- * still Blade; they switch to prefetching <Link> as those pages move to Inertia.
+ * The public site shell: a translucent sticky header and a footer, rendered
+ * from shell props by PublicShell (PHP). Geist typography with a blue→violet→
+ * pink accent gradient; light/dark toggled by the button in the header.
  */
 export function PublicLayout({ shell, children }: { shell: Shell; children: ReactNode }) {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -102,23 +118,17 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
             </a>
 
             <header
-                className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--bg)]/85 shadow-sm backdrop-blur-md"
+                className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-md"
                 data-testid="public-header"
             >
-                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
+                <div className="mx-auto flex h-16 max-w-[76rem] items-center justify-between gap-4 px-5 sm:px-8">
                     <a
                         href={shell.homeUrl}
-                        className="flex shrink-0 items-center gap-2.5"
+                        className="flex shrink-0 items-center"
                         aria-label={shell.general.websiteName}
                         data-testid="header-wordmark"
                     >
-                        {shell.logoUrl ? (
-                            <img src={shell.logoUrl} alt="" height={36} className="h-9 w-auto" />
-                        ) : (
-                            <span className="font-serif text-xl font-semibold tracking-tight text-[var(--text)]">
-                                {shell.wordmark}
-                            </span>
-                        )}
+                        <Wordmark shell={shell} />
                     </a>
 
                     <nav
@@ -130,7 +140,7 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                             <NavLink
                                 key={item.title + item.url}
                                 item={item}
-                                className="rounded-md px-3 py-2 text-sm text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+                                className="rounded-md px-3 py-2 text-[14px] text-[var(--text-subtle)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
                             />
                         ))}
                     </nav>
@@ -138,7 +148,7 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                     <div className="hidden items-center gap-1 lg:flex">
                         <a
                             href={shell.searchUrl}
-                            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--text-subtle)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
                             aria-label="Search"
                             data-testid="header-search"
                         >
@@ -156,8 +166,8 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                                         className={
                                             'rounded-md px-2 py-1 font-mono text-xs uppercase tracking-[0.06em] transition-colors ' +
                                             (lang.current
-                                                ? 'text-[var(--text)]'
-                                                : 'text-[var(--text-muted)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]')
+                                                ? 'text-[var(--accent)]'
+                                                : 'text-[var(--text-subtle)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]')
                                         }
                                     >
                                         {lang.code}
@@ -171,21 +181,23 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                             onClick={toggleDark}
                             aria-pressed={isDark}
                             aria-label="Toggle dark mode"
-                            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--text-subtle)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
                             data-testid="dark-toggle"
                         >
                             {isDark ? <SunIcon /> : <MoonIcon />}
                         </button>
 
+                        <div className="ml-1 h-5 w-px bg-[var(--border)]" aria-hidden="true" />
+
                         {auth.user ? (
                             <>
                                 {auth.canSeeAdmin && auth.adminUrl && (
-                                    <a href={auth.adminUrl} className="rounded-md px-3 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text)]">
+                                    <a href={auth.adminUrl} className="rounded-md px-3 py-2 text-[14px] text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
                                         Admin
                                     </a>
                                 )}
                                 {auth.logoutUrl && (
-                                    <a href={auth.logoutUrl} className="ml-1 rounded-md px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text)]">
+                                    <a href={auth.logoutUrl} className="ml-1 rounded-md px-3 py-2 text-[14px] text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
                                         Log out
                                     </a>
                                 )}
@@ -193,14 +205,14 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                         ) : (
                             <>
                                 {auth.loginUrl && (
-                                    <a href={auth.loginUrl} className="rounded-md px-3 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text)]">
+                                    <a href={auth.loginUrl} className="rounded-md px-3 py-2 text-[14px] text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
                                         Log in
                                     </a>
                                 )}
                                 {shell.general.membership && auth.registerUrl && (
                                     <a
                                         href={auth.registerUrl}
-                                        className="ml-1 rounded-md bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--primary-contrast)] transition hover:opacity-90"
+                                        className="btn-accent ml-1 h-9 px-4 text-[14px] font-medium"
                                     >
                                         Register
                                     </a>
@@ -215,7 +227,7 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                         aria-expanded={mobileOpen}
                         aria-controls="mobile-drawer"
                         aria-label="Toggle navigation"
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-muted)] transition active:scale-95 lg:hidden"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-subtle)] transition active:scale-95 lg:hidden"
                         data-testid="mobile-menu-button"
                     >
                         {mobileOpen ? <CloseIcon /> : <MenuIcon />}
@@ -235,12 +247,17 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                                 <NavLink
                                     key={item.title + item.url}
                                     item={item}
-                                    className="rounded-md px-2 py-2 text-sm text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+                                    className="rounded-md px-2 py-2 text-sm text-[var(--text-subtle)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
                                 />
                             ))}
-                            <a href={shell.searchUrl} className="rounded-md px-2 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text)]">
+                            <a href={shell.searchUrl} className="rounded-md px-2 py-2 text-sm text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
                                 Search
                             </a>
+                            {!auth.user && shell.general.membership && auth.registerUrl && (
+                                <a href={auth.registerUrl} className="btn-accent mt-2 h-10 text-sm font-medium">
+                                    Register
+                                </a>
+                            )}
                         </nav>
                     </div>
                 )}
@@ -249,49 +266,46 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
             <main id="main">{children}</main>
 
             <footer className="mt-24 border-t border-[var(--border)] bg-[var(--surface-2)]" data-testid="public-footer">
-                <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
-                    <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mx-auto max-w-[76rem] px-5 py-14 sm:px-8">
+                    <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
                         <div>
-                            <a
-                                href={shell.homeUrl}
-                                className="font-serif text-xl font-semibold tracking-tight text-[var(--text)]"
-                                data-testid="footer-wordmark"
-                            >
-                                {shell.wordmark}
+                            <a href={shell.homeUrl} className="inline-flex" data-testid="footer-wordmark">
+                                <Wordmark shell={shell} />
                             </a>
                             {shell.site.copyright && (
                                 <div
-                                    className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]"
+                                    className="mt-4 max-w-md text-sm leading-relaxed text-[var(--text-subtle)]"
                                     dangerouslySetInnerHTML={{ __html: shell.site.copyright }}
                                 />
                             )}
-                            {(shell.site.linkedinUrl || shell.site.githubUrl) && (
-                                <div className="mt-4 flex items-center gap-2">
-                                    {shell.site.linkedinUrl && (
-                                        <a
-                                            href={shell.site.linkedinUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            aria-label="LinkedIn"
-                                            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-muted)] transition hover:bg-[var(--surface)] hover:text-[var(--text)]"
-                                        >
-                                            <LinkedInIcon />
-                                        </a>
-                                    )}
-                                    {shell.site.githubUrl && (
-                                        <a
-                                            href={shell.site.githubUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            aria-label="GitHub"
-                                            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-muted)] transition hover:bg-[var(--surface)] hover:text-[var(--text)]"
-                                        >
-                                            <GitHubIcon />
-                                        </a>
-                                    )}
-                                </div>
-                            )}
                         </div>
+
+                        {(shell.site.linkedinUrl || shell.site.githubUrl) && (
+                            <div className="flex items-center gap-2">
+                                {shell.site.linkedinUrl && (
+                                    <a
+                                        href={shell.site.linkedinUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label="LinkedIn"
+                                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-subtle)] transition hover:border-[var(--border-strong)] hover:text-[var(--text)]"
+                                    >
+                                        <LinkedInIcon />
+                                    </a>
+                                )}
+                                {shell.site.githubUrl && (
+                                    <a
+                                        href={shell.site.githubUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label="GitHub"
+                                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-subtle)] transition hover:border-[var(--border-strong)] hover:text-[var(--text)]"
+                                    >
+                                        <GitHubIcon />
+                                    </a>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </footer>
@@ -299,7 +313,7 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
     );
 }
 
-/* --- inline icons (mirror the x-icon set used by the Blade shell) --- */
+/* --- inline icons --- */
 const iconProps = { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, 'aria-hidden': true } as const;
 
 const SearchIcon = () => (

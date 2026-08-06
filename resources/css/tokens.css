@@ -30,3 +30,23 @@
 }
 /* Admin adopts the blue accent for focus rings; public keeps the mono ring. */
 .theme-admin { --ring:var(--accent-blue); }
+
+/* ------------------------------------------------------------------ *
+ * Public theme accent — violet + signature blue→violet→pink gradient.
+ * Scoped to `.theme-default` so the admin surfaces stay monochrome.
+ * The neutral scale is inherited from :root (already zinc-based).
+ * ------------------------------------------------------------------ */
+.theme-default {
+  --g1:#2563eb; --g2:#7c3aed; --g3:#db2777;
+  --accent:#6d28d9; --accent-hover:#5b21b6; --accent-contrast:#ffffff;
+  --accent-tint:rgba(109,40,217,0.08);
+  --grad:linear-gradient(100deg, var(--g1), var(--g2) 45%, var(--g3));
+  --ring:var(--accent);
+}
+/* Brighter accents read better on the near-black ground. Higher specificity
+ * than the plain `.theme-default` rule so it wins in dark mode. */
+.dark .theme-default {
+  --g1:#3b82f6; --g2:#a78bfa; --g3:#f472b6;
+  --accent:#a78bfa; --accent-hover:#c4b5fd; --accent-contrast:#0a0a0a;
+  --accent-tint:rgba(167,139,250,0.14);
+}

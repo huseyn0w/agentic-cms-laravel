@@ -149,6 +149,8 @@ export default {
                 serif: ['"Newsreader Variable"', ...defaultTheme.fontFamily.serif],
                 sans: ['"Inter Variable"', ...defaultTheme.fontFamily.sans],
                 mono: ['"Geist Mono Variable"', ...defaultTheme.fontFamily.mono],
+                // Public theme display/body face (Vercel-style Geist).
+                display: ['"Geist Variable"', ...defaultTheme.fontFamily.sans],
             },
             letterSpacing: {
                 tightest: '-0.04em',

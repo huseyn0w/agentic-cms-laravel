@@ -29,7 +29,7 @@
         margin: 0;
         background: var(--bg);
         color: var(--text);
-        font-family: theme('fontFamily.sans');
+        font-family: theme('fontFamily.display');
         font-feature-settings: 'cv05', 'ss01';
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -52,9 +52,9 @@
     .theme-default h2,
     .theme-default h3,
     .theme-default h4 {
-        font-family: theme('fontFamily.serif');
-        font-weight: 500;
-        letter-spacing: -0.015em;
+        font-family: theme('fontFamily.display');
+        font-weight: 600;
+        letter-spacing: -0.02em;
         color: var(--text);
         text-wrap: balance;
     }
@@ -233,4 +233,36 @@
 }
 #nprogress .peg {
     box-shadow: 0 0 10px #0070f3, 0 0 6px #0070f3 !important;
+}
+
+/*
+ |----------------------------------------------------------------------------
+ | Public theme helpers (Geist + violet gradient). Scoped to `.theme-default`.
+ |----------------------------------------------------------------------------
+ */
+@layer components {
+    /* Blue→violet→pink gradient clipped to text (hero keywords, wordmark dot). */
+    .theme-default .text-gradient {
+        background-image: var(--grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    /* Solid violet CTA. */
+    .theme-default .btn-accent {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: var(--accent);
+        color: var(--accent-contrast);
+        border-radius: var(--radius-md);
+        transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+    }
+    .theme-default .btn-accent:hover { background: var(--accent-hover); }
+    .theme-default .btn-accent:active { transform: translateY(1px); }
+    /* Ambient gradient glow behind the hero. */
+    .theme-default .hero-glow {
+        background: radial-gradient(60% 60% at 50% 0%, var(--accent-tint), transparent 70%);
+    }
 }

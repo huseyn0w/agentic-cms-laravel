@@ -28,6 +28,10 @@ class ValidateSecuritySettings extends FormRequest
             'login_throttle_enabled' => $this->boolean('login_throttle_enabled'),
             'login_block_enabled' => $this->boolean('login_block_enabled'),
             'require_2fa_for_admins' => $this->boolean('require_2fa_for_admins'),
+            'password_require_mixed_case' => $this->boolean('password_require_mixed_case'),
+            'password_require_numbers' => $this->boolean('password_require_numbers'),
+            'password_require_symbols' => $this->boolean('password_require_symbols'),
+            'password_check_hibp' => $this->boolean('password_check_hibp'),
         ]);
     }
 
@@ -41,6 +45,11 @@ class ValidateSecuritySettings extends FormRequest
             'login_block_threshold' => 'required|integer|min:1|max:1000|gte:login_max_attempts',
             'login_block_minutes' => 'required|integer|min:1|max:43200',
             'require_2fa_for_admins' => 'boolean',
+            'password_min_length' => 'sometimes|integer|min:6|max:255',
+            'password_require_mixed_case' => 'boolean',
+            'password_require_numbers' => 'boolean',
+            'password_require_symbols' => 'boolean',
+            'password_check_hibp' => 'boolean',
         ];
     }
 }

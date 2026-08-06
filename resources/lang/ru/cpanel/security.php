@@ -27,6 +27,15 @@ return [
     // Login protection — 2FA
     'require_2fa' => 'Требовать 2FA для всех с доступом в админку',
 
+    // Password policy
+    'password_policy_headline' => 'Политика паролей',
+    'password_policy_subtitle' => 'Применяется при установке или сбросе пароля.',
+    'password_min_length' => 'Минимальная длина',
+    'password_mixed_case' => 'Требовать верхний и нижний регистр',
+    'password_numbers' => 'Требовать цифру',
+    'password_symbols' => 'Требовать спецсимвол',
+    'password_hibp' => 'Отклонять пароли из известных утечек',
+
     // Event labels
     'action_login' => 'Вход',
     'action_login_failed' => 'Неудачный вход',

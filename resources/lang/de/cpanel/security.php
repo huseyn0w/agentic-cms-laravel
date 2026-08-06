@@ -27,6 +27,15 @@ return [
     // Login protection — 2FA
     'require_2fa' => '2FA für alle mit Admin-Zugang erforderlich',
 
+    // Password policy
+    'password_policy_headline' => 'Passwortrichtlinie',
+    'password_policy_subtitle' => 'Gilt, wenn Konten ein Passwort festlegen oder zurücksetzen.',
+    'password_min_length' => 'Mindestlänge',
+    'password_mixed_case' => 'Groß- und Kleinbuchstaben verlangen',
+    'password_numbers' => 'Eine Ziffer verlangen',
+    'password_symbols' => 'Ein Sonderzeichen verlangen',
+    'password_hibp' => 'Passwörter aus bekannten Datenlecks ablehnen',
+
     // Event labels
     'action_login' => 'Anmeldung',
     'action_login_failed' => 'Fehlgeschlagene Anmeldung',

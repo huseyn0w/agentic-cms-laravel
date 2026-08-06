@@ -50,7 +50,12 @@ class SecuritySettingsTest extends TestCase
                     ->where('login_block_enabled', false)
                     ->where('login_block_threshold', 10)
                     ->where('login_block_minutes', 60)
-                    ->where('require_2fa_for_admins', false)));
+                    ->where('require_2fa_for_admins', false)
+                    ->where('password_min_length', 8)
+                    ->where('password_require_mixed_case', false)
+                    ->where('password_require_numbers', false)
+                    ->where('password_require_symbols', false)
+                    ->where('password_check_hibp', false)));
     }
 
     public function test_saving_persists_the_singleton(): void
@@ -87,6 +92,32 @@ class SecuritySettingsTest extends TestCase
         ])->assertRedirect();
 
         $this->assertDatabaseHas('security_settings', ['id' => 1, 'require_2fa_for_admins' => 1]);
+    }
+
+    public function test_saving_persists_password_policy(): void
+    {
+        $this->actingAs($this->admin())->post(self::SAVE, [
+            'login_throttle_enabled' => true,
+            'login_max_attempts' => 5,
+            'login_decay_minutes' => 1,
+            'login_block_enabled' => false,
+            'login_block_threshold' => 10,
+            'login_block_minutes' => 60,
+            'password_min_length' => 14,
+            'password_require_mixed_case' => true,
+            'password_require_numbers' => true,
+            'password_require_symbols' => true,
+            'password_check_hibp' => true,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('security_settings', [
+            'id' => 1,
+            'password_min_length' => 14,
+            'password_require_mixed_case' => 1,
+            'password_require_numbers' => 1,
+            'password_require_symbols' => 1,
+            'password_check_hibp' => 1,
+        ]);
     }
 
     public function test_block_threshold_must_be_at_least_max_attempts(): void

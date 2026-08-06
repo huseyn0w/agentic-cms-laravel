@@ -25,6 +25,11 @@ const settings = {
   login_block_threshold: 10,
   login_block_minutes: 60,
   require_2fa_for_admins: false,
+  password_min_length: 8,
+  password_require_mixed_case: false,
+  password_require_numbers: false,
+  password_require_symbols: false,
+  password_check_hibp: false,
 };
 
 const page = (rows: any[], filter: string | null = null) => ({

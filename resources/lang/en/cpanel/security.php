@@ -29,6 +29,15 @@ return [
     // Login protection — 2FA
     'require_2fa' => 'Require 2FA for everyone with admin access',
 
+    // Password policy
+    'password_policy_headline' => 'Password policy',
+    'password_policy_subtitle' => 'Applied when accounts set or reset a password.',
+    'password_min_length' => 'Minimum length',
+    'password_mixed_case' => 'Require upper and lower case',
+    'password_numbers' => 'Require a number',
+    'password_symbols' => 'Require a symbol',
+    'password_hibp' => 'Reject passwords found in known data breaches',
+
     // Event labels
     'action_login' => 'Sign in',
     'action_login_failed' => 'Failed sign in',

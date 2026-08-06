@@ -52,6 +52,11 @@ class CPanelSecurityController extends CPanelBaseController
                 'login_block_threshold' => (int) ($security->login_block_threshold ?? 10),
                 'login_block_minutes' => (int) ($security->login_block_minutes ?? 60),
                 'require_2fa_for_admins' => (bool) ($security->require_2fa_for_admins ?? false),
+                'password_min_length' => (int) ($security->password_min_length ?? 8),
+                'password_require_mixed_case' => (bool) ($security->password_require_mixed_case ?? false),
+                'password_require_numbers' => (bool) ($security->password_require_numbers ?? false),
+                'password_require_symbols' => (bool) ($security->password_require_symbols ?? false),
+                'password_check_hibp' => (bool) ($security->password_check_hibp ?? false),
             ],
         ]);
     }

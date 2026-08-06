@@ -36,6 +36,14 @@ return [
     'password_symbols' => 'Ein Sonderzeichen verlangen',
     'password_hibp' => 'Passwörter aus bekannten Datenlecks ablehnen',
 
+    // Security headers
+    'headers_headline' => 'Sicherheits-Header',
+    'headers_subtitle' => 'Basis-Härtungs-Header werden immer gesendet. HSTS und CSP sind optional.',
+    'hsts_enabled' => 'HSTS senden (nur HTTPS)',
+    'hsts_max_age' => 'HSTS max-age (Sekunden)',
+    'csp' => 'Content-Security-Policy (erweitert — leer lassen zum Deaktivieren)',
+    'csp_report_only' => 'Nur-Bericht (CSP nicht erzwingen, nur protokollieren)',
+
     // Event labels
     'action_login' => 'Anmeldung',
     'action_login_failed' => 'Fehlgeschlagene Anmeldung',

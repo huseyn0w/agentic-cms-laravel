@@ -36,6 +36,14 @@ return [
     'password_symbols' => 'Требовать спецсимвол',
     'password_hibp' => 'Отклонять пароли из известных утечек',
 
+    // Security headers
+    'headers_headline' => 'Заголовки безопасности',
+    'headers_subtitle' => 'Базовые защитные заголовки шлются всегда. HSTS и CSP — по выбору.',
+    'hsts_enabled' => 'Слать HSTS (только HTTPS)',
+    'hsts_max_age' => 'HSTS max-age (секунды)',
+    'csp' => 'Content-Security-Policy (для продвинутых — пусто = выключено)',
+    'csp_report_only' => 'Только отчёт (не применять CSP, только логировать)',
+
     // Event labels
     'action_login' => 'Вход',
     'action_login_failed' => 'Неудачный вход',

@@ -29,6 +29,10 @@ interface SecuritySettings {
   password_require_numbers: boolean;
   password_require_symbols: boolean;
   password_check_hibp: boolean;
+  hsts_enabled: boolean;
+  hsts_max_age: number;
+  csp: string;
+  csp_report_only: boolean;
 }
 interface Props {
   audit_log: Paginator<Row>;
@@ -77,6 +81,10 @@ export default function Index({ audit_log, filter, actions, security_settings }:
     password_require_numbers: Boolean(security_settings.password_require_numbers),
     password_require_symbols: Boolean(security_settings.password_require_symbols),
     password_check_hibp: Boolean(security_settings.password_check_hibp),
+    hsts_enabled: Boolean(security_settings.hsts_enabled),
+    hsts_max_age: security_settings.hsts_max_age ?? 15552000,
+    csp: security_settings.csp ?? '',
+    csp_report_only: Boolean(security_settings.csp_report_only),
   });
 
   const testid = (name: keyof SecuritySettings) => `security-${String(name).replace(/_/g, '-')}`;
@@ -105,7 +113,8 @@ export default function Index({ audit_log, filter, actions, security_settings }:
 
   const toggle = (
     name: 'login_throttle_enabled' | 'login_block_enabled' | 'require_2fa_for_admins'
-      | 'password_require_mixed_case' | 'password_require_numbers' | 'password_require_symbols' | 'password_check_hibp',
+      | 'password_require_mixed_case' | 'password_require_numbers' | 'password_require_symbols' | 'password_check_hibp'
+      | 'hsts_enabled' | 'csp_report_only',
     labelKey: string,
     fallback: string,
   ) => (
@@ -199,6 +208,32 @@ export default function Index({ audit_log, filter, actions, security_settings }:
           {toggle('password_require_numbers', 'cpanel/security.password_numbers', 'Require a number')}
           {toggle('password_require_symbols', 'cpanel/security.password_symbols', 'Require a symbol')}
           {toggle('password_check_hibp', 'cpanel/security.password_hibp', 'Reject passwords found in known data breaches')}
+        </div>
+
+        <div className="flex flex-col gap-4 border-t admin-sep pt-4">
+          <div>
+            <h3 className="text-[13px] font-semibold tracking-tight">
+              {tr('cpanel/security.headers_headline', 'Security headers')}
+            </h3>
+            <p className="mt-0.5 text-[12px] text-subtle">
+              {tr('cpanel/security.headers_subtitle', 'Baseline hardening headers are always sent. HSTS and CSP are opt-in.')}
+            </p>
+          </div>
+          {toggle('hsts_enabled', 'cpanel/security.hsts_enabled', 'Send HSTS (HTTPS only)')}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {number('hsts_max_age', 'cpanel/security.hsts_max_age', 'HSTS max-age (seconds)')}
+          </div>
+          <div className="flex flex-col gap-y-1.5">
+            <label htmlFor="csp" className="font-sans text-sm font-medium text-fg">
+              {tr('cpanel/security.csp', 'Content-Security-Policy (advanced — leave blank to disable)')}
+            </label>
+            <textarea id="csp" name="csp" data-testid="security-csp" rows={3}
+              className="field-input w-full font-mono text-[12px]"
+              placeholder="default-src 'self'"
+              value={form.data.csp}
+              onChange={(e) => form.setData('csp', e.target.value)} />
+          </div>
+          {toggle('csp_report_only', 'cpanel/security.csp_report_only', 'Report-only (do not enforce CSP, only log)')}
         </div>
       </form>
 

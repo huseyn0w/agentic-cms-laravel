@@ -55,7 +55,11 @@ class SecuritySettingsTest extends TestCase
                     ->where('password_require_mixed_case', false)
                     ->where('password_require_numbers', false)
                     ->where('password_require_symbols', false)
-                    ->where('password_check_hibp', false)));
+                    ->where('password_check_hibp', false)
+                    ->where('hsts_enabled', false)
+                    ->where('hsts_max_age', 15552000)
+                    ->where('csp', '')
+                    ->where('csp_report_only', false)));
     }
 
     public function test_saving_persists_the_singleton(): void
@@ -117,6 +121,30 @@ class SecuritySettingsTest extends TestCase
             'password_require_numbers' => 1,
             'password_require_symbols' => 1,
             'password_check_hibp' => 1,
+        ]);
+    }
+
+    public function test_saving_persists_security_headers(): void
+    {
+        $this->actingAs($this->admin())->post(self::SAVE, [
+            'login_throttle_enabled' => true,
+            'login_max_attempts' => 5,
+            'login_decay_minutes' => 1,
+            'login_block_enabled' => false,
+            'login_block_threshold' => 10,
+            'login_block_minutes' => 60,
+            'hsts_enabled' => true,
+            'hsts_max_age' => 31536000,
+            'csp' => "default-src 'self'",
+            'csp_report_only' => true,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('security_settings', [
+            'id' => 1,
+            'hsts_enabled' => 1,
+            'hsts_max_age' => 31536000,
+            'csp' => "default-src 'self'",
+            'csp_report_only' => 1,
         ]);
     }
 

@@ -57,6 +57,10 @@ class CPanelSecurityController extends CPanelBaseController
                 'password_require_numbers' => (bool) ($security->password_require_numbers ?? false),
                 'password_require_symbols' => (bool) ($security->password_require_symbols ?? false),
                 'password_check_hibp' => (bool) ($security->password_check_hibp ?? false),
+                'hsts_enabled' => (bool) ($security->hsts_enabled ?? false),
+                'hsts_max_age' => (int) ($security->hsts_max_age ?? 15552000),
+                'csp' => (string) ($security->csp ?? ''),
+                'csp_report_only' => (bool) ($security->csp_report_only ?? false),
             ],
         ]);
     }

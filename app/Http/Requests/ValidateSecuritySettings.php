@@ -32,6 +32,8 @@ class ValidateSecuritySettings extends FormRequest
             'password_require_numbers' => $this->boolean('password_require_numbers'),
             'password_require_symbols' => $this->boolean('password_require_symbols'),
             'password_check_hibp' => $this->boolean('password_check_hibp'),
+            'hsts_enabled' => $this->boolean('hsts_enabled'),
+            'csp_report_only' => $this->boolean('csp_report_only'),
         ]);
     }
 
@@ -50,6 +52,10 @@ class ValidateSecuritySettings extends FormRequest
             'password_require_numbers' => 'boolean',
             'password_require_symbols' => 'boolean',
             'password_check_hibp' => 'boolean',
+            'hsts_enabled' => 'boolean',
+            'hsts_max_age' => 'sometimes|integer|min:0|max:63072000',
+            'csp' => 'sometimes|nullable|string|max:4000',
+            'csp_report_only' => 'boolean',
         ];
     }
 }

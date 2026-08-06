@@ -30,6 +30,10 @@ const settings = {
   password_require_numbers: false,
   password_require_symbols: false,
   password_check_hibp: false,
+  hsts_enabled: false,
+  hsts_max_age: 15552000,
+  csp: '',
+  csp_report_only: false,
 };
 
 const page = (rows: any[], filter: string | null = null) => ({

@@ -38,6 +38,14 @@ return [
     'password_symbols' => 'Require a symbol',
     'password_hibp' => 'Reject passwords found in known data breaches',
 
+    // Security headers
+    'headers_headline' => 'Security headers',
+    'headers_subtitle' => 'Baseline hardening headers are always sent. HSTS and CSP are opt-in.',
+    'hsts_enabled' => 'Send HSTS (HTTPS only)',
+    'hsts_max_age' => 'HSTS max-age (seconds)',
+    'csp' => 'Content-Security-Policy (advanced — leave blank to disable)',
+    'csp_report_only' => 'Report-only (do not enforce CSP, only log)',
+
     // Event labels
     'action_login' => 'Sign in',
     'action_login_failed' => 'Failed sign in',

@@ -27,6 +27,11 @@ class CPanelSecuritySettings extends Model
         'login_block_threshold',
         'login_block_minutes',
         'require_2fa_for_admins',
+        'password_min_length',
+        'password_require_mixed_case',
+        'password_require_numbers',
+        'password_require_symbols',
+        'password_check_hibp',
     ];
 
     protected $casts = [
@@ -37,5 +42,10 @@ class CPanelSecuritySettings extends Model
         'login_block_threshold' => 'integer',
         'login_block_minutes' => 'integer',
         'require_2fa_for_admins' => 'boolean',
+        'password_min_length' => 'integer',
+        'password_require_mixed_case' => 'boolean',
+        'password_require_numbers' => 'boolean',
+        'password_require_symbols' => 'boolean',
+        'password_check_hibp' => 'boolean',
     ];
 }

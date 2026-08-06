@@ -24,9 +24,11 @@ use App\Http\Models\TagTranslation;
 use App\Http\Models\User;
 use App\Http\Models\UserPermissions;
 use App\Http\Models\UserRoles;
+use App\Services\Auth\PasswordPolicy;
 use Doctrine\DBAL\Driver\PDOException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\Password;
 
 function lang_exist($code)
 {
@@ -708,6 +710,18 @@ function get_security_settings($key = null)
     }
 
     return $settings->$key ?? null;
+}
+
+/**
+ * Build the configurable password-strength rule from the security settings.
+ * A fresh rule instance per call (the Password rule is mutable). Compose it in
+ * a FormRequest alongside required/nullable/confirmed as needed.
+ *
+ * @return Password
+ */
+function password_policy_rule()
+{
+    return app(PasswordPolicy::class)->rule();
 }
 
 /**

@@ -33,12 +33,14 @@ interface SecuritySettings {
   hsts_max_age: number;
   csp: string;
   csp_report_only: boolean;
+  admin_ip_allowlist: string;
 }
 interface Props {
   audit_log: Paginator<Row>;
   filter: string | null;
   actions: string[];
   security_settings: SecuritySettings;
+  current_ip: string | null;
 }
 
 const BASE = '/agentic-cms-laravel-admin/security';
@@ -63,7 +65,7 @@ const LABELS: Record<string, string> = {
   '2fa_failed': 'Failed 2FA',
 };
 
-export default function Index({ audit_log, filter, actions, security_settings }: Props) {
+export default function Index({ audit_log, filter, actions, security_settings, current_ip }: Props) {
   const { t } = useTranslation();
   const tr = (k: string, f: string) => (t(k) === k ? f : t(k));
   const rows = audit_log.data;
@@ -85,6 +87,7 @@ export default function Index({ audit_log, filter, actions, security_settings }:
     hsts_max_age: security_settings.hsts_max_age ?? 15552000,
     csp: security_settings.csp ?? '',
     csp_report_only: Boolean(security_settings.csp_report_only),
+    admin_ip_allowlist: security_settings.admin_ip_allowlist ?? '',
   });
 
   const testid = (name: keyof SecuritySettings) => `security-${String(name).replace(/_/g, '-')}`;
@@ -234,6 +237,28 @@ export default function Index({ audit_log, filter, actions, security_settings }:
               onChange={(e) => form.setData('csp', e.target.value)} />
           </div>
           {toggle('csp_report_only', 'cpanel/security.csp_report_only', 'Report-only (do not enforce CSP, only log)')}
+        </div>
+
+        <div className="flex flex-col gap-4 border-t admin-sep pt-4">
+          <div>
+            <h3 className="text-[13px] font-semibold tracking-tight">
+              {tr('cpanel/security.ip_allowlist_headline', 'Admin IP allowlist')}
+            </h3>
+            <p className="mt-0.5 text-[12px] text-subtle">
+              {tr('cpanel/security.ip_allowlist_subtitle', 'One IP or CIDR per line. Empty means no restriction. Only these addresses may reach the admin panel.')}
+            </p>
+          </div>
+          <div className="flex flex-col gap-y-1.5">
+            <textarea id="admin_ip_allowlist" name="admin_ip_allowlist" data-testid="security-admin-ip-allowlist" rows={4}
+              className="field-input w-full font-mono text-[12px]"
+              placeholder={"203.0.113.9\n10.0.0.0/8"}
+              value={form.data.admin_ip_allowlist}
+              onChange={(e) => form.setData('admin_ip_allowlist', e.target.value)} />
+            <p className="text-[12px] text-subtle">
+              {tr('cpanel/security.ip_current', 'Your current IP')}:{' '}
+              <code className="font-mono text-fg" data-testid="security-current-ip">{current_ip ?? '—'}</code>
+            </p>
+          </div>
         </div>
       </form>
 

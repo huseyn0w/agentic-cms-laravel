@@ -44,6 +44,12 @@ return [
     'csp' => 'Content-Security-Policy (erweitert — leer lassen zum Deaktivieren)',
     'csp_report_only' => 'Nur-Bericht (CSP nicht erzwingen, nur protokollieren)',
 
+    // Admin IP allowlist
+    'ip_allowlist_headline' => 'Admin-IP-Zulassungsliste',
+    'ip_allowlist_subtitle' => 'Eine IP oder ein CIDR pro Zeile. Leer bedeutet keine Einschränkung. Nur diese Adressen erreichen das Admin-Panel.',
+    'ip_current' => 'Ihre aktuelle IP',
+    'ip_forbidden' => 'Ihre IP-Adresse darf nicht auf das Admin-Panel zugreifen.',
+
     // Event labels
     'action_login' => 'Anmeldung',
     'action_login_failed' => 'Fehlgeschlagene Anmeldung',

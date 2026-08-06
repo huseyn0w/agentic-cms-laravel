@@ -46,6 +46,12 @@ return [
     'csp' => 'Content-Security-Policy (advanced — leave blank to disable)',
     'csp_report_only' => 'Report-only (do not enforce CSP, only log)',
 
+    // Admin IP allowlist
+    'ip_allowlist_headline' => 'Admin IP allowlist',
+    'ip_allowlist_subtitle' => 'One IP or CIDR per line. Empty means no restriction. Only these addresses may reach the admin panel.',
+    'ip_current' => 'Your current IP',
+    'ip_forbidden' => 'Your IP address is not allowed to access the admin panel.',
+
     // Event labels
     'action_login' => 'Sign in',
     'action_login_failed' => 'Failed sign in',

@@ -59,7 +59,14 @@ class SecuritySettingsTest extends TestCase
                     ->where('hsts_enabled', false)
                     ->where('hsts_max_age', 15552000)
                     ->where('csp', '')
-                    ->where('csp_report_only', false)));
+                    ->where('csp_report_only', false)
+                    ->where('admin_ip_allowlist', '')));
+    }
+
+    public function test_screen_ships_the_current_request_ip(): void
+    {
+        $this->actingAs($this->admin())->get(self::SCREEN)
+            ->assertInertia(fn (AssertableInertia $page) => $page->has('current_ip'));
     }
 
     public function test_saving_persists_the_singleton(): void
@@ -145,6 +152,24 @@ class SecuritySettingsTest extends TestCase
             'hsts_max_age' => 31536000,
             'csp' => "default-src 'self'",
             'csp_report_only' => 1,
+        ]);
+    }
+
+    public function test_saving_persists_the_admin_ip_allowlist(): void
+    {
+        $this->actingAs($this->admin())->post(self::SAVE, [
+            'login_throttle_enabled' => true,
+            'login_max_attempts' => 5,
+            'login_decay_minutes' => 1,
+            'login_block_enabled' => false,
+            'login_block_threshold' => 10,
+            'login_block_minutes' => 60,
+            'admin_ip_allowlist' => "203.0.113.9\n10.0.0.0/8",
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('security_settings', [
+            'id' => 1,
+            'admin_ip_allowlist' => "203.0.113.9\n10.0.0.0/8",
         ]);
     }
 

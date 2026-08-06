@@ -44,6 +44,12 @@ return [
     'csp' => 'Content-Security-Policy (для продвинутых — пусто = выключено)',
     'csp_report_only' => 'Только отчёт (не применять CSP, только логировать)',
 
+    // Admin IP allowlist
+    'ip_allowlist_headline' => 'IP-allowlist админки',
+    'ip_allowlist_subtitle' => 'По одному IP или CIDR на строку. Пусто — без ограничения. Только эти адреса получают доступ в админку.',
+    'ip_current' => 'Ваш текущий IP',
+    'ip_forbidden' => 'Вашему IP-адресу запрещён доступ в админку.',
+
     // Event labels
     'action_login' => 'Вход',
     'action_login_failed' => 'Неудачный вход',

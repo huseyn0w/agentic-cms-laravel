@@ -56,6 +56,7 @@ class ValidateSecuritySettings extends FormRequest
             'hsts_max_age' => 'sometimes|integer|min:0|max:63072000',
             'csp' => 'sometimes|nullable|string|max:4000',
             'csp_report_only' => 'boolean',
+            'admin_ip_allowlist' => 'sometimes|nullable|string|max:4000',
         ];
     }
 }

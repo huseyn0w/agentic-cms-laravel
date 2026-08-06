@@ -34,6 +34,7 @@ const settings = {
   hsts_max_age: 15552000,
   csp: '',
   csp_report_only: false,
+  admin_ip_allowlist: '',
 };
 
 const page = (rows: any[], filter: string | null = null) => ({
@@ -41,6 +42,7 @@ const page = (rows: any[], filter: string | null = null) => ({
   filter,
   actions: ['login', 'login_failed', 'logout', 'lockout'],
   security_settings: settings,
+  current_ip: '203.0.113.9',
 });
 
 describe('Security audit screen', () => {

@@ -61,7 +61,9 @@ class CPanelSecurityController extends CPanelBaseController
                 'hsts_max_age' => (int) ($security->hsts_max_age ?? 15552000),
                 'csp' => (string) ($security->csp ?? ''),
                 'csp_report_only' => (bool) ($security->csp_report_only ?? false),
+                'admin_ip_allowlist' => (string) ($security->admin_ip_allowlist ?? ''),
             ],
+            'current_ip' => $request->ip(),
         ]);
     }
 

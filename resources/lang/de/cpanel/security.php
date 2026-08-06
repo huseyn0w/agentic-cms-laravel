@@ -65,6 +65,7 @@ return [
     'action_2fa_enabled' => '2FA aktiviert',
     'action_2fa_disabled' => '2FA deaktiviert',
     'action_2fa_failed' => 'Fehlgeschlagene 2FA',
+    'action_session_revoked' => 'Sitzung widerrufen',
 
     // Table columns
     'col_when' => 'Wann',

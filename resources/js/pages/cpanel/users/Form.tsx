@@ -5,6 +5,7 @@ import { TextField } from '@/components/TextField';
 import { Button } from '@/components/Button';
 import { MediaField } from '@/components/MediaField';
 import { TwoFactorPanel, type TwoFactor } from '@/components/admin/TwoFactorPanel';
+import { ActiveSessionsPanel, type SessionRow } from '@/components/admin/ActiveSessionsPanel';
 import type { SharedProps } from '@/lib/types';
 import type { FormEvent, ReactElement } from 'react';
 
@@ -39,6 +40,7 @@ interface FormProps {
   countries: Country[];
   user_roles: Role[];
   two_factor?: TwoFactor;
+  sessions?: SessionRow[] | null;
 }
 
 const BASE = '/agentic-cms-laravel-admin/users';
@@ -54,7 +56,7 @@ const SOCIALS = [
   ['xing_url', 'xing', 'Xing'],
 ] as const;
 
-export default function Form({ entity, countries, user_roles, two_factor }: FormProps) {
+export default function Form({ entity, countries, user_roles, two_factor, sessions }: FormProps) {
   const { t } = useTranslation();
   const tr = (k: string, f: string) => (t(k) === k ? f : t(k));
   const canManageUsers = usePage<SharedProps>().props.auth.can.manage_users;
@@ -209,6 +211,12 @@ export default function Form({ entity, countries, user_roles, two_factor }: Form
       {two_factor?.is_self && (
         <div className="mt-4 max-w-[560px]">
           <TwoFactorPanel two_factor={two_factor} />
+        </div>
+      )}
+
+      {two_factor?.is_self && sessions && (
+        <div className="mt-4 max-w-[560px]">
+          <ActiveSessionsPanel sessions={sessions} />
         </div>
       )}
     </>

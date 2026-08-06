@@ -67,6 +67,7 @@ return [
     'action_2fa_enabled' => '2FA enabled',
     'action_2fa_disabled' => '2FA disabled',
     'action_2fa_failed' => 'Failed 2FA',
+    'action_session_revoked' => 'Session revoked',
 
     // Table columns
     'col_when' => 'When',

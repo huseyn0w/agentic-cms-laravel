@@ -65,6 +65,7 @@ return [
     'action_2fa_enabled' => '2FA включена',
     'action_2fa_disabled' => '2FA отключена',
     'action_2fa_failed' => 'Неудачная 2FA',
+    'action_session_revoked' => 'Сессия отозвана',
 
     // Table columns
     'col_when' => 'Когда',

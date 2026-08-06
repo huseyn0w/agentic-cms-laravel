@@ -56,6 +56,7 @@ const TONES: Record<string, PillTone> = {
   '2fa_enabled': 'success',
   '2fa_disabled': 'muted',
   '2fa_failed': 'warning',
+  session_revoked: 'muted',
 };
 const LABELS: Record<string, string> = {
   login: 'Sign in',
@@ -65,6 +66,7 @@ const LABELS: Record<string, string> = {
   '2fa_enabled': '2FA enabled',
   '2fa_disabled': '2FA disabled',
   '2fa_failed': 'Failed 2FA',
+  session_revoked: 'Session revoked',
 };
 
 export default function Index({ audit_log, filter, actions, security_settings, current_ip }: Props) {

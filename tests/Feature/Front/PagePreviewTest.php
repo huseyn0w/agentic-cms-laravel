@@ -48,7 +48,12 @@ class PagePreviewTest extends TestCase
             ->assertOk()
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('public/Page')
-                ->where('preview', true));
+                ->where('preview', true)
+                // Preview renders the public page (PublicLayout), which reads the
+                // shell shared prop; it must be built for the admin-prefixed
+                // preview route or PublicLayout crashes on a null shell.
+                ->has('shell.auth')
+                ->has('shell.menu'));
     }
 
     public function test_public_route_still_hides_the_draft_page(): void

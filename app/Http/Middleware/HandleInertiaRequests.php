@@ -91,11 +91,20 @@ class HandleInertiaRequests extends Middleware
      * Inertia page. Returns null on admin routes (they render AdminLayout and
      * never read it) so the menu/settings queries are skipped there.
      *
+     * The two admin-gated *preview* routes (cpanel_preview_post /
+     * cpanel_preview_page) are the exception: they sit under the admin prefix but
+     * render the public post/page in PublicLayout, which reads the shell. Without
+     * it PublicLayout destructures a null shell and the preview crashes, so build
+     * the shell for those routes even though they are admin-prefixed.
+     *
      * @return array<string, mixed>|null
      */
     private function sharedShell(Request $request): ?array
     {
-        if ($request->is('agentic-cms-laravel-admin', 'agentic-cms-laravel-admin/*')) {
+        $isAdmin = $request->is('agentic-cms-laravel-admin', 'agentic-cms-laravel-admin/*');
+        $isPreview = $request->routeIs('cpanel_preview_post', 'cpanel_preview_page');
+
+        if ($isAdmin && ! $isPreview) {
             return null;
         }
 

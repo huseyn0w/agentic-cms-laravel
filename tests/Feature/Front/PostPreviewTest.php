@@ -42,7 +42,13 @@ class PostPreviewTest extends TestCase
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('public/Post')
                 ->where('preview', true)
-                ->where('post.id', 1));
+                ->where('post.id', 1)
+                // The preview renders the public post page (PublicLayout), which
+                // reads the shell shared prop. HandleInertiaRequests skips the
+                // shell on admin routes, so it must be re-enabled for the preview
+                // route or PublicLayout crashes on a null shell.
+                ->has('shell.auth')
+                ->has('shell.menu'));
     }
 
     public function test_public_route_still_hides_the_scheduled_post(): void

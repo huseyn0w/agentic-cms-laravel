@@ -26,11 +26,10 @@
  * public/build/assets/ at build time.
  */
 
-/* Newsreader Variable — normal + italic (wght axis, includes latin unicode-range) */
-@import '@fontsource-variable/newsreader/wght.css';
-@import '@fontsource-variable/newsreader/wght-italic.css';
-
-/* Inter Variable — normal only (wght axis, includes latin unicode-range) */
+/* Inter Variable — normal only (wght axis, includes latin unicode-range).
+ * Used by the admin panel (theme('fontFamily.sans')). The public theme uses
+ * Geist Variable (declared below); Newsreader serif was dropped in the theme
+ * rebuild and is no longer imported. */
 @import '@fontsource-variable/inter/wght.css';
 
 /* Geist Variable — the public theme's display + body face (latin subsets only,

@@ -195,35 +195,6 @@
     }
     .btn-ghost:hover { background: var(--surface-2); }
 
-    /*
-     | Header nav: the menu HTML is generated server-side (render_menu) with
-     | the classes we pass from header.blade.php. We attach interactive styling
-     | here so the markup stays clean.
-     */
-    .nav-menu {
-        @apply flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-1;
-    }
-
-    .nav-link {
-        @apply relative block rounded-full px-3.5 py-2 text-sm font-medium text-ink-600
-            transition-colors duration-200 hover:text-ink-900;
-    }
-
-    /* Dropdown submenu (render_menu emits .dropdown > .dropdown-menu). */
-    .nav-menu .dropdown {
-        @apply relative;
-    }
-
-    .nav-menu .dropdown-menu {
-        @apply pointer-events-none absolute left-0 top-full z-20 mt-1 min-w-[12rem] origin-top
-            rounded-xl border border-ink-100 bg-surface p-1.5 opacity-0 shadow-lift
-            transition duration-200 ease-out-expo lg:scale-95;
-    }
-
-    .nav-menu .dropdown:hover .dropdown-menu,
-    .nav-menu .dropdown:focus-within .dropdown-menu {
-        @apply pointer-events-auto opacity-100 lg:scale-100;
-    }
 
     .nav-menu .dropdown-item {
         @apply block rounded-lg px-3 py-2 text-sm text-ink-600 transition-colors hover:bg-ink-50 hover:text-ink-900;

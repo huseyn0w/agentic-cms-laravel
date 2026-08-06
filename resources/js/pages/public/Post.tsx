@@ -2,6 +2,7 @@ import { Link, router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
+import { PreviewBanner } from '@/components/PreviewBanner';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface Author {
@@ -74,15 +75,7 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
 
     return (
         <PublicLayout shell={shell}>
-            {preview && (
-                <div
-                    data-testid="preview-banner"
-                    className="sticky top-0 z-50 flex items-center justify-center gap-2 bg-[var(--text)] px-4 py-2 text-center text-xs font-medium text-[var(--bg)]"
-                >
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-current opacity-70" />
-                    {tr('cpanel/posts.preview_banner', 'Preview — draft, not published. This page is not indexed.')}
-                </div>
-            )}
+            {preview && <PreviewBanner />}
             <article className="mx-auto max-w-[720px] px-5 py-14 sm:px-8 sm:py-16">
                 {post.category && (
                     <a href={post.category.url} className="transition-colors hover:text-[var(--primary)]">

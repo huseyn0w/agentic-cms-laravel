@@ -66,6 +66,26 @@ class PageRepository extends BaseRepository
     }
 
     /**
+     * Resolve a page by id for the admin preview screen. Mirrors the public
+     * read (locale join, select fields, eager relations) but SKIPS
+     * applyFrontReadScope, so a draft page (status 0) resolves for an editor.
+     * Never exposed on a public route — gated behind manage_pages. Null when
+     * the page has no translation in the current locale.
+     */
+    public function resolveByIdForPreview(int $id)
+    {
+        $this->select_fields_ready_array = $this->generateSelectFieldsArray($this->select_fields);
+        $this->locale = get_current_lang();
+
+        return $this->model::join($this->translated_table, $this->main_table.'.id', '=', $this->translated_table.'.'.$this->translated_table_join_column)
+            ->select($this->select_fields_ready_array)
+            ->where($this->translated_table.'.locale', $this->locale)
+            ->where($this->main_table.'.id', $id)
+            ->with($this->eager_relations)
+            ->first();
+    }
+
+    /**
      * Sitemap rows for all pages: one row per (page, locale) translation with
      * the slug + updated_at used to build <url>/<lastmod>/<xhtml:link> entries.
      */

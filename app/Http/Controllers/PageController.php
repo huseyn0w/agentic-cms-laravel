@@ -37,17 +37,49 @@ class PageController extends BaseController
             : [];
 
         // All page templates are on Inertia (Phase 4).
+        return $this->renderByTemplate($customFields);
+    }
+
+    /**
+     * Admin-only preview of a single page by id. Renders the exact public page
+     * (whichever template it uses) for a draft the public site hides. Gated
+     * behind auth + manage_pages by the route; forced noindex and flagged so the
+     * React page shows a preview banner. Never a public/signed URL.
+     */
+    public function preview(int $id)
+    {
+        $this->data = $this->service->previewById($id);
+
+        if (is_null($this->data)) {
+            throwNotFound();
+        }
+
+        // Belt-and-suspenders: the route is already admin-gated, but force the
+        // <head> to noindex so a preview can never be indexed.
+        $this->data->meta_noindex = true;
+
+        $customFields = ! empty($this->data->custom_fields)
+            ? (json_decode($this->data->custom_fields, true) ?: [])
+            : [];
+
+        return $this->renderByTemplate($customFields, true);
+    }
+
+    /** Dispatch to the right template renderer, carrying the preview flag. */
+    private function renderByTemplate(array $customFields, bool $preview = false): Response
+    {
         return match ($this->data->template) {
-            'home' => $this->renderHome($customFields),
-            'contacts' => $this->renderContact(),
-            default => $this->renderPage(),
+            'home' => $this->renderHome($customFields, $preview),
+            'contacts' => $this->renderContact($preview),
+            default => $this->renderPage($preview),
         };
     }
 
     /** A standard content page (title + prose body). */
-    private function renderPage(): Response
+    private function renderPage(bool $preview = false): Response
     {
         return Inertia::render('public/Page', [
+            'preview' => $preview,
             'page' => [
                 'title' => $this->data->title,
                 'lead' => $this->data->meta_description ?: null,
@@ -60,11 +92,12 @@ class PageController extends BaseController
     }
 
     /** The contact page: a form that posts to sendMail. */
-    private function renderContact(): Response
+    private function renderContact(bool $preview = false): Response
     {
         $user = Auth::user();
 
         return Inertia::render('public/Contact', [
+            'preview' => $preview,
             'title' => $this->data->title,
             'crumbs' => $this->homeCrumbs($this->data->title),
             'action' => route('sendform'),
@@ -94,9 +127,10 @@ class PageController extends BaseController
      * handed to the seo-meta partial via withViewData on the app-public root, so
      * the server-rendered <head> is unchanged from the Blade era.
      */
-    private function renderHome(array $customFields): Response
+    private function renderHome(array $customFields, bool $preview = false): Response
     {
         return Inertia::render('public/Home', [
+            'preview' => $preview,
             'page' => [
                 'title' => $this->data->title ?? (get_general_settings('website_name') ?: config('app.name')),
             ],

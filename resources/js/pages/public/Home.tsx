@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { PublicLayout } from '@/layouts/PublicLayout';
+import { PreviewBanner } from '@/components/PreviewBanner';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface PostCard {
@@ -20,6 +21,7 @@ interface Author {
 
 interface HomeProps {
     shell: Shell;
+    preview?: boolean;
     page: { title: string };
     hero: { headline: string | null; background: string | null };
     postsSection: { headline: string | null; description: string | null; posts: PostCard[] };
@@ -31,9 +33,10 @@ interface HomeProps {
  * Blade (partials/seo-meta.blade.php via the app-public root) — this component
  * deliberately renders no <Head>, so exactly one <title> reaches the page.
  */
-export default function Home({ shell, page, hero, postsSection, about }: HomeProps) {
+export default function Home({ shell, preview = false, page, hero, postsSection, about }: HomeProps) {
     return (
         <PublicLayout shell={shell}>
+            {preview && <PreviewBanner />}
             {/* Hero */}
             <section className="relative overflow-hidden" id="home">
                 {hero.background ? (

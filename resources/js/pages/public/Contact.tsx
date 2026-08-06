@@ -1,12 +1,14 @@
 import { usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { RawHtml } from '@/components/RawHtml';
+import { PreviewBanner } from '@/components/PreviewBanner';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import type { Shell } from '@/layouts/PublicLayout';
 import type { SharedProps } from '@/lib/types';
 
 interface ContactProps {
     shell: Shell;
+    preview?: boolean;
     title: string;
     crumbs: { label: string; url: string | null }[];
     action: string;
@@ -21,7 +23,7 @@ interface ContactProps {
  * validation errors + the success flash arrive via Inertia shared props. SEO
  * head is server-rendered by Blade.
  */
-export default function Contact({ shell, title, crumbs, action, csrfToken, captchaHtml, prefill }: ContactProps) {
+export default function Contact({ shell, preview = false, title, crumbs, action, csrfToken, captchaHtml, prefill }: ContactProps) {
     const { t } = useTranslation();
     const tr = (k: string, f: string) => (t(k) === k ? f : t(k));
     const { errors, flash } = usePage<SharedProps>().props;
@@ -32,6 +34,7 @@ export default function Contact({ shell, title, crumbs, action, csrfToken, captc
 
     return (
         <PublicLayout shell={shell}>
+            {preview && <PreviewBanner />}
             <header className="border-b border-[var(--border)] bg-[var(--surface-2)]">
                 <div className="mx-auto max-w-[720px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
                     <nav aria-label="Breadcrumb" className="mb-3 flex flex-wrap items-center gap-1.5 font-mono text-xs text-[var(--text-muted)]">

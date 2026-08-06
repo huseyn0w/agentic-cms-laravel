@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use Inertia\Inertia;
 
@@ -125,6 +126,9 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['auth', 'see_admin_panel
         // Restore is GET /{id}/restore — registered BEFORE the greedy /{id}/{lang}
         // editor route so it isn't shadowed (matched as edit with lang="restore").
         Route::get('/{id}/restore', 'CPanelPageController@restore')->name('cpanel_restore_page')->where('id', '[0-9]+');
+        // Admin preview (GET /{id}/preview) — before the greedy /{id}/{lang}
+        // editor route, or it is shadowed as editPage(lang="preview").
+        Route::get('/{id}/preview', [PageController::class, 'preview'])->name('cpanel_preview_page')->where('id', '[0-9]+');
         Route::get('/{id}/{lang}', 'CPanelPageController@editPage')->name('cpanel_edit_page')->where('id', '[0-9]+');
         Route::put('/{id}/update', 'CPanelPageController@updatePage')->name('cpanel_update_page')->where('id', '[0-9]+');
         Route::get('/{id}/revisions/{lang}', 'CPanelPageController@revisions')->name('cpanel_page_revisions')->where('id', '[0-9]+');

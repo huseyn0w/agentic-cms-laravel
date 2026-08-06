@@ -16,4 +16,14 @@ class PageViewService extends BaseCrudService
     {
         parent::__construct($repo);
     }
+
+    /**
+     * Resolve a page by id for the admin-only preview screen (drafts included).
+     * Null when it has no translation in the current locale. See
+     * PageRepository::resolveByIdForPreview.
+     */
+    public function previewById(int $id)
+    {
+        return $this->repo->resolveByIdForPreview($id);
+    }
 }

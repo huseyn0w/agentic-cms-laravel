@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PasswordNotReused;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,7 @@ class ChangePasswordRequest extends FormRequest
     {
         return [
             'g-recaptcha-response' => ['nullable', 'captcha'],
-            'password' => ['string', password_policy_rule(), 'same:password_confirmation'],
+            'password' => ['string', password_policy_rule(), new PasswordNotReused(Auth::user()), 'same:password_confirmation'],
             'password_confirmation' => ['string'],
         ];
     }

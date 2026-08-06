@@ -63,6 +63,7 @@ class CPanelSecurityController extends CPanelBaseController
                 'csp_report_only' => (bool) ($security->csp_report_only ?? false),
                 'admin_ip_allowlist' => (string) ($security->admin_ip_allowlist ?? ''),
                 'site_lockdown_enabled' => (bool) ($security->site_lockdown_enabled ?? false),
+                'password_history_count' => (int) ($security->password_history_count ?? 0),
             ],
             'current_ip' => $request->ip(),
         ]);

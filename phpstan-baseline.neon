@@ -181,12 +181,6 @@ parameters:
 			path: app/Http/Requests/Auth/RegisterRequest.php
 
 		-
-			message: '#^Method App\\Http\\Requests\\Auth\\ResetPasswordRequest\:\:rules\(\) should return array\<string, array\<int, string\>\> but returns array\<string, list\<Illuminate\\Validation\\Rules\\Password\|string\>\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Requests/Auth/ResetPasswordRequest.php
-
-		-
 			message: '#^Variable \$rules might not be defined\.$#'
 			identifier: variable.undefined
 			count: 1

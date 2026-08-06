@@ -61,7 +61,8 @@ class SecuritySettingsTest extends TestCase
                     ->where('csp', '')
                     ->where('csp_report_only', false)
                     ->where('admin_ip_allowlist', '')
-                    ->where('site_lockdown_enabled', false)));
+                    ->where('site_lockdown_enabled', false)
+                    ->where('password_history_count', 0)));
     }
 
     public function test_screen_ships_the_current_request_ip(): void
@@ -187,6 +188,21 @@ class SecuritySettingsTest extends TestCase
         ])->assertRedirect();
 
         $this->assertDatabaseHas('security_settings', ['id' => 1, 'site_lockdown_enabled' => 1]);
+    }
+
+    public function test_saving_persists_the_password_history_count(): void
+    {
+        $this->actingAs($this->admin())->post(self::SAVE, [
+            'login_throttle_enabled' => true,
+            'login_max_attempts' => 5,
+            'login_decay_minutes' => 1,
+            'login_block_enabled' => false,
+            'login_block_threshold' => 10,
+            'login_block_minutes' => 60,
+            'password_history_count' => 5,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('security_settings', ['id' => 1, 'password_history_count' => 5]);
     }
 
     public function test_block_threshold_must_be_at_least_max_attempts(): void

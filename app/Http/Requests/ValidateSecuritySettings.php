@@ -59,6 +59,7 @@ class ValidateSecuritySettings extends FormRequest
             'csp_report_only' => 'boolean',
             'admin_ip_allowlist' => 'sometimes|nullable|string|max:4000',
             'site_lockdown_enabled' => 'boolean',
+            'password_history_count' => 'sometimes|integer|min:0|max:24',
         ];
     }
 }

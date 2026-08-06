@@ -51,6 +51,14 @@ class CPanelUserController extends CPanelBaseController
             'entity' => $this->userEntity($user),
             'countries' => $this->countryOptions(),
             'user_roles' => $this->roleOptions(),
+            'two_factor' => [
+                'status' => $user->hasEnabledTwoFactor()
+                    ? 'enabled'
+                    : ($user->two_factor_secret ? 'pending' : 'disabled'),
+                'is_self' => (int) $user->id === (int) $this->user->id,
+                'setup' => session('two_factor_setup'),
+                'recovery_codes' => session('two_factor_recovery_codes'),
+            ],
         ]);
     }
 

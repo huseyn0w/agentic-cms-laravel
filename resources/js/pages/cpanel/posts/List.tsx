@@ -61,8 +61,23 @@ export default function List({ posts_list, trashed }: ListProps) {
 
   const tab = (isActive: boolean) =>
     `-mb-px border-b-2 px-4 py-2 text-[13px] transition ${
-      isActive ? 'border-primary font-semibold text-fg' : 'border-transparent text-muted hover:text-fg'
+      isActive
+        ? 'border-[color:var(--accent-blue)] font-semibold text-fg'
+        : 'border-transparent text-muted hover:text-fg'
     }`;
+
+  const StatusPill = ({ status }: { status: number }) =>
+    status === 1 ? (
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-success-bg px-2.5 py-0.5 text-[11.5px] font-semibold text-success">
+        <span className="h-1.5 w-1.5 rounded-full bg-current opacity-80" />
+        {tr('cpanel/posts.status_published', 'Published')}
+      </span>
+    ) : (
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-3 px-2.5 py-0.5 text-[11.5px] font-semibold text-subtle">
+        <span className="h-1.5 w-1.5 rounded-full bg-current opacity-70" />
+        {tr('cpanel/posts.status_private', 'Private')}
+      </span>
+    );
 
   return (
     <>
@@ -135,20 +150,16 @@ export default function List({ posts_list, trashed }: ListProps) {
               </tr>
             )}
             {rows.map((r) => (
-              <tr key={r.id} className="hover:bg-black/[.022]">
+              <tr key={r.id} className="transition-colors hover:bg-surface-2">
                 <td className="border-b admin-sep px-4 py-3">
                   <input type="checkbox" aria-label={`select-${r.id}`}
                     checked={selected.includes(r.id)} onChange={() => toggle(r.id)} />
                 </td>
-                <td className="border-b admin-sep px-4 py-3 font-semibold">{r.title}</td>
+                <td className="border-b admin-sep px-4 py-3 font-medium tracking-tight">{r.title}</td>
                 <td className="border-b admin-sep px-4 py-3 text-muted">{r.author ?? '—'}</td>
-                <td className="whitespace-nowrap border-b admin-sep px-4 py-3 text-muted">{r.created_at}</td>
+                <td className="whitespace-nowrap border-b admin-sep px-4 py-3 tabular-nums text-faint">{r.created_at}</td>
                 <td className="border-b admin-sep px-4 py-3">
-                  {r.status === 1 ? (
-                    <span className="text-success">{tr('cpanel/posts.status_published', 'Published')}</span>
-                  ) : (
-                    <span className="text-muted">{tr('cpanel/posts.status_private', 'Private')}</span>
-                  )}
+                  <StatusPill status={r.status} />
                 </td>
                 <td className="border-b admin-sep px-4 py-3">
                   <div className="flex gap-3.5 text-[12.5px]">
@@ -164,7 +175,7 @@ export default function List({ posts_list, trashed }: ListProps) {
                     ) : (
                       <>
                         <Link href={`${BASE}/${r.id}/${locale.current}`} prefetch cacheFor="15s"
-                          className="text-muted hover:text-fg">
+                          className="font-medium text-muted hover:text-[color:var(--accent-blue)]">
                           {tr('cpanel/posts.edit_post', 'Edit')}
                         </Link>
                         <button onClick={() => bulkDelete([r.id])} className="text-muted hover:text-error">

@@ -300,10 +300,18 @@
     .theme-admin textarea,
     .theme-admin select {
         @apply block w-full rounded-lg border border-ink-200 bg-surface px-3.5 py-2.5
-            text-sm text-ink-900 placeholder:text-ink-400 shadow-sm
+            text-sm text-ink-900 placeholder:text-ink-400
             transition duration-150 ease-out-expo
-            focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25
             disabled:cursor-not-allowed disabled:bg-ink-50 disabled:text-ink-400;
+    }
+
+    /* Flat blue-accent focus (Mono/Vercel): a 3px ring replaces the outline. */
+    .theme-admin :where(.form-control, input[type='text'], input[type='email'],
+        input[type='password'], input[type='number'], input[type='url'],
+        input[type='search'], textarea, select):focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue) 20%, transparent);
+        outline: none;
     }
 
     .theme-admin textarea {
@@ -327,7 +335,7 @@
         @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5
             text-sm font-semibold leading-none
             transition duration-150 ease-out-expo
-            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600
+            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent-blue)]
             active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60 disabled:active:translate-y-0;
     }
 
@@ -335,19 +343,19 @@
     .theme-admin .btn-info,
     .theme-admin .btn-primary,
     .theme-admin .btn-fill {
-        @apply bg-brand-600 text-white shadow-sm hover:bg-brand-700;
+        @apply bg-brand-600 text-white hover:bg-brand-700;
     }
 
     .theme-admin .btn-success {
-        @apply bg-success-600 text-white shadow-sm hover:bg-success-700;
+        @apply bg-success-600 text-white hover:bg-success-700;
     }
 
     .theme-admin .btn-warning {
-        @apply bg-warning-600 text-white shadow-sm hover:bg-warning-700;
+        @apply bg-warning-600 text-white hover:bg-warning-700;
     }
 
     .theme-admin .btn-danger {
-        @apply bg-danger-600 text-white shadow-sm hover:bg-danger-700;
+        @apply bg-danger-600 text-white hover:bg-danger-700;
     }
 
     /* Neutral / secondary outline button. */
@@ -357,25 +365,25 @@
     }
 
     .theme-admin .btn-link {
-        @apply text-brand-700 hover:text-brand-800;
+        @apply text-[color:var(--accent-blue)] hover:text-[color:var(--accent-blue-hover)];
     }
 
     /* The LFM "choose image" trigger. */
     .theme-admin .choose-image {
         @apply inline-flex cursor-pointer items-center gap-2 rounded-lg border border-ink-200
-            bg-surface px-3.5 py-2 text-sm font-medium text-ink-700 shadow-sm
-            transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700;
+            bg-surface px-3.5 py-2 text-sm font-medium text-ink-700
+            transition hover:border-ink-300 hover:bg-ink-50;
     }
 
     /* ---------------------------------------------------------------------
      | Cards / panels
      | --------------------------------------------------------------------- */
     .theme-admin .card {
-        @apply rounded-xl border border-ink-200/70 bg-surface shadow-card;
+        @apply rounded-[10px] border border-border bg-surface;
     }
 
     .theme-admin .card-header {
-        @apply border-b border-ink-100 px-5 py-4;
+        @apply border-b border-border px-5 py-4;
     }
 
     .theme-admin .card-title {

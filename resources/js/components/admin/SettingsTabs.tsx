@@ -27,7 +27,7 @@ export function SettingsTabs({ active }: { active: SettingsTab }) {
           aria-current={active === tab.key ? 'page' : undefined}
           className={`-mb-px border-b-2 px-3.5 py-2 text-[13px] font-semibold ${
             active === tab.key
-              ? 'border-primary text-fg'
+              ? 'border-[color:var(--accent-blue)] text-fg'
               : 'border-transparent text-muted hover:text-fg'
           }`}>
           {tr(tab.labelKey, tab.fallback)}

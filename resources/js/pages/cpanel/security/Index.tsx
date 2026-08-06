@@ -23,6 +23,7 @@ interface SecuritySettings {
   login_block_enabled: boolean;
   login_block_threshold: number;
   login_block_minutes: number;
+  require_2fa_for_admins: boolean;
 }
 interface Props {
   audit_log: Paginator<Row>;
@@ -59,6 +60,7 @@ export default function Index({ audit_log, filter, actions, security_settings }:
     login_block_enabled: Boolean(security_settings.login_block_enabled),
     login_block_threshold: security_settings.login_block_threshold ?? 10,
     login_block_minutes: security_settings.login_block_minutes ?? 60,
+    require_2fa_for_admins: Boolean(security_settings.require_2fa_for_admins),
   });
 
   const testid = (name: keyof SecuritySettings) => `security-${String(name).replace(/_/g, '-')}`;
@@ -77,7 +79,7 @@ export default function Index({ audit_log, filter, actions, security_settings }:
     />
   );
 
-  const toggle = (name: 'login_throttle_enabled' | 'login_block_enabled', labelKey: string, fallback: string) => (
+  const toggle = (name: 'login_throttle_enabled' | 'login_block_enabled' | 'require_2fa_for_admins', labelKey: string, fallback: string) => (
     <label className="flex cursor-pointer items-center gap-2.5 text-sm text-fg">
       <input
         type="checkbox"
@@ -146,6 +148,10 @@ export default function Index({ audit_log, filter, actions, security_settings }:
             {number('login_block_threshold', 'cpanel/security.block_threshold', 'Attempts before auto-block')}
             {number('login_block_minutes', 'cpanel/security.block_minutes', 'Auto-block duration (minutes)')}
           </div>
+        </div>
+
+        <div className="flex flex-col gap-4 border-t admin-sep pt-4">
+          {toggle('require_2fa_for_admins', 'cpanel/security.require_2fa', 'Require 2FA for everyone with admin access')}
         </div>
       </form>
 

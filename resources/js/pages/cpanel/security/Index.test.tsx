@@ -24,6 +24,7 @@ const settings = {
   login_block_enabled: false,
   login_block_threshold: 10,
   login_block_minutes: 60,
+  require_2fa_for_admins: false,
 };
 
 const page = (rows: any[], filter: string | null = null) => ({

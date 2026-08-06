@@ -35,6 +35,8 @@ return [
     'password_numbers' => 'Требовать цифру',
     'password_symbols' => 'Требовать спецсимвол',
     'password_hibp' => 'Отклонять пароли из известных утечек',
+    'password_history' => 'Запрещать повтор последних N паролей (0 = выкл)',
+    'password_reused' => 'Этот пароль совпадает с одним из недавних. Выберите другой пароль.',
 
     // Security headers
     'headers_headline' => 'Заголовки безопасности',

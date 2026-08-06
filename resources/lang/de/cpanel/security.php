@@ -35,6 +35,8 @@ return [
     'password_numbers' => 'Eine Ziffer verlangen',
     'password_symbols' => 'Ein Sonderzeichen verlangen',
     'password_hibp' => 'Passwörter aus bekannten Datenlecks ablehnen',
+    'password_history' => 'Wiederverwendung der letzten N Passwörter sperren (0 = aus)',
+    'password_reused' => 'Dieses Passwort entspricht einem kürzlich verwendeten. Bitte wählen Sie ein anderes.',
 
     // Security headers
     'headers_headline' => 'Sicherheits-Header',

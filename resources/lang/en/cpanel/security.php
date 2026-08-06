@@ -37,6 +37,8 @@ return [
     'password_numbers' => 'Require a number',
     'password_symbols' => 'Require a symbol',
     'password_hibp' => 'Reject passwords found in known data breaches',
+    'password_history' => 'Block reuse of the last N passwords (0 = off)',
+    'password_reused' => 'This password matches a recent one. Please choose a different password.',
 
     // Security headers
     'headers_headline' => 'Security headers',

@@ -35,6 +35,7 @@ interface SecuritySettings {
   csp_report_only: boolean;
   admin_ip_allowlist: string;
   site_lockdown_enabled: boolean;
+  password_history_count: number;
 }
 interface Props {
   audit_log: Paginator<Row>;
@@ -90,6 +91,7 @@ export default function Index({ audit_log, filter, actions, security_settings, c
     csp_report_only: Boolean(security_settings.csp_report_only),
     admin_ip_allowlist: security_settings.admin_ip_allowlist ?? '',
     site_lockdown_enabled: Boolean(security_settings.site_lockdown_enabled),
+    password_history_count: security_settings.password_history_count ?? 0,
   });
 
   const testid = (name: keyof SecuritySettings) => `security-${String(name).replace(/_/g, '-')}`;
@@ -102,10 +104,10 @@ export default function Index({ audit_log, filter, actions, security_settings, c
     return false;
   };
 
-  const number = (name: keyof SecuritySettings, labelKey: string, fallback: string) => (
+  const number = (name: keyof SecuritySettings, labelKey: string, fallback: string, min = 1) => (
     <TextField
       type="number"
-      min={1}
+      min={min}
       name={name}
       label={tr(labelKey, fallback)}
       data-testid={testid(name)}
@@ -208,6 +210,7 @@ export default function Index({ audit_log, filter, actions, security_settings, c
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {number('password_min_length', 'cpanel/security.password_min_length', 'Minimum length')}
+            {number('password_history_count', 'cpanel/security.password_history', 'Block reuse of the last N passwords (0 = off)', 0)}
           </div>
           {toggle('password_require_mixed_case', 'cpanel/security.password_mixed_case', 'Require upper and lower case')}
           {toggle('password_require_numbers', 'cpanel/security.password_numbers', 'Require a number')}

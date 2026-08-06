@@ -35,6 +35,7 @@ const settings = {
   csp: '',
   csp_report_only: false,
   admin_ip_allowlist: '',
+  site_lockdown_enabled: false,
 };
 
 const page = (rows: any[], filter: string | null = null) => ({

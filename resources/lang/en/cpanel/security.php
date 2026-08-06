@@ -52,6 +52,11 @@ return [
     'ip_current' => 'Your current IP',
     'ip_forbidden' => 'Your IP address is not allowed to access the admin panel.',
 
+    // Site lockdown
+    'lockdown_headline' => 'Site lockdown',
+    'lockdown_subtitle' => 'Take the public site private. Visitors who are not signed in are sent to the login page; the admin panel and login stay reachable.',
+    'lockdown_enabled' => 'Require sign-in to view the public site',
+
     // Event labels
     'action_login' => 'Sign in',
     'action_login_failed' => 'Failed sign in',

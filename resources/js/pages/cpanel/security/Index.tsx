@@ -34,6 +34,7 @@ interface SecuritySettings {
   csp: string;
   csp_report_only: boolean;
   admin_ip_allowlist: string;
+  site_lockdown_enabled: boolean;
 }
 interface Props {
   audit_log: Paginator<Row>;
@@ -88,6 +89,7 @@ export default function Index({ audit_log, filter, actions, security_settings, c
     csp: security_settings.csp ?? '',
     csp_report_only: Boolean(security_settings.csp_report_only),
     admin_ip_allowlist: security_settings.admin_ip_allowlist ?? '',
+    site_lockdown_enabled: Boolean(security_settings.site_lockdown_enabled),
   });
 
   const testid = (name: keyof SecuritySettings) => `security-${String(name).replace(/_/g, '-')}`;
@@ -117,7 +119,7 @@ export default function Index({ audit_log, filter, actions, security_settings, c
   const toggle = (
     name: 'login_throttle_enabled' | 'login_block_enabled' | 'require_2fa_for_admins'
       | 'password_require_mixed_case' | 'password_require_numbers' | 'password_require_symbols' | 'password_check_hibp'
-      | 'hsts_enabled' | 'csp_report_only',
+      | 'hsts_enabled' | 'csp_report_only' | 'site_lockdown_enabled',
     labelKey: string,
     fallback: string,
   ) => (
@@ -259,6 +261,18 @@ export default function Index({ audit_log, filter, actions, security_settings, c
               <code className="font-mono text-fg" data-testid="security-current-ip">{current_ip ?? '—'}</code>
             </p>
           </div>
+        </div>
+
+        <div className="flex flex-col gap-4 border-t admin-sep pt-4">
+          <div>
+            <h3 className="text-[13px] font-semibold tracking-tight">
+              {tr('cpanel/security.lockdown_headline', 'Site lockdown')}
+            </h3>
+            <p className="mt-0.5 text-[12px] text-subtle">
+              {tr('cpanel/security.lockdown_subtitle', 'Take the public site private. Visitors who are not signed in are sent to the login page; the admin panel and login stay reachable.')}
+            </p>
+          </div>
+          {toggle('site_lockdown_enabled', 'cpanel/security.lockdown_enabled', 'Require sign-in to view the public site')}
         </div>
       </form>
 

@@ -50,6 +50,11 @@ return [
     'ip_current' => 'Ihre aktuelle IP',
     'ip_forbidden' => 'Ihre IP-Adresse darf nicht auf das Admin-Panel zugreifen.',
 
+    // Site lockdown
+    'lockdown_headline' => 'Website-Sperre',
+    'lockdown_subtitle' => 'Die öffentliche Website privat schalten. Nicht angemeldete Besucher werden zur Anmeldeseite geleitet; Admin-Panel und Anmeldung bleiben erreichbar.',
+    'lockdown_enabled' => 'Anmeldung erforderlich, um die öffentliche Website zu sehen',
+
     // Event labels
     'action_login' => 'Anmeldung',
     'action_login_failed' => 'Fehlgeschlagene Anmeldung',

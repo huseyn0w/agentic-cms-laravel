@@ -1,4 +1,4 @@
-import { Link, useForm } from '@inertiajs/react';
+import { Link, router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
@@ -46,7 +46,14 @@ interface PostProps {
     };
     related: { title: string; url: string; excerpt: string; date: string; image: string }[];
     comments: { total: number; data: CommentNode[]; currentPage: number; lastPage: number; currentUserId: number | null };
-    commentForm: { postUrl: string; canComment: boolean; canManageComments: boolean; loginUrl: string };
+    commentForm: {
+        postUrl: string;
+        editUrl: string;
+        deleteBase: string;
+        canComment: boolean;
+        canManageComments: boolean;
+        loginUrl: string;
+    };
 }
 
 const HeartIcon = () => (
@@ -58,8 +65,7 @@ const HeartIcon = () => (
 /**
  * Public post detail. SEO head (Article + BreadcrumbList JSON-LD) is
  * server-rendered by Blade (seo-meta detects the posts route) — no <Head> here.
- * Comment edit/delete for owners/admins is a follow-up; this renders the thread
- * and the create form.
+ * The thread renders the create form plus owner/admin inline edit + delete.
  */
 export default function Post({ shell, currentUserId, post, related, comments, commentForm }: PostProps) {
     const { t } = useTranslation();
@@ -224,7 +230,39 @@ function LikeBar({
     );
 }
 
-function CommentCard({ comment, isReply }: { comment: CommentNode; isReply?: boolean }) {
+function CommentCard({
+    comment,
+    isReply,
+    canManage,
+    editUrl,
+    deleteBase,
+    tr,
+}: {
+    comment: CommentNode;
+    isReply?: boolean;
+    canManage: boolean;
+    editUrl: string;
+    deleteBase: string;
+    tr: (k: string, f: string) => string;
+}) {
+    const [editing, setEditing] = useState(false);
+    const [text, setText] = useState(comment.body);
+    const [saving, setSaving] = useState(false);
+
+    const save = () => {
+        setSaving(true);
+        router.put(
+            editUrl,
+            { updated_comment_id: comment.id, comment: text },
+            { preserveScroll: true, onSuccess: () => setEditing(false), onFinish: () => setSaving(false) },
+        );
+    };
+
+    const remove = () => {
+        if (!window.confirm(tr('default/post.delete_confirm', 'Delete this comment?'))) return;
+        router.delete(`${deleteBase}/${comment.id}`, { data: { commentId: comment.id }, preserveScroll: true });
+    };
+
     return (
         <article className="flex gap-4" data-testid={isReply ? 'comment-reply' : 'comment-card'}>
             <img src={comment.user.avatar} alt={comment.user.name} width={40} height={40} className="h-10 w-10 shrink-0 rounded-full object-cover ring-1 ring-[var(--border)]" />
@@ -235,7 +273,52 @@ function CommentCard({ comment, isReply }: { comment: CommentNode; isReply?: boo
                     </a>
                     <span className="text-xs text-[var(--text-subtle)]">{comment.date}</span>
                 </div>
-                <p className="mt-1.5 text-base leading-relaxed text-[var(--text-muted)]">{comment.body}</p>
+
+                {editing ? (
+                    <div className="mt-2">
+                        <textarea
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            rows={3}
+                            data-testid="comment-edit-input"
+                            className="w-full rounded-sm border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-2 text-base text-[var(--text)] focus:border-[var(--ring)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]/30"
+                        />
+                        <div className="mt-2 flex gap-2">
+                            <button
+                                type="button"
+                                onClick={save}
+                                disabled={saving}
+                                data-testid="comment-edit-save"
+                                className="rounded-md bg-[var(--primary)] px-3 py-1.5 text-xs font-medium text-[var(--primary-contrast)] transition hover:opacity-90 disabled:opacity-60"
+                            >
+                                {tr('default/post.save', 'Save')}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setEditing(false);
+                                    setText(comment.body);
+                                }}
+                                className="rounded-md px-3 py-1.5 text-xs font-medium text-[var(--text-muted)] transition hover:text-[var(--text)]"
+                            >
+                                {tr('default/post.cancel', 'Cancel')}
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="mt-1.5 text-base leading-relaxed text-[var(--text-muted)]">{comment.body}</p>
+                )}
+
+                {canManage && !editing && (
+                    <div className="mt-2 flex gap-3 text-xs">
+                        <button type="button" onClick={() => setEditing(true)} data-testid="comment-edit" className="font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--primary)]">
+                            {tr('default/post.edit', 'Edit')}
+                        </button>
+                        <button type="button" onClick={remove} data-testid="comment-delete" className="font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--error)]">
+                            {tr('default/post.delete', 'Delete')}
+                        </button>
+                    </div>
+                )}
             </div>
         </article>
     );
@@ -274,6 +357,8 @@ function CommentThread({
         document.getElementById('comment-area')?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    const canManage = (c: CommentNode) => comments.currentUserId === c.user.id || commentForm.canManageComments;
+
     return (
         <>
             <section className="mt-16">
@@ -287,7 +372,7 @@ function CommentThread({
                             <div key={comment.id}>
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1">
-                                        <CommentCard comment={comment} />
+                                        <CommentCard comment={comment} canManage={canManage(comment)} editUrl={commentForm.editUrl} deleteBase={commentForm.deleteBase} tr={tr} />
                                     </div>
                                     {commentForm.canComment && comments.currentUserId !== comment.user.id && (
                                         <button
@@ -302,7 +387,7 @@ function CommentThread({
                                 {comment.replies && comment.replies.length > 0 && (
                                     <div data-comment-replies className="ml-6 mt-8 space-y-8 border-l border-[var(--border)] pl-6 sm:ml-10 sm:pl-8">
                                         {comment.replies.map((child) => (
-                                            <CommentCard key={child.id} comment={child} isReply />
+                                            <CommentCard key={child.id} comment={child} isReply canManage={canManage(child)} editUrl={commentForm.editUrl} deleteBase={commentForm.deleteBase} tr={tr} />
                                         ))}
                                     </div>
                                 )}

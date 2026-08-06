@@ -40,9 +40,10 @@ class PostCommentsRequest extends FormRequest
                 'comment' => 'required|string|max:5000',
             ];
         } elseif ($route_name === 'delete_post_comments') {
+            // Authorization is by the comment's real owner (resolved server-side
+            // in the repository), so no client-supplied username is trusted here.
             $rules = [
                 'commentId' => 'required|integer',
-                'username' => 'required|string',
             ];
         }
 

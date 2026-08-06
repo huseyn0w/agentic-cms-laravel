@@ -24,9 +24,9 @@ class PostCommentController extends BaseController
 
     public function delete(PostCommentsRequest $request)
     {
-        $result = $this->service->delete($request);
+        $this->service->delete($request);
 
-        return json_encode($result);
+        return back()->with('comment_deleted', true);
     }
 
     public function update(PostCommentsRequest $request)

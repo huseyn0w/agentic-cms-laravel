@@ -2,9 +2,12 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const post = vi.fn();
+const put = vi.fn();
+const del = vi.fn();
 
 vi.mock('@inertiajs/react', () => ({
     Link: ({ children, prefetch, cacheFor, preserveScroll, ...p }: any) => <a {...p}>{children}</a>,
+    router: { put: (...a: any[]) => put(...a), delete: (...a: any[]) => del(...a) },
     useForm: (initial: any) => ({
         data: initial,
         errors: {},
@@ -61,13 +64,31 @@ const props = (over: Record<string, unknown> = {}) => ({
             { id: 11, body: 'Nice post', date: '02.01.2026', user: { id: 9, name: 'Bob', username: 'bob', url: '/users/bob', avatar: '/c.png' }, replies: [] },
         ],
     },
-    commentForm: { postUrl: '/comment/3', canComment: true, canManageComments: false, loginUrl: '/login' },
+    commentForm: {
+        postUrl: '/comment/3',
+        editUrl: '/posts/handlecomment',
+        deleteBase: '/posts/deletecomment',
+        canComment: true,
+        canManageComments: false,
+        loginUrl: '/login',
+    },
     ...over,
 });
+
+// A comment authored by the current user (id 7), so owner controls appear.
+const ownComment = {
+    id: 11,
+    body: 'My own comment',
+    date: '02.01.2026',
+    user: { id: 7, name: 'Me', username: 'me', url: '/users/me', avatar: '/c.png' },
+    replies: [],
+};
 
 describe('public Post', () => {
     beforeEach(() => {
         post.mockClear();
+        put.mockClear();
+        del.mockClear();
     });
 
     it('renders title, prose content, byline and tags', () => {
@@ -102,5 +123,43 @@ describe('public Post', () => {
         render(<Post {...(props({ commentForm: { postUrl: '/comment/3', canComment: false, canManageComments: false, loginUrl: '/login' } }) as any)} />);
         expect(screen.getByText('Please log in to comment.')).toBeInTheDocument();
         expect(screen.queryByLabelText('Comment')).not.toBeInTheDocument();
+    });
+
+    it('shows edit and delete controls on a comment the user owns', () => {
+        render(<Post {...(props({ comments: { total: 1, currentPage: 1, lastPage: 1, currentUserId: 7, data: [ownComment] } }) as any)} />);
+        expect(screen.getByTestId('comment-edit')).toBeInTheDocument();
+        expect(screen.getByTestId('comment-delete')).toBeInTheDocument();
+    });
+
+    it('hides edit and delete on comments the user does not own', () => {
+        render(<Post {...(props() as any)} />); // seeded comment is user.id 9, not manageable
+        expect(screen.queryByTestId('comment-edit')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('comment-delete')).not.toBeInTheDocument();
+    });
+
+    it('shows moderator controls when the user can manage comments', () => {
+        render(
+            <Post
+                {...(props({
+                    commentForm: { postUrl: '/comment/3', editUrl: '/posts/handlecomment', deleteBase: '/posts/deletecomment', canComment: true, canManageComments: true, loginUrl: '/login' },
+                }) as any)}
+            />,
+        );
+        expect(screen.getByTestId('comment-edit')).toBeInTheDocument();
+    });
+
+    it('saves an edit via router.put with the comment id and new text', () => {
+        render(<Post {...(props({ comments: { total: 1, currentPage: 1, lastPage: 1, currentUserId: 7, data: [ownComment] } }) as any)} />);
+        fireEvent.click(screen.getByTestId('comment-edit'));
+        fireEvent.change(screen.getByTestId('comment-edit-input'), { target: { value: 'edited text' } });
+        fireEvent.click(screen.getByTestId('comment-edit-save'));
+        expect(put).toHaveBeenCalledWith('/posts/handlecomment', { updated_comment_id: 11, comment: 'edited text' }, expect.objectContaining({ preserveScroll: true }));
+    });
+
+    it('deletes via router.delete after confirmation', () => {
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+        render(<Post {...(props({ comments: { total: 1, currentPage: 1, lastPage: 1, currentUserId: 7, data: [ownComment] } }) as any)} />);
+        fireEvent.click(screen.getByTestId('comment-delete'));
+        expect(del).toHaveBeenCalledWith('/posts/deletecomment/11', expect.objectContaining({ data: { commentId: 11 }, preserveScroll: true }));
     });
 });

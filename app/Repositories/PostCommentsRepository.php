@@ -55,11 +55,17 @@ class PostCommentsRepository extends BaseRepository
 
         $user = Auth::user();
 
-        $comment_id = $request['commentId'];
-        $username = $request['username'];
+        $comment_id = (int) $request['commentId'];
 
-        // Only the comment owner or an administrator may delete a comment.
-        if ($user->username !== $username && ! $this->isAdmin($user)) {
+        $comment = $this->model::find($comment_id);
+        if (! $comment) {
+            return false;
+        }
+
+        // Authorize by the comment's REAL owner (or an admin) — never a
+        // client-supplied username, which an attacker could set to their own
+        // to delete a comment they do not own.
+        if (! $this->isAdmin($user) && (int) $comment->user_id !== (int) $user->id) {
             return false;
         }
 

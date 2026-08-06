@@ -69,6 +69,8 @@ class PostController extends BaseController
             'comments' => $this->shapeComments(),
             'commentForm' => [
                 'postUrl' => route('store_post_comments', ['id' => $post->id]),
+                'editUrl' => route('update_post_comment'),
+                'deleteBase' => url('/posts/deletecomment'),
                 'canComment' => is_logged_in(),
                 'canManageComments' => Auth::user()?->can('manage_comments', 'App\Http\Models\UserRoles') ?? false,
                 'loginUrl' => route('login'),

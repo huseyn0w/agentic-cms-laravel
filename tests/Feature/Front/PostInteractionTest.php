@@ -114,10 +114,8 @@ class PostInteractionTest extends TestCase
         ]);
 
         $this->actingAs($this->user)
-            ->delete('/posts/deletecomment/'.$comment->id, [
-                'commentId' => $comment->id,
-                'username' => $this->user->username,
-            ])->assertOk();
+            ->delete('/posts/deletecomment/'.$comment->id, ['commentId' => $comment->id])
+            ->assertRedirect();
 
         $this->assertDatabaseMissing('post_comments', ['id' => $comment->id]);
     }
@@ -131,12 +129,49 @@ class PostInteractionTest extends TestCase
         ]);
 
         $this->actingAs($this->user)
+            ->delete('/posts/deletecomment/'.$comment->id, ['commentId' => $comment->id])
+            ->assertRedirect();
+
+        // Ownership check rejects the deletion: the comment must still exist.
+        $this->assertDatabaseHas('post_comments', ['id' => $comment->id]);
+    }
+
+    /**
+     * Broken-access-control guard: authorization is by the comment's real owner,
+     * never a client-supplied username. An attacker passing their OWN username
+     * (which the old check compared against self) must still not delete a
+     * comment they do not own.
+     */
+    public function test_user_cannot_delete_others_comment_by_spoofing_own_username(): void
+    {
+        $owner = User::factory()->create(['role_id' => 2]);
+        $comment = Comments::create([
+            'post_id' => 1, 'parent_id' => null, 'comment' => 'victim comment',
+            'user_id' => $owner->id, 'status' => 1,
+        ]);
+
+        $this->actingAs($this->user)
             ->delete('/posts/deletecomment/'.$comment->id, [
                 'commentId' => $comment->id,
-                'username' => $owner->username,
-            ])->assertOk();
+                'username' => $this->user->username, // attacker's own username
+            ])->assertRedirect();
 
-        // Repository rejects the deletion: the comment must still exist.
         $this->assertDatabaseHas('post_comments', ['id' => $comment->id]);
+    }
+
+    public function test_admin_can_delete_any_comment(): void
+    {
+        $owner = User::factory()->create(['role_id' => 2]);
+        $admin = User::where('username', 'admin')->firstOrFail();
+        $comment = Comments::create([
+            'post_id' => 1, 'parent_id' => null, 'comment' => 'moderated away',
+            'user_id' => $owner->id, 'status' => 1,
+        ]);
+
+        $this->actingAs($admin)
+            ->delete('/posts/deletecomment/'.$comment->id, ['commentId' => $comment->id])
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('post_comments', ['id' => $comment->id]);
     }
 }

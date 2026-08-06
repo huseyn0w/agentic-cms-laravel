@@ -104,6 +104,10 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
     // ever surface the authenticated user's own profile.
     Route::prefix('myprofile')->group(function () {
         Route::get('/', 'CPanelUserController@editUser')->name('cpanel_myprofile');
+        // Active browser sessions (self-service). The service scopes every
+        // action to the current user, so no per-resource permission is needed.
+        Route::delete('/sessions/{id}', 'CPanelSessionController@revoke')->name('cpanel_revoke_session');
+        Route::post('/sessions/logout-others', 'CPanelSessionController@logoutOthers')->name('cpanel_logout_other_sessions');
     });
 
     Route::prefix('users')->middleware('manage_users')->group(function () {

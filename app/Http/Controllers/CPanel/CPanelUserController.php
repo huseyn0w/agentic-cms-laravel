@@ -4,7 +4,9 @@ namespace App\Http\Controllers\CPanel;
 
 use App\Http\Requests\UserListRequest;
 use App\Http\Requests\ValidateUserSettings;
+use App\Services\CPanel\CPanelSessionService;
 use App\Services\CPanel\CPanelUserService;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class CPanelUserController extends CPanelBaseController
@@ -13,7 +15,7 @@ class CPanelUserController extends CPanelBaseController
 
     private $countries;
 
-    public function __construct(CPanelUserService $service)
+    public function __construct(CPanelUserService $service, private CPanelSessionService $sessions)
     {
         parent::__construct();
         $this->service = $service;
@@ -47,6 +49,8 @@ class CPanelUserController extends CPanelBaseController
 
         $user = $this->service->getById($id);
 
+        $isSelf = (int) $user->id === (int) $this->user->id;
+
         return Inertia::render('cpanel/users/Form', [
             'entity' => $this->userEntity($user),
             'countries' => $this->countryOptions(),
@@ -55,10 +59,16 @@ class CPanelUserController extends CPanelBaseController
                 'status' => $user->hasEnabledTwoFactor()
                     ? 'enabled'
                     : ($user->two_factor_secret ? 'pending' : 'disabled'),
-                'is_self' => (int) $user->id === (int) $this->user->id,
+                'is_self' => $isSelf,
                 'setup' => session('two_factor_setup'),
                 'recovery_codes' => session('two_factor_recovery_codes'),
             ],
+            // Active browser sessions are only ever the viewer's own (the store
+            // has no other user's session for someone else's profile), so this
+            // is populated for the self view only.
+            'sessions' => $isSelf
+                ? $this->sessions->activeSessions((int) $user->id, Session::getId())
+                : null,
         ]);
     }
 

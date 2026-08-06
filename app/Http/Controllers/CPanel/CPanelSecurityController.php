@@ -14,7 +14,7 @@ use Inertia\Inertia;
  */
 class CPanelSecurityController extends CPanelBaseController
 {
-    private const ACTIONS = ['login', 'login_failed', 'logout', 'lockout', '2fa_enabled', '2fa_disabled', '2fa_failed'];
+    private const ACTIONS = ['login', 'login_failed', 'logout', 'lockout', '2fa_enabled', '2fa_disabled', '2fa_failed', 'session_revoked'];
 
     public function __construct(
         private AuditLogService $audit,

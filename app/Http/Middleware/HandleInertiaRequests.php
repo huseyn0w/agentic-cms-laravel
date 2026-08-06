@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Front\PublicShell;
 use App\Support\I18n\TranslationDictionary;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -71,12 +72,32 @@ class HandleInertiaRequests extends Middleware
             ],
             'messages' => fn (): array => app(TranslationDictionary::class)
                 ->forLocale(get_current_lang()),
+            // Public site chrome (header menu, languages, footer, auth links).
+            // Shared so the public pages don't each rebuild it; skipped on admin
+            // routes, which use their own AdminLayout and never read it.
+            'shell' => fn () => $this->sharedShell($request),
             'flash' => [
                 'status' => fn () => $request->session()->get('status'),
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
             ],
         ];
+    }
+
+    /**
+     * The public site chrome, built once per request and shared to every public
+     * Inertia page. Returns null on admin routes (they render AdminLayout and
+     * never read it) so the menu/settings queries are skipped there.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function sharedShell(Request $request): ?array
+    {
+        if ($request->is('agentic-cms-laravel-admin', 'agentic-cms-laravel-admin/*')) {
+            return null;
+        }
+
+        return app(PublicShell::class)->build();
     }
 
     /**

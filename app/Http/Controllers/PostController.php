@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LikesRequest;
 use App\Services\Front\PostViewService;
-use App\Services\Front\PublicShell;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -13,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class PostController extends BaseController
 {
-    public function __construct(PostViewService $service, private PublicShell $shell)
+    public function __construct(PostViewService $service)
     {
         parent::__construct();
         $this->service = $service;
@@ -32,7 +31,6 @@ class PostController extends BaseController
         $base = rtrim(config('app.url'), '/');
 
         return Inertia::render('public/Post', [
-            'shell' => $this->shell->build(),
             'currentUserId' => Auth::id(),
             'post' => [
                 'id' => $post->id,

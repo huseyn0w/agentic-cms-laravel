@@ -6,7 +6,6 @@ use App\Http\Requests\ContactMail as ContactRequest;
 use App\Http\Requests\SearchRequest;
 use App\Services\Front\ContactService;
 use App\Services\Front\PageViewService;
-use App\Services\Front\PublicShell;
 use App\Services\Front\SearchService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -20,7 +19,6 @@ class PageController extends BaseController
         PageViewService $service,
         private SearchService $searchService,
         private ContactService $contactService,
-        private PublicShell $shell,
     ) {
         parent::__construct();
         $this->service = $service;
@@ -50,7 +48,6 @@ class PageController extends BaseController
     private function renderPage(): Response
     {
         return Inertia::render('public/Page', [
-            'shell' => $this->shell->build(),
             'page' => [
                 'title' => $this->data->title,
                 'lead' => $this->data->meta_description ?: null,
@@ -68,7 +65,6 @@ class PageController extends BaseController
         $user = Auth::user();
 
         return Inertia::render('public/Contact', [
-            'shell' => $this->shell->build(),
             'title' => $this->data->title,
             'crumbs' => $this->homeCrumbs($this->data->title),
             'action' => route('sendform'),
@@ -100,12 +96,9 @@ class PageController extends BaseController
      */
     private function renderHome(array $customFields): Response
     {
-        $shell = $this->shell->build();
-
         return Inertia::render('public/Home', [
-            'shell' => $shell,
             'page' => [
-                'title' => $this->data->title ?? $shell['general']['websiteName'],
+                'title' => $this->data->title ?? (get_general_settings('website_name') ?: config('app.name')),
             ],
             'hero' => [
                 'headline' => get_field('headline', $customFields) ?: null,
@@ -242,7 +235,6 @@ class PageController extends BaseController
         ];
 
         return Inertia::render('public/Search', [
-            'shell' => $this->shell->build(),
             'title' => $title,
             'action' => route('get_search_result'),
             'csrfToken' => csrf_token(),

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Front\PublicShell;
 use App\Services\Front\ServiceViewService;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
@@ -11,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ServiceController extends BaseController
 {
-    public function __construct(ServiceViewService $service, private PublicShell $shell)
+    public function __construct(ServiceViewService $service)
     {
         parent::__construct();
         $this->service = $service;
@@ -42,7 +41,6 @@ class ServiceController extends BaseController
         ];
 
         return Inertia::render('public/ServiceIndex', [
-            'shell' => $this->shell->build(),
             'heading' => __('services.index_heading'),
             'emptyText' => __('services.empty'),
             'services' => $services->values()->map(fn ($s) => [
@@ -74,7 +72,6 @@ class ServiceController extends BaseController
         $service = $this->data;
 
         return Inertia::render('public/ServiceShow', [
-            'shell' => $this->shell->build(),
             'indexUrl' => route('services_index'),
             'service' => [
                 'title' => $service->title,

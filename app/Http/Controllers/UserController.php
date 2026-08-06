@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\FrontEndUserRequest;
 use App\Services\Front\ProfileService;
-use App\Services\Front\PublicShell;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class UserController extends BaseController
 {
-    public function __construct(ProfileService $service, private PublicShell $shell)
+    public function __construct(ProfileService $service)
     {
         parent::__construct();
         $this->service = $service;
@@ -24,7 +23,6 @@ class UserController extends BaseController
         $user = $this->service->byUsername($username);
 
         return Inertia::render('public/ProfileEdit', [
-            'shell' => $this->shell->build(),
             'title' => __('default/profile.profile'),
             'crumbs' => $this->noindexCrumbs(__('default/profile.edit_profile')),
             'action' => route('update_user_info'),
@@ -64,7 +62,6 @@ class UserController extends BaseController
     public function password(): Response
     {
         return Inertia::render('public/ChangePassword', [
-            'shell' => $this->shell->build(),
             'title' => __('default/change_password.headline'),
             'crumbs' => [
                 ['label' => get_general_settings('website_name') ?: config('app.name'), 'url' => rtrim(config('app.url'), '/')],
@@ -128,7 +125,6 @@ class UserController extends BaseController
         ])->filter()->map(fn ($url, $label) => ['label' => $label, 'url' => $url])->values()->all();
 
         return Inertia::render('public/Profile', [
-            'shell' => $this->shell->build(),
             'profile' => [
                 'displayName' => $displayName,
                 'username' => $user->username,

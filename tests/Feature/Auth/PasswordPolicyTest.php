@@ -3,6 +3,8 @@
 namespace Tests\Feature\Auth;
 
 use App\Http\Models\CPanel\CPanelSecuritySettings;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\Auth\PasswordPolicy;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -69,6 +71,23 @@ class PasswordPolicyTest extends TestCase
         $this->policy(['password_require_symbols' => true]);
         $this->assertFalse($this->passes('NoSymbols123'));
         $this->assertTrue($this->passes('Has#Symbol123'));
+    }
+
+    public function test_register_and_reset_requests_apply_the_policy(): void
+    {
+        $this->policy(['password_min_length' => 12]);
+
+        foreach ([
+            RegisterRequest::class,
+            ResetPasswordRequest::class,
+        ] as $requestClass) {
+            $rules = (new $requestClass)->rules();
+            $validator = Validator::make(
+                ['password' => 'short8chrs', 'password_confirmation' => 'short8chrs'],
+                ['password' => $rules['password']]
+            );
+            $this->assertTrue($validator->fails(), "$requestClass should reject a sub-minimum password");
+        }
     }
 
     public function test_hibp_toggle_wires_the_uncompromised_constraint(): void

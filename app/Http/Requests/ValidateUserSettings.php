@@ -53,8 +53,8 @@ class ValidateUserSettings extends FormRequest
             'role_id' => 'numeric',
             'gender' => 'nullable|in:male,female',
             'avatar' => 'nullable|string',
-            'password' => 'sometimes|string|nullable|min:8|same:password_confirmation',
-            'password_confirmation' => 'sometimes|string|nullable|min:8',
+            'password' => ['sometimes', 'nullable', 'string', password_policy_rule(), 'same:password_confirmation'],
+            'password_confirmation' => ['sometimes', 'nullable', 'string'],
         ];
 
         if ($route_name === 'cpanel_update_user_profile') {

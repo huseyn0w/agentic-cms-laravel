@@ -125,4 +125,52 @@ class CPanelUserRepository extends BaseRepository
 
         return $user && $user->can('manage_users', UserRoles::class);
     }
+
+    public function startTwoFactorEnrollment(User $user, string $secret): void
+    {
+        $user->forceFill([
+            'two_factor_secret' => $secret,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
+        ])->save();
+    }
+
+    /** @param  array<int, string>  $codes */
+    public function confirmTwoFactorEnrollment(User $user, array $codes): void
+    {
+        $user->forceFill([
+            'two_factor_recovery_codes' => $codes,
+            'two_factor_confirmed_at' => now(),
+        ])->save();
+    }
+
+    public function disableTwoFactor(User $user): void
+    {
+        $user->forceFill([
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
+        ])->save();
+    }
+
+    /** @param  array<int, string>  $codes */
+    public function replaceTwoFactorRecoveryCodes(User $user, array $codes): void
+    {
+        $user->forceFill(['two_factor_recovery_codes' => $codes])->save();
+    }
+
+    public function consumeTwoFactorRecoveryCode(User $user, string $code): bool
+    {
+        $codes = $user->two_factor_recovery_codes ?? [];
+        foreach ($codes as $i => $stored) {
+            if (hash_equals((string) $stored, $code)) {
+                unset($codes[$i]);
+                $user->forceFill(['two_factor_recovery_codes' => array_values($codes)])->save();
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

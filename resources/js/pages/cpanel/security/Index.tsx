@@ -1,10 +1,12 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { Pagination } from '@/components/admin/Pagination';
 import { StatusPill, type PillTone } from '@/components/admin/StatusPill';
+import { TextField } from '@/components/TextField';
+import { Button } from '@/components/Button';
 import type { Paginator } from '@/lib/types';
-import type { ReactElement } from 'react';
+import type { FormEvent, ReactElement } from 'react';
 
 interface Row {
   id: number;
@@ -14,13 +16,23 @@ interface Row {
   ip: string | null;
   when: string | null;
 }
+interface SecuritySettings {
+  login_throttle_enabled: boolean;
+  login_max_attempts: number;
+  login_decay_minutes: number;
+  login_block_enabled: boolean;
+  login_block_threshold: number;
+  login_block_minutes: number;
+}
 interface Props {
   audit_log: Paginator<Row>;
   filter: string | null;
   actions: string[];
+  security_settings: SecuritySettings;
 }
 
 const BASE = '/agentic-cms-laravel-admin/security';
+const SAVE = `${BASE}/settings`;
 
 const TONES: Record<string, PillTone> = {
   login: 'success',
@@ -35,10 +47,54 @@ const LABELS: Record<string, string> = {
   lockout: 'Lockout',
 };
 
-export default function Index({ audit_log, filter, actions }: Props) {
+export default function Index({ audit_log, filter, actions, security_settings }: Props) {
   const { t } = useTranslation();
   const tr = (k: string, f: string) => (t(k) === k ? f : t(k));
   const rows = audit_log.data;
+
+  const form = useForm<SecuritySettings>({
+    login_throttle_enabled: Boolean(security_settings.login_throttle_enabled),
+    login_max_attempts: security_settings.login_max_attempts ?? 5,
+    login_decay_minutes: security_settings.login_decay_minutes ?? 1,
+    login_block_enabled: Boolean(security_settings.login_block_enabled),
+    login_block_threshold: security_settings.login_block_threshold ?? 10,
+    login_block_minutes: security_settings.login_block_minutes ?? 60,
+  });
+
+  const testid = (name: keyof SecuritySettings) => `security-${String(name).replace(/_/g, '-')}`;
+
+  const number = (name: keyof SecuritySettings, labelKey: string, fallback: string) => (
+    <TextField
+      type="number"
+      min={1}
+      name={name}
+      label={tr(labelKey, fallback)}
+      data-testid={testid(name)}
+      value={String(form.data[name] ?? '')}
+      error={form.errors[name]}
+      disabled={name.startsWith('login_block') ? !form.data.login_block_enabled : !form.data.login_throttle_enabled}
+      onChange={(e) => form.setData(name, Number(e.target.value) as never)}
+    />
+  );
+
+  const toggle = (name: 'login_throttle_enabled' | 'login_block_enabled', labelKey: string, fallback: string) => (
+    <label className="flex cursor-pointer items-center gap-2.5 text-sm text-fg">
+      <input
+        type="checkbox"
+        name={name}
+        aria-label={name}
+        data-testid={testid(name)}
+        checked={form.data[name]}
+        onChange={(e) => form.setData(name, e.target.checked)}
+      />
+      {tr(labelKey, fallback)}
+    </label>
+  );
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    form.post(SAVE, { preserveScroll: true });
+  };
 
   const chip = (active: boolean) =>
     `cursor-pointer rounded-full border px-3 py-1 text-[12px] font-medium transition ${
@@ -59,6 +115,43 @@ export default function Index({ audit_log, filter, actions }: Props) {
           {tr('cpanel/security.audit_subtitle', 'Authentication activity — sign-ins, failed attempts and lockouts.')}
         </p>
       </div>
+
+      <form onSubmit={submit} className="admin-card mb-6 flex flex-col gap-5 p-[18px]">
+        <div className="flex items-center gap-4">
+          <div>
+            <h2 className="text-[15px] font-semibold tracking-tight">
+              {tr('cpanel/security.protection_headline', 'Login protection')}
+            </h2>
+            <p className="mt-0.5 text-[12px] text-subtle">
+              {tr('cpanel/security.protection_subtitle', 'Rate-limit failed sign-in attempts by email and IP.')}
+            </p>
+          </div>
+          <Button type="submit" variant="primary" size="md" loading={form.processing}
+            data-testid="security-submit" className="ml-auto">
+            {tr('cpanel/security.save_button', 'Save')}
+          </Button>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          {toggle('login_throttle_enabled', 'cpanel/security.throttle_enabled', 'Throttle failed sign-in attempts')}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {number('login_max_attempts', 'cpanel/security.max_attempts', 'Max attempts before lockout')}
+            {number('login_decay_minutes', 'cpanel/security.decay_minutes', 'Lockout duration (minutes)')}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4 border-t admin-sep pt-4">
+          {toggle('login_block_enabled', 'cpanel/security.block_enabled', 'Auto-block repeat offenders for longer')}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {number('login_block_threshold', 'cpanel/security.block_threshold', 'Attempts before auto-block')}
+            {number('login_block_minutes', 'cpanel/security.block_minutes', 'Auto-block duration (minutes)')}
+          </div>
+        </div>
+      </form>
+
+      <h2 className="mb-3 text-[15px] font-semibold tracking-tight">
+        {tr('cpanel/security.activity_headline', 'Activity log')}
+      </h2>
 
       <div className="mb-4 flex flex-wrap gap-2">
         <Link href={BASE} prefetch cacheFor="15s" className={chip(!filter)}>

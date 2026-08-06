@@ -96,6 +96,7 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['auth', 'see_admin_panel
 
     Route::prefix('security')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelSecurityController@index')->name('cpanel_security');
+        Route::post('/settings', 'CPanelSecurityController@updateSettings')->name('cpanel_update_security_settings');
     });
 
     // The profile controller resolves the user from Auth when no id is

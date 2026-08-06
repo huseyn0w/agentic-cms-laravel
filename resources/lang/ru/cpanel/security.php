@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * Admin Security screen (Russian). See the English file for structure.
+ */
+
+return [
+
+    // Login-protection form
+    'protection_headline' => 'Защита входа',
+    'protection_subtitle' => 'Ограничение числа неудачных попыток входа по email и IP.',
+    'save_button' => 'Сохранить',
+    'settings_saved' => 'Настройки безопасности сохранены.',
+    'throttle_enabled' => 'Ограничивать неудачные попытки входа',
+    'max_attempts' => 'Попыток до блокировки',
+    'decay_minutes' => 'Длительность блокировки (минуты)',
+    'block_enabled' => 'Автоблокировка повторных нарушителей на дольше',
+    'block_threshold' => 'Попыток до автоблокировки',
+    'block_minutes' => 'Длительность автоблокировки (минуты)',
+
+    // Activity log
+    'activity_headline' => 'Журнал активности',
+    'audit_subtitle' => 'Активность аутентификации — входы, неудачные попытки и блокировки.',
+    'filter_all' => 'Все',
+    'empty' => 'Активность пока не зафиксирована',
+
+    // Event labels
+    'action_login' => 'Вход',
+    'action_login_failed' => 'Неудачный вход',
+    'action_logout' => 'Выход',
+    'action_lockout' => 'Блокировка',
+
+    // Table columns
+    'col_when' => 'Когда',
+    'col_action' => 'Событие',
+    'col_actor' => 'Аккаунт',
+    'col_ip' => 'IP',
+    'col_detail' => 'Детали',
+
+];

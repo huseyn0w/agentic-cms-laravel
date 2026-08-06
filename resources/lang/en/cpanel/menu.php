@@ -21,5 +21,6 @@ return [
     'comments' => 'Comments',
     'menus' => 'Menus',
     'users' => 'Users',
+    'security' => 'Security',
 
 ];

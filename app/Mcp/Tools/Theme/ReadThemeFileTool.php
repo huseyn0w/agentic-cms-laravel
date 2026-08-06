@@ -11,7 +11,7 @@ use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 
-#[Description('Read-only. Return the raw contents of a Blade template in the active theme. Pass a relative path from list-theme-files, e.g. "pages/default.blade.php". The file is never rendered or executed. Requires the manage_general_settings permission.')]
+#[Description('Read-only. Return the raw contents of a React page component under resources/js/pages. Pass a relative path from list-theme-files, e.g. "public/Home.tsx". The file is never compiled or executed. Requires the manage_general_settings permission.')]
 class ReadThemeFileTool extends Tool
 {
     use AuthorizesAccess;
@@ -21,7 +21,7 @@ class ReadThemeFileTool extends Tool
     {
         return [
             'path' => $schema->string()
-                ->description('Relative path inside the active theme, ending in .blade.php.')
+                ->description('Relative path inside resources/js/pages, ending in .tsx, e.g. "public/Post.tsx".')
                 ->required(),
         ];
     }
@@ -39,7 +39,7 @@ class ReadThemeFileTool extends Tool
         $absolute = $this->safeThemePath($validated['path'], mustExist: true);
 
         if (is_null($absolute)) {
-            return Response::error('Rejected path. Provide an existing *.blade.php file inside the active theme (no absolute paths or "..").');
+            return Response::error('Rejected path. Provide an existing *.tsx page inside resources/js/pages (no *.test.tsx, no absolute paths or "..").');
         }
 
         return Response::structured([

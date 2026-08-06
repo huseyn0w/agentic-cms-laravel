@@ -11,7 +11,7 @@ use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 
-#[Description('Write (create or overwrite) a Blade template in the active theme. The path must stay inside the theme and end in .blade.php; content is written verbatim and never executed. This edits live theme code — read the file first and preview your change. Requires the manage_general_settings permission.')]
+#[Description('Write (create or overwrite) a React page component under resources/js/pages. The path must stay inside resources/js/pages and end in .tsx (not *.test.tsx); content is written verbatim and never compiled. This edits live UI code — read the file first and preview your change. Requires the manage_general_settings permission.')]
 class WriteThemeFileTool extends Tool
 {
     use AuthorizesAccess;
@@ -21,10 +21,10 @@ class WriteThemeFileTool extends Tool
     {
         return [
             'path' => $schema->string()
-                ->description('Relative path inside the active theme, ending in .blade.php, e.g. "partials/promo.blade.php".')
+                ->description('Relative path inside resources/js/pages, ending in .tsx, e.g. "public/Home.tsx".')
                 ->required(),
             'contents' => $schema->string()
-                ->description('Full new file contents (Blade markup). Replaces the file entirely.')
+                ->description('Full new file contents (React/TSX source). Replaces the file entirely.')
                 ->required(),
             'create' => $schema->boolean()
                 ->description('Allow creating a new file when the path does not exist yet. Defaults to false (update only).'),
@@ -47,13 +47,13 @@ class WriteThemeFileTool extends Tool
         $existing = $this->safeThemePath($validated['path'], mustExist: true);
 
         if (is_null($existing) && ! $allowCreate) {
-            return Response::error('That template does not exist. Pass "create": true to create a new file, or fix the path.');
+            return Response::error('That page does not exist. Pass "create": true to create a new file, or fix the path.');
         }
 
         $target = $existing ?? $this->safeThemePath($validated['path'], mustExist: false);
 
         if (is_null($target)) {
-            return Response::error('Rejected path. The target must be a *.blade.php file inside the active theme (no absolute paths or "..").');
+            return Response::error('Rejected path. The target must be a *.tsx page inside resources/js/pages (no *.test.tsx, no absolute paths or "..").');
         }
 
         $isNew = ! file_exists($target);

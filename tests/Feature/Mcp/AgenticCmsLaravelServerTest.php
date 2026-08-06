@@ -63,10 +63,11 @@ class AgenticCmsLaravelServerTest extends TestCase
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
+        // The editable theme is now the React pages under resources/js/pages.
         AgenticCmsLaravelServer::actingAs($user)
             ->tool(ListThemeFilesTool::class, [])
             ->assertOk()
-            ->assertSee('index.blade.php');
+            ->assertSee('Home.tsx');
     }
 
     public function test_theme_read_rejects_path_traversal(): void
@@ -78,12 +79,13 @@ class AgenticCmsLaravelServerTest extends TestCase
             ->assertSee('Rejected path');
     }
 
-    public function test_theme_read_rejects_non_blade_extension(): void
+    public function test_theme_read_rejects_non_tsx_extension(): void
     {
         $user = $this->userWithPermissions(['manage_general_settings' => 1]);
 
+        // A .ts file (not .tsx) must be rejected — only page components qualify.
         AgenticCmsLaravelServer::actingAs($user)
-            ->tool(ReadThemeFileTool::class, ['path' => 'index.php'])
+            ->tool(ReadThemeFileTool::class, ['path' => 'public/Home.ts'])
             ->assertSee('Rejected path');
     }
 

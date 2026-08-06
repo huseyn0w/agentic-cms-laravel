@@ -9,7 +9,8 @@ It is built on the official [`laravel/mcp`](https://laravel.com/docs/12.x/mcp) p
 and runs **inside the Laravel app itself** (no separate Node service). Every tool runs
 as the OAuth-authenticated admin and is gated by that account's existing Agentic CMS
 permissions. There is **no raw code-execution tool**: the only "code" surface is
-editing Blade templates inside the active theme, with strict path allow-listing.
+editing the React page components under `resources/js/pages`, with strict path
+allow-listing.
 
 - **Endpoint:** `POST https://<your-site>/mcp/agentic-cms-laravel`
 - **Auth:** OAuth 2.1 via Laravel Passport (the MCP-standard mechanism)
@@ -37,9 +38,10 @@ Notes:
   argument (e.g. `en`, `ru`); omitting it targets the site default language.
 - **User passwords** are always hashed; passwords are never returned by any tool.
   The primary admin (id 1) and your own account cannot be deleted.
-- **Theme tools** only touch `*.blade.php` files under the active theme
-  (`resources/views/<TEMPLATE_NAME>/`). Absolute paths, `..` traversal and
-  non-Blade files are rejected. Templates are read/written as text, never executed.
+- **Theme tools** only touch `*.tsx` page components under `resources/js/pages`
+  (the UI is Inertia + React since the migration). Absolute paths, `..` traversal,
+  co-located `*.test.tsx`, and non-`.tsx` files are rejected. Components are
+  read/written as text, never compiled or executed.
 
 ---
 

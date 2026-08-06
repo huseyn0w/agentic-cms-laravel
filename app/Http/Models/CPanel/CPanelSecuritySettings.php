@@ -32,6 +32,10 @@ class CPanelSecuritySettings extends Model
         'password_require_numbers',
         'password_require_symbols',
         'password_check_hibp',
+        'hsts_enabled',
+        'hsts_max_age',
+        'csp',
+        'csp_report_only',
     ];
 
     protected $casts = [
@@ -47,5 +51,8 @@ class CPanelSecuritySettings extends Model
         'password_require_numbers' => 'boolean',
         'password_require_symbols' => 'boolean',
         'password_check_hibp' => 'boolean',
+        'hsts_enabled' => 'boolean',
+        'hsts_max_age' => 'integer',
+        'csp_report_only' => 'boolean',
     ];
 }

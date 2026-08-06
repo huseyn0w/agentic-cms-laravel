@@ -23,6 +23,7 @@ use App\Http\Middleware\ManageServices;
 use App\Http\Middleware\ManageUsers;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RequireTwoFactorEnrollment;
+use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
@@ -75,6 +76,7 @@ class Kernel extends HttpKernel
             // Inertia builds the response, which is what reads the flag it writes.
             EnableSsrOnPublicRoutes::class,
             HandleInertiaRequests::class,
+            SecurityHeaders::class,
         ],
 
         'api' => [

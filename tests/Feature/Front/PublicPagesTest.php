@@ -46,18 +46,9 @@ class PublicPagesTest extends TestCase
         );
     }
 
-    public function test_mobile_drawer_is_aria_modal(): void
-    {
-        // DESIGN_SYSTEM §5/§8: the focus-trapped mobile drawer must be a modal.
-        // The migrated pages' header is React now (its drawer is covered by
-        // PublicLayout.test.tsx); the search page is the last public page still
-        // on the Blade header, so it guards that until search migrates too.
-        $html = $this->get('/search')->assertStatus(200)->getContent();
-
-        $this->assertStringContainsString('id="mobile-drawer"', $html);
-        $this->assertStringContainsString('aria-modal="true"', $html);
-        $this->assertStringNotContainsString('aria-modal="false"', $html);
-    }
+    // The focus-trapped mobile drawer (DESIGN_SYSTEM §5/§8) is now React on every
+    // public route — its aria-modal/id="mobile-drawer" contract is covered by
+    // PublicLayout.test.tsx. No Blade public page remains to assert it here.
 
     public function test_content_page_renders(): void
     {

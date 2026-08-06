@@ -11,11 +11,11 @@ use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
- * Public search: filter=tag returns matching tags with links to their archive.
- * The body is the React public/Search page, so results are asserted on Inertia
- * props (the tag archive URL and the empty result set), not Blade markup.
+ * Public search is on the React public/Search page. The GET landing shows the
+ * form only; POST and the pretty paginated GET render shaped results. The SEO
+ * head (noindex) stays server-rendered by Blade via the app-public root.
  */
-class SearchTagsTest extends TestCase
+class SearchInertiaRenderTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -28,10 +28,20 @@ class SearchTagsTest extends TestCase
         app()->setLocale('en');
     }
 
-    /** Searching for an existing tag name with filter=tag returns a link to /tag/{slug}. */
-    public function test_search_with_tag_filter_returns_matching_tag(): void
+    public function test_get_search_page_renders_the_form_only(): void
     {
-        // Attach a known tag to seeded post 1 so the tag exists in tag_translations.
+        $this->get('/search')->assertOk()->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('public/Search')
+                ->has('shell.menu')
+                ->has('action')
+                ->has('csrfToken')
+                ->where('results', null)
+        );
+    }
+
+    public function test_post_search_renders_shaped_results(): void
+    {
         $post = Post::findOrFail(1);
         app(TagRepository::class)->syncToPost($post, ['Laravel']);
 
@@ -41,28 +51,26 @@ class SearchTagsTest extends TestCase
                 fn (AssertableInertia $page) => $page
                     ->component('public/Search')
                     ->where('results.type', 'tag')
+                    ->where('results.query', 'Laravel')
                     ->where('results.items.0.url', route('tags_first_page', ['slug' => 'laravel']))
             );
     }
 
-    /** An unrelated query produces a zero-result page (no crash, no 5xx). */
-    public function test_search_with_tag_filter_and_no_match_shows_empty_state(): void
+    public function test_paginated_search_renders_results(): void
     {
-        $this->post('/search', ['query' => 'nonexistent-xyz-tag-abc', 'filter' => 'tag'])
+        $this->get('/search/query/post/filter/post/page/1')
             ->assertOk()
             ->assertInertia(
                 fn (AssertableInertia $page) => $page
                     ->component('public/Search')
-                    ->where('results.total', 0)
-                    ->where('results.items', [])
+                    ->where('results.type', 'post')
+                    ->where('results.currentPage', 1)
             );
     }
 
-    /** Paginated search route also works for filter=tag. */
-    public function test_paginated_tag_search_renders(): void
+    public function test_search_page_is_noindex(): void
     {
-        $this->get('/search/query/Laravel/filter/tag/page/1')
-            ->assertOk()
-            ->assertInertia(fn (AssertableInertia $page) => $page->component('public/Search'));
+        $this->get('/search')->assertOk()
+            ->assertSee('noindex', false);
     }
 }

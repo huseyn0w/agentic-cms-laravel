@@ -9,6 +9,7 @@ use App\Services\Front\PageViewService;
 use App\Services\Front\PublicShell;
 use App\Services\Front\SearchService;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -199,26 +200,85 @@ class PageController extends BaseController
         return back()->with('success', \Lang::get('default/page.contact_message_success'));
     }
 
-    public function search()
+    public function search(): Response
     {
-        return view('default.pages.search');
+        return $this->renderSearch(null);
     }
 
-    public function searchResult(SearchRequest $request, $page = 1, $count = 10)
+    public function searchResult(SearchRequest $request, $page = 1, $count = 10): Response
     {
-        $searchData['query'] = $request->get('query');
-        $searchData['type'] = $request->get('filter');
-        $searchData['result'] = $this->searchService->search($request, $page, $count);
+        $result = $this->searchService->search($request, $page, $count);
 
-        return view('default.pages.search', compact('searchData'));
+        return $this->renderSearch(
+            $this->shapeResults($request->get('query'), $request->get('filter'), $result),
+        );
     }
 
-    public function paginatedResult($string, $filter, $page)
+    public function paginatedResult($string, $filter, $page): Response
     {
-        $searchData['query'] = $string;
-        $searchData['type'] = $filter;
-        $searchData['result'] = $this->searchService->paginate($string, $filter, $page);
+        $result = $this->searchService->paginate($string, $filter, $page);
 
-        return view('default.pages.search', compact('searchData'));
+        return $this->renderSearch($this->shapeResults($string, $filter, $result));
+    }
+
+    /**
+     * The search page: a native POST form (captcha + CSRF) plus, once a query
+     * has run, the shaped result set. Search pages are noindex, so the synthetic
+     * SEO entity carries meta_noindex; the body is React, the head stays Blade.
+     *
+     * @param  array<string, mixed>|null  $results
+     */
+    private function renderSearch(?array $results): Response
+    {
+        $title = __('default/header.searchpage_title');
+
+        $seoEntity = (object) [
+            'title' => $title,
+            'meta_description' => null,
+            'meta_keywords' => null,
+            'canonical_url' => route('get_search_page'),
+            'meta_noindex' => true,
+            'thumbnail' => null,
+        ];
+
+        return Inertia::render('public/Search', [
+            'shell' => $this->shell->build(),
+            'title' => $title,
+            'action' => route('get_search_result'),
+            'csrfToken' => csrf_token(),
+            'captchaHtml' => app('captcha')->render(),
+            'results' => $results,
+        ])
+            ->rootView('app-public')
+            ->withViewData(['data' => $seoEntity]);
+    }
+
+    /**
+     * Shape a search paginator into serialisable props: each row becomes a
+     * {label, url} pair (URLs via named routes, so they stay locale-correct),
+     * plus the pagination metadata the React page needs.
+     *
+     * @param  LengthAwarePaginator  $paginator
+     * @return array<string, mixed>
+     */
+    private function shapeResults(string $query, string $type, $paginator): array
+    {
+        $items = collect($paginator->items())->map(fn ($item) => match ($type) {
+            'post' => ['label' => $item->title, 'url' => route('posts', ['slug' => $item->slug])],
+            'page' => ['label' => $item->title, 'url' => route('front_pages', ['slug' => $item->slug])],
+            'user' => ['label' => $item->username, 'url' => route('show_user', ['username' => $item->username])],
+            'category' => ['label' => $item->title, 'url' => route('categories_first_page', ['slug' => $item->slug])],
+            'tag' => ['label' => $item->name, 'url' => route('tags_first_page', ['slug' => $item->slug])],
+        })->all();
+
+        return [
+            'query' => $query,
+            'type' => $type,
+            'total' => $paginator->total(),
+            'currentPage' => $paginator->currentPage(),
+            'lastPage' => $paginator->lastPage(),
+            'items' => $items,
+            'pageBaseUrl' => rtrim(config('app.url'), '/').'/search/query/'.rawurlencode($query).'/filter/'.$type,
+        ];
     }
 }

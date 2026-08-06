@@ -1,6 +1,6 @@
 import { usePage } from '@inertiajs/react';
-import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { RawHtml } from '@/components/RawHtml';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import type { Shell } from '@/layouts/PublicLayout';
 import type { SharedProps } from '@/lib/types';
@@ -13,27 +13,6 @@ interface ContactProps {
     csrfToken: string;
     captchaHtml: string;
     prefill: { first_name: string; last_name: string; email: string } | null;
-}
-
-/**
- * Injects a server-rendered HTML snippet and re-executes any <script> it
- * carries (innerHTML alone never runs scripts). Used for the captcha widget,
- * which is empty when no keys are configured.
- */
-function RawHtml({ html }: { html: string }) {
-    const ref = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        const host = ref.current;
-        if (!host) return;
-        host.innerHTML = html;
-        host.querySelectorAll('script').forEach((old) => {
-            const script = document.createElement('script');
-            [...old.attributes].forEach((attr) => script.setAttribute(attr.name, attr.value));
-            script.textContent = old.textContent;
-            old.replaceWith(script);
-        });
-    }, [html]);
-    return <div ref={ref} />;
 }
 
 /**

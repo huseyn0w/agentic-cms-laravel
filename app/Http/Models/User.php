@@ -65,7 +65,7 @@ class User extends Authenticatable implements MustVerifyEmailContract, OAuthenti
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes',
     ];
 
     /**
@@ -75,7 +75,18 @@ class User extends Authenticatable implements MustVerifyEmailContract, OAuthenti
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'two_factor_confirmed_at' => 'datetime',
+        'two_factor_secret' => 'encrypted',
+        'two_factor_recovery_codes' => 'encrypted:array',
     ];
+
+    /**
+     * 2FA is active only once a secret exists AND the user has proven a code.
+     */
+    public function hasEnabledTwoFactor(): bool
+    {
+        return ! empty($this->two_factor_secret) && ! is_null($this->two_factor_confirmed_at);
+    }
 
     /**
      * Add a mutator to ensure hashed passwords

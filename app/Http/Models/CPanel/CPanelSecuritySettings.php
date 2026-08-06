@@ -26,6 +26,7 @@ class CPanelSecuritySettings extends Model
         'login_block_enabled',
         'login_block_threshold',
         'login_block_minutes',
+        'require_2fa_for_admins',
     ];
 
     protected $casts = [
@@ -35,5 +36,6 @@ class CPanelSecuritySettings extends Model
         'login_block_enabled' => 'boolean',
         'login_block_threshold' => 'integer',
         'login_block_minutes' => 'integer',
+        'require_2fa_for_admins' => 'boolean',
     ];
 }

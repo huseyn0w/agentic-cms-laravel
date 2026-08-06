@@ -24,11 +24,17 @@ return [
     'filter_all' => 'Alle',
     'empty' => 'Noch keine Aktivität aufgezeichnet',
 
+    // Login protection — 2FA
+    'require_2fa' => '2FA für alle mit Admin-Zugang erforderlich',
+
     // Event labels
     'action_login' => 'Anmeldung',
     'action_login_failed' => 'Fehlgeschlagene Anmeldung',
     'action_logout' => 'Abmeldung',
     'action_lockout' => 'Sperrung',
+    'action_2fa_enabled' => '2FA aktiviert',
+    'action_2fa_disabled' => '2FA deaktiviert',
+    'action_2fa_failed' => 'Fehlgeschlagene 2FA',
 
     // Table columns
     'col_when' => 'Wann',

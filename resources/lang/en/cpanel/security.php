@@ -26,11 +26,17 @@ return [
     'filter_all' => 'All',
     'empty' => 'No activity recorded yet',
 
+    // Login protection — 2FA
+    'require_2fa' => 'Require 2FA for everyone with admin access',
+
     // Event labels
     'action_login' => 'Sign in',
     'action_login_failed' => 'Failed sign in',
     'action_logout' => 'Sign out',
     'action_lockout' => 'Lockout',
+    'action_2fa_enabled' => '2FA enabled',
+    'action_2fa_disabled' => '2FA disabled',
+    'action_2fa_failed' => 'Failed 2FA',
 
     // Table columns
     'col_when' => 'When',

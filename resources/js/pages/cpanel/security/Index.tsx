@@ -40,12 +40,18 @@ const TONES: Record<string, PillTone> = {
   login_failed: 'warning',
   logout: 'muted',
   lockout: 'warning',
+  '2fa_enabled': 'success',
+  '2fa_disabled': 'muted',
+  '2fa_failed': 'warning',
 };
 const LABELS: Record<string, string> = {
   login: 'Sign in',
   login_failed: 'Failed sign in',
   logout: 'Sign out',
   lockout: 'Lockout',
+  '2fa_enabled': '2FA enabled',
+  '2fa_disabled': '2FA disabled',
+  '2fa_failed': 'Failed 2FA',
 };
 
 export default function Index({ audit_log, filter, actions, security_settings }: Props) {

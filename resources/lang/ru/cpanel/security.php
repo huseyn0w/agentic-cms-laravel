@@ -24,11 +24,17 @@ return [
     'filter_all' => 'Все',
     'empty' => 'Активность пока не зафиксирована',
 
+    // Login protection — 2FA
+    'require_2fa' => 'Требовать 2FA для всех с доступом в админку',
+
     // Event labels
     'action_login' => 'Вход',
     'action_login_failed' => 'Неудачный вход',
     'action_logout' => 'Выход',
     'action_lockout' => 'Блокировка',
+    'action_2fa_enabled' => '2FA включена',
+    'action_2fa_disabled' => '2FA отключена',
+    'action_2fa_failed' => 'Неудачная 2FA',
 
     // Table columns
     'col_when' => 'Когда',

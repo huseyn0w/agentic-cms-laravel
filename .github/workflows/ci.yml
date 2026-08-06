@@ -4,6 +4,9 @@ on:
   push:
     branches: [master, refactor/canon-convergence]
   pull_request:
+  # Manual trigger to run the full pipeline (incl. the heavy e2e + Lighthouse
+  # jobs) on demand from any branch.
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -102,6 +105,10 @@ jobs:
     name: Browser e2e (Pest + Playwright)
     runs-on: ubuntu-latest
     needs: [quality, build]
+    # Heavy job (Playwright Chromium + MySQL). Manual-only (workflow_dispatch)
+    # to conserve Actions minutes — run it before merging to master via the
+    # Actions "Run workflow" button or `gh workflow run CI`. Not run on PR pushes.
+    if: github.event_name == 'workflow_dispatch'
     services:
       mysql:
         image: mysql:8
@@ -185,6 +192,10 @@ jobs:
     name: Lighthouse perf gate (mobile)
     runs-on: ubuntu-latest
     needs: [quality, build]
+    # Heavy job (MySQL + served site + Lighthouse). Manual-only
+    # (workflow_dispatch) to conserve Actions minutes — run it before merging to
+    # master via the Actions "Run workflow" button or `gh workflow run CI`.
+    if: github.event_name == 'workflow_dispatch'
     services:
       mysql:
         image: mysql:8

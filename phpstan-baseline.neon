@@ -19,10 +19,46 @@ parameters:
 			path: app/Exceptions/Handler.php
 
 		-
+			message: '#^Access to an undefined property Illuminate\\Contracts\\Auth\\Authenticatable\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
 			message: '#^Access to an undefined property App\\Http\\Controllers\\BaseController\:\:\$lang_prefixes\.$#'
 			identifier: property.notFound
 			count: 3
 			path: app/Http/Controllers/BaseController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\CPanel\\CPanelRoleController\:\:\$countries is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/CPanel/CPanelRoleController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\CPanel\\CPanelRoleController\:\:\$user_roles is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/CPanel/CPanelRoleController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\:\:getCollection\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/CPanel/CPanelSecurityController.php
+
+		-
+			message: '#^Match expression does not handle remaining value\: string$#'
+			identifier: match.unhandled
+			count: 1
+			path: app/Http/Controllers/PageController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,object\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/ServiceController.php
 
 		-
 			message: '#^PHPDoc type array of property App\\Http\\Kernel\:\:\$middleware is not covariant with PHPDoc type array\<int, string\> of overridden property Illuminate\\Foundation\\Http\\Kernel\:\:\$middleware\.$#'
@@ -139,10 +175,46 @@ parameters:
 			path: app/Http/Models/UserRoles.php
 
 		-
+			message: '#^Method App\\Http\\Requests\\Auth\\RegisterRequest\:\:rules\(\) should return array\<string, array\<int, string\>\> but returns array\<string, list\<Illuminate\\Validation\\Rules\\Password\|string\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Requests/Auth/RegisterRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\Auth\\ResetPasswordRequest\:\:rules\(\) should return array\<string, array\<int, string\>\> but returns array\<string, list\<Illuminate\\Validation\\Rules\\Password\|string\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Requests/Auth/ResetPasswordRequest.php
+
+		-
 			message: '#^Variable \$rules might not be defined\.$#'
 			identifier: variable.undefined
 			count: 1
 			path: app/Http/Requests/PostCommentsRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\ValidateGeneralSettings\:\:prepareForValidation\(\) should return array but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: app/Http/Requests/ValidateGeneralSettings.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Contracts\\Auth\\Authenticatable\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Listeners/AuthAuditSubscriber.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Contracts\\Auth\\Authenticatable\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Listeners/AuthAuditSubscriber.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>username" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Listeners/AuthAuditSubscriber.php
 
 		-
 			message: '#^Access to an undefined property App\\Mail\\ContactMail\:\:\$message\.$#'
@@ -283,12 +355,6 @@ parameters:
 			path: app/Repositories/CategoryRepository.php
 
 		-
-			message: '#^Relation ''categories'' is not found in App\\Http\\Models\\Post model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Repositories/PostRepository.php
-
-		-
 			message: '#^Variable \$data might not be defined\.$#'
 			identifier: variable.undefined
 			count: 1
@@ -305,6 +371,12 @@ parameters:
 			identifier: class.notFound
 			count: 1
 			path: app/Repositories/PostCommentsRepository.php
+
+		-
+			message: '#^Relation ''categories'' is not found in App\\Http\\Models\\Post model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Repositories/PostRepository.php
 
 		-
 			message: '#^Relation ''author'' is not found in App\\Http\\Models\\Post model\.$#'
@@ -325,7 +397,19 @@ parameters:
 			path: app/Repositories/UserRepository.php
 
 		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Http\\Request\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Services/CPanel/AuditLogService.php
+
+		-
 			message: '#^Instanceof between Illuminate\\Http\\Request and Illuminate\\Http\\Request will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
 			count: 1
 			path: app/Services/Captcha/CaptchaService.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,object\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Services/Front/PublicArchive.php

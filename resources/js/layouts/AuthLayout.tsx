@@ -23,28 +23,34 @@ export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
 
     return (
         <div className="theme-default min-h-screen bg-bg text-fg lg:grid lg:grid-cols-[45fr_55fr]">
-            {/* Brand panel */}
-            <aside className="relative hidden overflow-hidden bg-primary text-primary-contrast lg:flex lg:flex-col lg:justify-between lg:p-12">
+            {/* Brand panel — the signature blue→violet→pink gradient. */}
+            <aside
+                className="relative hidden overflow-hidden text-white lg:flex lg:flex-col lg:justify-between lg:p-12"
+                style={{ backgroundImage: 'var(--grad)' }}
+            >
                 <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 opacity-[0.08]"
+                    className="pointer-events-none absolute inset-0 opacity-[0.12]"
                     style={{
                         backgroundImage: 'radial-gradient(currentColor 1px, transparent 1px)',
                         backgroundSize: '22px 22px',
                     }}
                 />
-                <span className="relative font-serif text-2xl font-semibold tracking-tight">Agentic CMS</span>
-                <p className="relative max-w-sm font-serif text-3xl leading-tight">
+                <span className="relative flex items-center gap-2.5 text-[19px] font-semibold tracking-[-0.02em]">
+                    <span className="h-7 w-7 rounded-[8px] bg-white/25 ring-1 ring-white/40" aria-hidden="true" />
+                    Agentic CMS
+                </span>
+                <p className="relative max-w-sm text-[28px] font-semibold leading-[1.15] tracking-[-0.02em]">
                     AI First CMS you run from your AI assistant
                 </p>
-                <span className="relative text-sm opacity-70">&copy; Agentic CMS</span>
+                <span className="relative text-sm opacity-80">&copy; Agentic CMS</span>
             </aside>
 
             {/* Form panel */}
             <main className="flex min-h-screen items-center justify-center px-5 py-16 lg:py-20">
                 <div className="w-full max-w-[440px]">
                     <div className="mb-8 text-center lg:text-left">
-                        <h1 className="font-serif text-3xl font-semibold tracking-tight text-fg">{title}</h1>
+                        <h1 className="text-3xl font-semibold tracking-[-0.02em] text-fg">{title}</h1>
                         {subtitle && <p className="mt-2 text-sm text-muted">{subtitle}</p>}
                     </div>
                     {children}

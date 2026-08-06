@@ -14,6 +14,7 @@ use App\Http\Middleware\Localization;
 use App\Http\Middleware\ManageCategories;
 use App\Http\Middleware\ManageComments;
 use App\Http\Middleware\ManageGeneralSettings;
+use App\Http\Middleware\ManageMedia;
 use App\Http\Middleware\ManageMenu;
 use App\Http\Middleware\ManagePages;
 use App\Http\Middleware\ManagePosts;
@@ -96,6 +97,7 @@ class Kernel extends HttpKernel
         'manage_services' => ManageServices::class,
         'manage_menus' => ManageMenu::class,
         'manage_comments' => ManageComments::class,
+        'manage_media' => ManageMedia::class,
         'see_admin_panel' => AdminPanelMiddleware::class,
         'manage_categories' => ManageCategories::class,
         'manage_general_settings' => ManageGeneralSettings::class,

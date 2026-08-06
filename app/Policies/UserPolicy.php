@@ -85,6 +85,11 @@ class UserPolicy
         return $this->has('manage_comments');
     }
 
+    public function manage_media(): bool
+    {
+        return $this->has('manage_media');
+    }
+
     public function see_admin_panel(): bool
     {
         return $this->has('see_admin_panel');

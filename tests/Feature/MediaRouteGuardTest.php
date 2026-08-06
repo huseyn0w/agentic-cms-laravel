@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Http\Models\User;
+use App\Http\Models\UserRoles;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
@@ -39,5 +40,18 @@ class MediaRouteGuardTest extends TestCase
         $user = User::factory()->create(['role_id' => 2]);
 
         $this->actingAs($user)->get('/agentic-cms-laravel-admin/media')->assertStatus(403);
+    }
+
+    public function test_panel_user_without_manage_media_is_denied(): void
+    {
+        // Can see the panel but lacks the media capability specifically: the
+        // manage_media middleware must reject the request (401).
+        $role = UserRoles::create([
+            'name' => 'PanelNoMedia',
+            'permissions' => json_encode(['see_admin_panel' => 1, 'manage_media' => 0]),
+        ]);
+        $user = User::factory()->create(['role_id' => $role->id]);
+
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/media')->assertStatus(401);
     }
 }

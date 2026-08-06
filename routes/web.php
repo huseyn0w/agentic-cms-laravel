@@ -208,11 +208,10 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['auth', 'see_admin_panel
         Route::delete('/multipleDelete', 'CPanelCommentController@multipleDelete')->name('cpanel_comments_bulk_delete');
     });
 
-    // Media management is gated behind general-settings permission. There is
-    // no dedicated manage_media permission yet; settings is the closest
-    // admin-only capability. TODO(phase-4): introduce a manage_media permission
-    // (seeder + roles) and switch this guard to it.
-    Route::prefix('media')->middleware('manage_general_settings')->group(function () {
+    // Media management is gated behind its own manage_media capability
+    // (seeded permission + roles UI; existing Administrator roles backfilled by
+    // the add-manage-media migration so they keep access).
+    Route::prefix('media')->middleware('manage_media')->group(function () {
         Route::get('/', 'CPanelMediaController@index')->name('cpanel_all_media');
         // Per-asset media metadata (FEATURE_MATRIX §7): read + edit alt/title/caption.
         Route::get('/metadata', 'CPanelMediaController@metadata')->name('cpanel_media_metadata');

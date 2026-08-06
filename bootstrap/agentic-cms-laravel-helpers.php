@@ -12,6 +12,7 @@ use App\Http\Models\CategoryTranslation;
 use App\Http\Models\Comments;
 use App\Http\Models\CPanel\CPanelGeneralSettings;
 use App\Http\Models\CPanel\CPanelGeoSettings;
+use App\Http\Models\CPanel\CPanelSecuritySettings;
 use App\Http\Models\CPanel\CPanelSeoSettings;
 use App\Http\Models\CPanel\CPanelSiteOptions;
 use App\Http\Models\Menu;
@@ -666,6 +667,34 @@ function get_geo_settings($key = null)
 {
     try {
         $settings = CPanelGeoSettings::first();
+    } catch (Throwable $e) {
+        $settings = null;
+    }
+
+    if (is_null($settings)) {
+        return null;
+    }
+
+    if (is_null($key)) {
+        return $settings;
+    }
+
+    return $settings->$key ?? null;
+}
+
+/**
+ * Security settings singleton accessor (row id = 1). Returns the model, a
+ * single field, or null when the row/table is absent. Mirrors
+ * get_geo_settings(); the ThrottlesLogins concern reads it on every login POST
+ * and falls back to shipped defaults when this returns null.
+ *
+ * @param  string|null  $key
+ * @return CPanelSecuritySettings|mixed|null
+ */
+function get_security_settings($key = null)
+{
+    try {
+        $settings = CPanelSecuritySettings::first();
     } catch (Throwable $e) {
         $settings = null;
     }

@@ -51,6 +51,7 @@ class CPanelSecurityController extends CPanelBaseController
                 'login_block_enabled' => (bool) ($security->login_block_enabled ?? false),
                 'login_block_threshold' => (int) ($security->login_block_threshold ?? 10),
                 'login_block_minutes' => (int) ($security->login_block_minutes ?? 60),
+                'require_2fa_for_admins' => (bool) ($security->require_2fa_for_admins ?? false),
             ],
         ]);
     }

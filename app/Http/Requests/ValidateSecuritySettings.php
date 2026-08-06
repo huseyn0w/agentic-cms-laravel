@@ -27,6 +27,7 @@ class ValidateSecuritySettings extends FormRequest
         $this->merge([
             'login_throttle_enabled' => $this->boolean('login_throttle_enabled'),
             'login_block_enabled' => $this->boolean('login_block_enabled'),
+            'require_2fa_for_admins' => $this->boolean('require_2fa_for_admins'),
         ]);
     }
 
@@ -39,6 +40,7 @@ class ValidateSecuritySettings extends FormRequest
             'login_block_enabled' => 'boolean',
             'login_block_threshold' => 'required|integer|min:1|max:1000|gte:login_max_attempts',
             'login_block_minutes' => 'required|integer|min:1|max:43200',
+            'require_2fa_for_admins' => 'boolean',
         ];
     }
 }

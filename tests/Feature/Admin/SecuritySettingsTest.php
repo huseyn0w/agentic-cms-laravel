@@ -49,7 +49,8 @@ class SecuritySettingsTest extends TestCase
                     ->where('login_decay_minutes', 1)
                     ->where('login_block_enabled', false)
                     ->where('login_block_threshold', 10)
-                    ->where('login_block_minutes', 60)));
+                    ->where('login_block_minutes', 60)
+                    ->where('require_2fa_for_admins', false)));
     }
 
     public function test_saving_persists_the_singleton(): void
@@ -71,6 +72,21 @@ class SecuritySettingsTest extends TestCase
             'login_block_threshold' => 8,
             'login_block_minutes' => 120,
         ]);
+    }
+
+    public function test_saving_persists_require_2fa_toggle(): void
+    {
+        $this->actingAs($this->admin())->post(self::SAVE, [
+            'login_throttle_enabled' => true,
+            'login_max_attempts' => 5,
+            'login_decay_minutes' => 1,
+            'login_block_enabled' => false,
+            'login_block_threshold' => 10,
+            'login_block_minutes' => 60,
+            'require_2fa_for_admins' => true,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('security_settings', ['id' => 1, 'require_2fa_for_admins' => 1]);
     }
 
     public function test_block_threshold_must_be_at_least_max_attempts(): void

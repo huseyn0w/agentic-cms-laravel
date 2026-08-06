@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\Auth\SocialAuthService;
 use App\Services\Auth\SocialEmailNotVerifiedException;
+use App\Services\Auth\TwoFactorService;
 use Auth;
+use Illuminate\Auth\Events\Failed;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,8 +30,10 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/';
 
-    public function __construct(private SocialAuthService $socialAuth)
-    {
+    public function __construct(
+        private SocialAuthService $socialAuth,
+        private TwoFactorService $twoFactor,
+    ) {
         $this->middleware('guest')->except('logout');
     }
 
@@ -50,7 +54,31 @@ class LoginController extends Controller
             $this->sendLockoutResponse($request);
         }
 
-        if (Auth::attempt($this->credentials($request), $request->boolean('remember'))) {
+        $credentials = $this->credentials($request);
+        $remember = $request->boolean('remember');
+
+        // Pre-branch: a 2FA-enabled user must pass the challenge before we log
+        // them in. Validate the password without side effects (no Login event),
+        // then hand off to the challenge — the session isn't authenticated yet.
+        $provider = Auth::getProvider();
+        $candidate = $provider->retrieveByCredentials($credentials);
+
+        if ($candidate && $candidate->hasEnabledTwoFactor()) {
+            if (! $provider->validateCredentials($candidate, $credentials)) {
+                event(new Failed('web', $candidate, $credentials));
+                $this->incrementLoginAttempts($request);
+
+                throw ValidationException::withMessages([$this->username() => [trans('auth.failed')]]);
+            }
+
+            $request->session()->put('two_factor.user_id', $candidate->id);
+            $request->session()->put('two_factor.remember', $remember);
+
+            return redirect()->route('two-factor.challenge');
+        }
+
+        // No 2FA — unchanged behaviour.
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             $this->clearLoginAttempts($request);
 

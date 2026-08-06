@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,10 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
 Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+// Two-factor challenge (mid-login; reads the pending user from the session)
+Route::get('two-factor/challenge', [TwoFactorChallengeController::class, 'show'])->name('two-factor.challenge');
+Route::post('two-factor/challenge', [TwoFactorChallengeController::class, 'store']);
 
 // Two-factor enrollment (authenticated)
 Route::middleware('auth')->group(function () {

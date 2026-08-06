@@ -40,7 +40,7 @@ export default function ServiceShow({ shell, indexUrl, service, crumbs }: Servic
                             </span>
                         ))}
                     </nav>
-                    <h1 className="font-serif leading-[1.08] tracking-[-0.01em] text-[var(--text)]" style={{ fontSize: 'clamp(2.25rem,4vw,3.052rem)' }}>
+                    <h1 className="leading-[1.08] tracking-[-0.01em] text-[var(--text)]" style={{ fontSize: 'clamp(2.25rem,4vw,3.052rem)' }}>
                         {service.title}
                     </h1>
                 </div>

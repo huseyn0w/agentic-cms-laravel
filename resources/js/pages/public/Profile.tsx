@@ -35,7 +35,7 @@ export default function Profile({ shell, profile }: ProfileProps) {
                     <div className="flex flex-col items-center gap-5 lg:items-start">
                         <img src={profile.avatar} alt={profile.displayName} width={96} height={96} className="h-24 w-24 shrink-0 rounded-2xl object-cover shadow-card ring-1 ring-[var(--border-strong)]" />
                         <div className="text-center lg:text-left">
-                            <h1 className="font-serif text-2xl font-medium tracking-[-0.01em] text-[var(--text)]">{profile.displayName}</h1>
+                            <h1 className="text-2xl font-medium tracking-[-0.01em] text-[var(--text)]">{profile.displayName}</h1>
                             <p className="mt-1 font-mono text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">@{profile.username}</p>
                         </div>
                         <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
@@ -53,7 +53,7 @@ export default function Profile({ shell, profile }: ProfileProps) {
                         {profile.aboutMe && (
                             <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-6">
                                 <p className="mb-3 font-mono text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">{tr('default/profile.about_me', 'About me')}</p>
-                                <p className="border-l-2 border-[var(--primary)] pl-4 font-serif text-lg leading-relaxed text-[var(--text)]">{profile.aboutMe}</p>
+                                <p className="border-l-2 border-[var(--primary)] pl-4 text-lg leading-relaxed text-[var(--text)]">{profile.aboutMe}</p>
                             </div>
                         )}
 

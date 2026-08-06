@@ -48,7 +48,7 @@ export default function Archive({ shell, archive }: ArchiveProps) {
                             </span>
                         ))}
                     </nav>
-                    <h1 className="font-serif text-[clamp(1.875rem,3vw,2.441rem)] font-medium leading-[1.15] tracking-[-0.01em] text-[var(--text)]">
+                    <h1 className="text-[clamp(1.875rem,3vw,2.441rem)] font-medium leading-[1.15] tracking-[-0.01em] text-[var(--text)]">
                         {archive.title}
                     </h1>
                 </div>
@@ -72,7 +72,7 @@ export default function Archive({ shell, archive }: ArchiveProps) {
                                     </div>
                                     <div className="flex flex-1 flex-col p-5">
                                         <p className="font-mono text-xs uppercase tracking-[0.06em] text-[var(--text-muted)]">{post.date}</p>
-                                        <h2 className="mt-2 font-serif text-lg font-medium text-[var(--text)]">{post.title}</h2>
+                                        <h2 className="mt-2 text-lg font-medium text-[var(--text)]">{post.title}</h2>
                                         {post.excerpt && <p className="mt-2 line-clamp-3 text-sm text-[var(--text-muted)]">{post.excerpt}</p>}
                                     </div>
                                 </Link>

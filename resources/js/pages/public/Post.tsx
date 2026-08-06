@@ -78,19 +78,19 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
             {preview && <PreviewBanner />}
             <article className="mx-auto max-w-[720px] px-5 py-14 sm:px-8 sm:py-16">
                 {post.category && (
-                    <a href={post.category.url} className="transition-colors hover:text-[var(--primary)]">
-                        <p className="mb-2 font-mono text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">{post.category.title}</p>
+                    <a href={post.category.url} className="transition-colors hover:text-[var(--accent)]">
+                        <p className="mb-2 font-mono text-xs uppercase tracking-[0.08em] text-[var(--text-subtle)]">{post.category.title}</p>
                     </a>
                 )}
 
-                <h1 className="mt-3 font-serif leading-[1.08] tracking-[-0.01em] text-[var(--text)]" style={{ fontSize: 'clamp(2.25rem,4vw,3.052rem)' }}>
+                <h1 className="mt-3 font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text)]" style={{ fontSize: 'clamp(2.25rem,4.5vw,3.25rem)' }}>
                     {post.title}
                 </h1>
 
                 <div className="mt-6 flex items-center gap-3 border-b border-[var(--border)] pb-6">
                     <img src={post.author.avatar} alt={post.author.name} width={44} height={44} className="h-11 w-11 rounded-full object-cover ring-1 ring-[var(--border)]" />
                     <div className="min-w-0">
-                        <a href={post.author.url} className="font-serif text-base font-medium text-[var(--text)] transition-colors hover:text-[var(--primary)]">
+                        <a href={post.author.url} className="text-base font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]">
                             {post.author.name}
                         </a>
                         <div className="mt-0.5 font-mono text-xs text-[var(--text-muted)]">
@@ -114,7 +114,7 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
                             <a
                                 key={tag.url}
                                 href={tag.url}
-                                className="rounded-full border border-[var(--border)] px-3 py-1 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--text)]"
+                                className="rounded-full border border-[var(--border)] px-3 py-1 text-sm text-[var(--text-subtle)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
                             >
                                 {tag.name}
                             </a>
@@ -134,13 +134,13 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
 
                 {related.length > 0 && (
                     <section className="mt-16 border-t border-[var(--border)] pt-12">
-                        <h2 className="font-serif text-2xl text-[var(--text)]">{tr('default/post.related_posts', 'Related posts')}</h2>
+                        <h2 className="text-2xl font-semibold tracking-[-0.02em] text-[var(--text)]">{tr('default/post.related_posts', 'Related posts')}</h2>
                         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {related.map((r) => (
-                                <Link key={r.url} href={r.url} prefetch="hover" cacheFor="30s" className="group block rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 transition hover:border-[var(--border-strong)]">
-                                    <p className="font-mono text-xs text-[var(--text-muted)]">{r.date}</p>
-                                    <h3 className="mt-1 font-serif text-lg font-medium text-[var(--text)]">{r.title}</h3>
-                                    {r.excerpt && <p className="mt-1 line-clamp-2 text-sm text-[var(--text-muted)]">{r.excerpt}</p>}
+                                <Link key={r.url} href={r.url} prefetch="hover" cacheFor="30s" className="group block rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 transition duration-200 hover:-translate-y-0.5 hover:border-[var(--accent)]">
+                                    <p className="font-mono text-xs text-[var(--text-faint)]">{r.date}</p>
+                                    <h3 className="mt-1 text-lg font-semibold tracking-[-0.01em] text-[var(--text)] transition-colors group-hover:text-[var(--accent)]">{r.title}</h3>
+                                    {r.excerpt && <p className="mt-1 line-clamp-2 text-sm text-[var(--text-subtle)]">{r.excerpt}</p>}
                                 </Link>
                             ))}
                         </div>
@@ -271,7 +271,7 @@ function CommentCard({
             <img src={comment.user.avatar} alt={comment.user.name} width={40} height={40} className="h-10 w-10 shrink-0 rounded-full object-cover ring-1 ring-[var(--border)]" />
             <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <a href={comment.user.url} className="font-serif text-base font-medium text-[var(--text)] transition-colors hover:text-[var(--primary)]">
+                    <a href={comment.user.url} className="text-base font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]">
                         {comment.user.name}
                     </a>
                     <span className="text-xs text-[var(--text-subtle)]">{comment.date}</span>
@@ -365,7 +365,7 @@ function CommentThread({
     return (
         <>
             <section className="mt-16">
-                <h2 className="font-serif text-2xl text-[var(--text)]">
+                <h2 className="text-2xl font-semibold tracking-[-0.02em] text-[var(--text)]">
                     {comments.total} {tr('default/post.comments', 'Comments')}
                 </h2>
 
@@ -423,7 +423,7 @@ function CommentThread({
             <section className="mt-16 scroll-mt-24" id="comment-area">
                 {commentForm.canComment ? (
                     <>
-                        <h2 className="font-serif text-2xl text-[var(--text)]">{tr('default/post.leave_reply', 'Leave a reply')}</h2>
+                        <h2 className="text-2xl font-semibold tracking-[-0.02em] text-[var(--text)]">{tr('default/post.leave_reply', 'Leave a reply')}</h2>
 
                         {submitted && (
                             <div className="mt-6 rounded-md border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-[var(--text)]" role="status">

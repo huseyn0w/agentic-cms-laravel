@@ -33,7 +33,7 @@ export default function Page({ shell, preview = false, page, crumbs }: PageProps
                             </span>
                         ))}
                     </nav>
-                    <h1 className="font-serif text-[clamp(2.25rem,4vw,3.052rem)] font-medium leading-[1.08] tracking-[-0.01em] text-[var(--text)] [text-wrap:balance]">
+                    <h1 className="text-[clamp(2.25rem,4vw,3.052rem)] font-medium leading-[1.08] tracking-[-0.01em] text-[var(--text)] [text-wrap:balance]">
                         {page.title}
                     </h1>
                     {page.lead && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">{page.lead}</p>}

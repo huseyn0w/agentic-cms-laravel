@@ -29,7 +29,7 @@ export default function ServiceIndex({ shell, heading, emptyText, services }: Se
         <PublicLayout shell={shell}>
             <header className="border-b border-[var(--border)] bg-[var(--surface-2)]">
                 <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16">
-                    <h1 className="font-serif text-[clamp(1.875rem,3vw,2.441rem)] font-medium leading-[1.15] tracking-[-0.01em] text-[var(--text)]">
+                    <h1 className="text-[clamp(1.875rem,3vw,2.441rem)] font-medium leading-[1.15] tracking-[-0.01em] text-[var(--text)]">
                         {heading}
                     </h1>
                 </div>
@@ -49,7 +49,7 @@ export default function ServiceIndex({ shell, heading, emptyText, services }: Se
                                         {service.icon}
                                     </div>
                                 )}
-                                <h2 className="font-serif text-xl leading-snug text-[var(--text)]">
+                                <h2 className="text-xl leading-snug text-[var(--text)]">
                                     <Link href={service.url} prefetch="hover" cacheFor="30s" className="transition-colors hover:text-[var(--primary)]">
                                         {service.title}
                                     </Link>

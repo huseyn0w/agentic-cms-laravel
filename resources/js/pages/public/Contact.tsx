@@ -51,7 +51,7 @@ export default function Contact({ shell, preview = false, title, crumbs, action,
                             </span>
                         ))}
                     </nav>
-                    <h1 className="font-serif text-[clamp(2.25rem,4vw,3.052rem)] font-medium leading-[1.08] tracking-[-0.01em] text-[var(--text)]">{title}</h1>
+                    <h1 className="text-[clamp(2.25rem,4vw,3.052rem)] font-medium leading-[1.08] tracking-[-0.01em] text-[var(--text)]">{title}</h1>
                 </div>
             </header>
 
@@ -72,7 +72,7 @@ export default function Contact({ shell, preview = false, title, crumbs, action,
                     </div>
                 )}
 
-                <h2 className="mb-8 font-serif text-2xl font-medium text-[var(--text)]">{tr('default/page.have_question', 'Have a question?')}</h2>
+                <h2 className="mb-8 text-2xl font-medium text-[var(--text)]">{tr('default/page.have_question', 'Have a question?')}</h2>
 
                 <form action={action} method="post" className="space-y-5" noValidate>
                     <input type="hidden" name="_token" value={csrfToken} />

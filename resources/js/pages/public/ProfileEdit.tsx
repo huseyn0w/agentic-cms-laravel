@@ -63,7 +63,7 @@ export default function ProfileEdit({ shell, title, crumbs, action, csrfToken, c
             <header className="border-b border-[var(--border)] bg-[var(--surface-2)]">
                 <div className="mx-auto max-w-[720px] px-5 py-12 sm:px-8 sm:py-16">
                     <Crumbs crumbs={crumbs} />
-                    <h1 className="font-serif text-[clamp(2.25rem,4vw,3.052rem)] font-medium leading-[1.08] tracking-[-0.01em] text-[var(--text)]">{title}</h1>
+                    <h1 className="text-[clamp(2.25rem,4vw,3.052rem)] font-medium leading-[1.08] tracking-[-0.01em] text-[var(--text)]">{title}</h1>
                 </div>
             </header>
 

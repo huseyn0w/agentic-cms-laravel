@@ -53,7 +53,7 @@ export default function Search({ shell, title, action, csrfToken, captchaHtml, r
         <PublicLayout shell={shell}>
             <section className="border-b border-[var(--border)] bg-[var(--surface-2)]">
                 <div className="mx-auto max-w-[720px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-                    <h1 className="mb-8 text-center font-serif text-[clamp(1.875rem,3vw,2.441rem)] font-medium leading-[1.15] tracking-[-0.01em] text-[var(--text)]">
+                    <h1 className="mb-8 text-center text-[clamp(1.875rem,3vw,2.441rem)] font-medium leading-[1.15] tracking-[-0.01em] text-[var(--text)]">
                         {title}
                     </h1>
 
@@ -128,7 +128,7 @@ export default function Search({ shell, title, action, csrfToken, captchaHtml, r
 
                 {results && results.total > 0 && (
                     <>
-                        <h2 className="mb-8 font-serif text-[clamp(1.563rem,2vw,1.953rem)] font-medium leading-[1.2] text-[var(--text)]">
+                        <h2 className="mb-8 text-[clamp(1.563rem,2vw,1.953rem)] font-medium leading-[1.2] text-[var(--text)]">
                             {tr('default/page.search_result_headline', 'Results for')}: &ldquo;{results.query}&rdquo;
                         </h2>
 
@@ -143,7 +143,7 @@ export default function Search({ shell, title, action, csrfToken, captchaHtml, r
                                         data-testid="search-result"
                                         className="group flex flex-col rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 transition hover:border-[var(--border-strong)] hover:shadow-card"
                                     >
-                                        <h3 className="font-serif text-lg font-medium text-[var(--text)] transition-colors group-hover:text-[var(--primary)]">
+                                        <h3 className="text-lg font-medium text-[var(--text)] transition-colors group-hover:text-[var(--primary)]">
                                             {item.label}
                                         </h3>
                                     </Link>
@@ -160,7 +160,7 @@ export default function Search({ shell, title, action, csrfToken, captchaHtml, r
                                             data-testid="search-result"
                                             className="group flex items-center justify-between gap-4 py-5 transition-colors"
                                         >
-                                            <h3 className="font-serif text-xl font-medium text-[var(--text)] transition-colors group-hover:text-[var(--primary)]">
+                                            <h3 className="text-xl font-medium text-[var(--text)] transition-colors group-hover:text-[var(--primary)]">
                                                 {item.label}
                                             </h3>
                                             <span aria-hidden="true" className="shrink-0 text-[var(--text-subtle)] transition-transform group-hover:translate-x-1 group-hover:text-[var(--primary)]">

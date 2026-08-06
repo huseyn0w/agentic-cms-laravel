@@ -114,42 +114,86 @@
      | raw HTML; we style it with the typography plugin tuned to the brand.
      */
     .theme-default .article-prose {
-        @apply prose prose-lg max-w-none
-            prose-headings:font-serif prose-headings:font-medium prose-headings:tracking-tight prose-headings:text-ink-900
-            prose-p:text-ink-700 prose-p:leading-relaxed
-            prose-a:text-brand-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline prose-a:underline-offset-2
-            prose-strong:text-ink-900
-            prose-blockquote:border-l-2 prose-blockquote:border-brand-300 prose-blockquote:font-serif prose-blockquote:text-ink-800 prose-blockquote:not-italic
-            prose-img:rounded-xl prose-img:shadow-card
-            prose-hr:border-ink-200;
+        @apply prose prose-lg max-w-none;
+        /* Token-driven so the reading view adapts to light/dark automatically. */
+        --tw-prose-body: var(--text-muted);
+        --tw-prose-headings: var(--text);
+        --tw-prose-links: var(--accent);
+        --tw-prose-bold: var(--text);
+        --tw-prose-quotes: var(--text-muted);
+        --tw-prose-quote-borders: var(--accent);
+        --tw-prose-captions: var(--text-subtle);
+        --tw-prose-code: var(--text);
+        --tw-prose-hr: var(--border);
+        --tw-prose-bullets: var(--border-strong);
+        --tw-prose-counters: var(--text-subtle);
+        --tw-prose-th-borders: var(--border-strong);
+        --tw-prose-td-borders: var(--border);
+        font-family: theme('fontFamily.display');
+    }
+    .theme-default .article-prose :is(h1, h2, h3, h4) {
+        font-family: theme('fontFamily.display');
+        font-weight: 600;
+        letter-spacing: -0.02em;
+    }
+    .theme-default .article-prose :where(a) {
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .theme-default .article-prose :where(a):hover {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+    .theme-default .article-prose :where(blockquote) {
+        border-left-width: 2px;
+        font-style: normal;
+    }
+    .theme-default .article-prose :where(img) {
+        border-radius: var(--radius-lg);
     }
 
     /*
      | Reusable form control for the public theme (contact, profile, password).
      */
     .field-input {
-        @apply block w-full rounded-xl border-ink-200 bg-surface px-4 py-3 text-base text-ink-900
-            placeholder:text-ink-400 shadow-sm transition
-            focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30;
+        @apply block w-full px-4 py-3 text-base transition;
+        background: var(--surface);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+    }
+    .field-input::placeholder { color: var(--text-faint); }
+    .field-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-tint);
     }
 
     .field-label {
-        @apply mb-1.5 block text-sm font-medium text-ink-700;
+        @apply mb-1.5 block text-sm font-medium;
+        color: var(--text-muted);
     }
 
     .btn-primary {
-        @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3
-            text-sm font-semibold tracking-wide text-white shadow-card
-            transition duration-200 ease-out-expo
-            hover:bg-brand-700 active:scale-[0.97]
-            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
+        @apply inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium;
+        background: var(--accent);
+        color: var(--accent-contrast);
+        border-radius: var(--radius-md);
+        transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
     }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:active { transform: translateY(1px); }
+    .btn-primary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     .btn-ghost {
-        @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink-200 bg-surface px-5 py-2.5
-            text-sm font-semibold text-ink-700 transition duration-200 ease-out-expo
-            hover:border-ink-300 hover:bg-ink-50 active:scale-[0.97];
+        @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium;
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-md);
+        transition: background var(--dur-fast) var(--ease-out);
     }
+    .btn-ghost:hover { background: var(--surface-2); }
 
     /*
      | Header nav: the menu HTML is generated server-side (render_menu) with

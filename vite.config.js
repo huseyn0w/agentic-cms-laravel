@@ -12,14 +12,11 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                // Inertia + React entry (new stack).
+                // Inertia + React entry (the whole UI is React now).
                 'resources/js/app.tsx',
-                // Legacy Blade/Alpine assets — kept while the strangler migration
-                // runs so the pre-Inertia pages keep working.
+                // Stylesheets loaded by the Inertia root templates.
                 'resources/css/app.css',
-                'resources/js/app.js',
                 'resources/css/admin.css',
-                'resources/js/admin.js',
             ],
             // Inertia SSR entry — built by `vite build --ssr` into
             // bootstrap/ssr/ssr.js and run by `php artisan inertia:start-ssr`.

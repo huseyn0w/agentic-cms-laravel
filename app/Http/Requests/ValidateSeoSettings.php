@@ -22,9 +22,19 @@ class ValidateSeoSettings extends FormRequest
 
     protected function prepareForValidation()
     {
+        // Normalise the AI-crawler toggles to a full boolean map over the known
+        // bot keys (config/ai_crawlers.php), so unknown keys are dropped and a
+        // missing toggle defaults to allowed (true).
+        $raw = (array) $this->input('ai_crawlers', []);
+        $crawlers = [];
+        foreach (array_keys(config('ai_crawlers', [])) as $key) {
+            $crawlers[$key] = filter_var($raw[$key] ?? true, FILTER_VALIDATE_BOOLEAN);
+        }
+
         $this->merge([
             'discourage_search_engines' => $this->boolean('discourage_search_engines'),
             'sitemap_enabled' => $this->boolean('sitemap_enabled'),
+            'ai_crawlers' => $crawlers,
         ]);
     }
 
@@ -43,6 +53,8 @@ class ValidateSeoSettings extends FormRequest
             'discourage_search_engines' => 'boolean',
             'sitemap_enabled' => 'boolean',
             'robots_extra' => 'nullable|string|max:2000',
+            'ai_crawlers' => 'array',
+            'ai_crawlers.*' => 'boolean',
         ];
     }
 }

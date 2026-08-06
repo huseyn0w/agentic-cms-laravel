@@ -22,8 +22,18 @@ class CPanelSeoSettingsController extends CPanelBaseController
     {
         $seo = $this->service->currentOrNew();
 
+        $stored = is_array($seo->ai_crawlers) ? $seo->ai_crawlers : [];
+        $crawlers = [];
+        $catalog = [];
+        foreach (config('ai_crawlers', []) as $key => $bot) {
+            $crawlers[$key] = ($stored[$key] ?? true) !== false;
+            $catalog[] = ['key' => $key, 'label' => $bot['label']];
+        }
+
         return Inertia::render('cpanel/settings/Seo', [
+            'ai_crawler_catalog' => $catalog,
             'seo_settings' => [
+                'ai_crawlers' => $crawlers,
                 'title_separator' => $seo->title_separator,
                 'default_meta_description' => $seo->default_meta_description,
                 'default_og_image' => $seo->default_og_image,

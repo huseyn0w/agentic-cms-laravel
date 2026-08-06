@@ -16,16 +16,30 @@ const entity = {
   og_site_name: 'Site', twitter_handle: '@x', google_site_verification: '',
   bing_site_verification: '', ga4_measurement_id: 'G-1', gtm_container_id: '',
   discourage_search_engines: false, sitemap_enabled: true, robots_extra: '',
+  ai_crawlers: { gptbot: true, claudebot: false },
 };
+const catalog = [
+  { key: 'gptbot', label: 'GPTBot' },
+  { key: 'claudebot', label: 'ClaudeBot' },
+];
 
 describe('SEO settings', () => {
   it('prefills fields and toggles, posts to the seo-settings endpoint', () => {
-    render(<Seo seo_settings={entity} />);
+    render(<Seo seo_settings={entity} ai_crawler_catalog={catalog} />);
     expect(screen.getByTestId('title_separator')).toHaveValue('|');
     expect(screen.getByLabelText('sitemap_enabled')).toBeChecked();
     expect(screen.getByLabelText('discourage_search_engines')).not.toBeChecked();
 
     fireEvent.submit(screen.getByTestId('title_separator').closest('form')!);
     expect(post).toHaveBeenCalledWith('/agentic-cms-laravel-admin/seo-settings', expect.anything());
+  });
+
+  it('renders an AI-crawler toggle per catalog bot reflecting the allow map', () => {
+    render(<Seo seo_settings={entity} ai_crawler_catalog={catalog} />);
+    expect(screen.getByLabelText('ai_crawler_gptbot')).toBeChecked();
+    expect(screen.getByLabelText('ai_crawler_claudebot')).not.toBeChecked();
+
+    fireEvent.click(screen.getByLabelText('ai_crawler_claudebot'));
+    expect(setData).toHaveBeenCalledWith('ai_crawlers', { gptbot: true, claudebot: true });
   });
 });

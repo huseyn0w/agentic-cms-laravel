@@ -139,6 +139,17 @@ class SeoFeedService
             $lines[] = 'Allow: /';
         }
 
+        // AEO: block AI/LLM crawlers the admin turned off (a bot is allowed by
+        // default; only an explicit false in ai_crawlers gets a Disallow stanza).
+        $prefs = ($seo && is_array($seo->ai_crawlers)) ? $seo->ai_crawlers : [];
+        foreach (config('ai_crawlers', []) as $key => $bot) {
+            if (($prefs[$key] ?? true) === false) {
+                $lines[] = '';
+                $lines[] = 'User-agent: '.$bot['ua'];
+                $lines[] = 'Disallow: /';
+            }
+        }
+
         if (! $seo || $seo->sitemap_enabled) {
             $lines[] = '';
             $lines[] = 'Sitemap: '.$base.'/sitemap.xml';

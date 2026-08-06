@@ -32,10 +32,12 @@ class CPanelSeoSettings extends Model
         'discourage_search_engines',
         'sitemap_enabled',
         'robots_extra',
+        'ai_crawlers',
     ];
 
     protected $casts = [
         'discourage_search_engines' => 'boolean',
         'sitemap_enabled' => 'boolean',
+        'ai_crawlers' => 'array',
     ];
 }

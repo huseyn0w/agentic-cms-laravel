@@ -10,4 +10,5 @@ return [
     'enable' => 'Aktivieren',
     'disable' => 'Deaktivieren',
     'empty' => 'Keine Plugins gefunden.',
+    'saved' => 'Plugin aktualisiert.',
 ];

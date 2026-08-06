@@ -10,4 +10,5 @@ return [
     'enable' => 'Enable',
     'disable' => 'Disable',
     'empty' => 'No plugins found.',
+    'saved' => 'Plugin updated.',
 ];

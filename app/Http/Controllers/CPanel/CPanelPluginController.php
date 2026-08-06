@@ -4,6 +4,8 @@ namespace App\Http\Controllers\CPanel;
 
 use App\Services\CPanel\CPanelPluginService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 /**
  * Admin plugin manager: list discovered plugins and toggle them on/off. Pure
@@ -17,9 +19,11 @@ class CPanelPluginController extends CPanelBaseController
         $this->service = $service;
     }
 
-    public function index()
+    public function index(): Response
     {
-        return view('cpanel.plugins.list', ['plugins' => $this->service->listForAdmin()]);
+        return Inertia::render('cpanel/plugins/List', [
+            'plugins' => $this->service->listForAdmin()->all(),
+        ]);
     }
 
     public function toggle(Request $request)
@@ -33,6 +37,6 @@ class CPanelPluginController extends CPanelBaseController
             abort(404);
         }
 
-        return redirect()->route('cpanel_plugins_list')->with('message', ' ');
+        return redirect()->route('cpanel_plugins_list')->with('success', __('cpanel/plugins.saved'));
     }
 }

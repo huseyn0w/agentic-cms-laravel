@@ -36,6 +36,7 @@ class CPanelSecuritySettings extends Model
         'hsts_max_age',
         'csp',
         'csp_report_only',
+        'admin_ip_allowlist',
     ];
 
     protected $casts = [

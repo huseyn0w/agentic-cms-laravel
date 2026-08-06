@@ -23,6 +23,7 @@ use App\Http\Middleware\ManageServices;
 use App\Http\Middleware\ManageUsers;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RequireTwoFactorEnrollment;
+use App\Http\Middleware\RestrictAdminByIp;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\VerifyCsrfToken;
@@ -105,6 +106,7 @@ class Kernel extends HttpKernel
         'manage_categories' => ManageCategories::class,
         'manage_general_settings' => ManageGeneralSettings::class,
         'require_2fa' => RequireTwoFactorEnrollment::class,
+        'restrict_admin_ip' => RestrictAdminByIp::class,
         'auth' => Authenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'bindings' => SubstituteBindings::class,

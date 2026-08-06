@@ -46,6 +46,10 @@ createInertiaApp({
         }
     },
     progress: {
-        color: '#4f46e5',
+        // Vercel-blue top loading bar; show quickly on real navigations.
+        // Cache-hit (prefetched) visits resolve instantly and skip it by design.
+        color: '#0070f3',
+        delay: 120,
+        showSpinner: false,
     },
 });

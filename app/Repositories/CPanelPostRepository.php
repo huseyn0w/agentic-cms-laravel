@@ -58,6 +58,21 @@ class CPanelPostRepository extends BaseRepository
         return $this->model->listsTranslations('title')->orderBy('posts.id', 'desc')->take($count)->get();
     }
 
+    /** Total number of posts (excludes soft-deleted). */
+    public function countAll(): int
+    {
+        return (int) $this->model->count();
+    }
+
+    /** Posts scheduled to publish in the future (any locale). */
+    public function countScheduled(): int
+    {
+        return (int) $this->translated_model->newQuery()
+            ->whereNotNull('scheduled_at')
+            ->where('scheduled_at', '>', now())
+            ->count();
+    }
+
     public function trashedPosts($count)
     {
         try {

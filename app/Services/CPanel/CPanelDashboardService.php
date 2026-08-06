@@ -34,4 +34,20 @@ class CPanelDashboardService
     {
         return $this->comments->latestComments($count);
     }
+
+    /**
+     * Aggregate totals for the dashboard stat cards.
+     *
+     * @return array{posts:int, users:int, comments:int, comments_pending:int, scheduled:int}
+     */
+    public function counts(): array
+    {
+        return [
+            'posts' => $this->posts->countAll(),
+            'users' => $this->users->countAll(),
+            'comments' => $this->comments->countAll(),
+            'comments_pending' => $this->comments->countPending(),
+            'scheduled' => $this->posts->countScheduled(),
+        ];
+    }
 }

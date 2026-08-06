@@ -44,6 +44,12 @@ class CPanelUserRepository extends BaseRepository
         $this->model = $model;
     }
 
+    /** Total number of registered users. */
+    public function countAll(): int
+    {
+        return (int) $this->model->count();
+    }
+
     /**
      * Latest N usernames for the admin dashboard.
      */

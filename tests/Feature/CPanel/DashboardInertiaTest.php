@@ -29,7 +29,13 @@ class DashboardInertiaTest extends TestCase
                 ->component('cpanel/Dashboard')
                 ->has('posts')
                 ->has('users')
-                ->has('comments'));
+                ->has('comments')
+                ->has('counts', fn (AssertableInertia $c) => $c
+                    ->has('posts')
+                    ->has('users')
+                    ->has('comments')
+                    ->has('comments_pending')
+                    ->has('scheduled')));
     }
 
     /**

@@ -27,6 +27,18 @@ class CPanelCommentRepository extends BaseRepository
         return $this->model->select('comment')->orderBy('id', 'desc')->take($count)->get();
     }
 
+    /** Total number of comments. */
+    public function countAll(): int
+    {
+        return (int) $this->model->count();
+    }
+
+    /** Comments awaiting moderation (status != approved). */
+    public function countPending(): int
+    {
+        return (int) $this->model->where('status', '!=', 1)->count();
+    }
+
     /**
      * Paginated list of all comments (newest first), for MCP tooling.
      *

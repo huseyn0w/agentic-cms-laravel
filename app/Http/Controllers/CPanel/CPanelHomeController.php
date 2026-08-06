@@ -27,6 +27,7 @@ class CPanelHomeController extends CPanelBaseController
             'posts' => $posts,
             'users' => $users,
             'comments' => $comments,
+            'counts' => $this->dashboard->counts(),
         ]);
     }
 }

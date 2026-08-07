@@ -47,6 +47,22 @@ Route::get('/health/ready', 'HealthController@ready')->name('health_ready');
 
 /*
 |--------------------------------------------------------------------------
+| Newsletter (Phase 1): public double opt-in
+|--------------------------------------------------------------------------
+| Registered before the front catch-all ({locale?}/{slug?}) so /newsletter/*
+| is not swallowed. Outside site_lockdown so unsubscribe links always work.
+*/
+Route::prefix('newsletter')->group(function () {
+    Route::post('/subscribe', 'NewsletterController@subscribe')
+        ->middleware('throttle:5,1')->name('newsletter.subscribe');
+    Route::get('/confirm/{token}', 'NewsletterController@confirm')->name('newsletter.confirm');
+    Route::get('/unsubscribe/{token}', 'NewsletterController@unsubscribe')->name('newsletter.unsubscribe');
+    Route::post('/resubscribe', 'NewsletterController@resubscribe')
+        ->middleware('throttle:5,1')->name('newsletter.resubscribe');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Inertia smoke route (Phase 0 of the Blade -> Inertia migration)
 |--------------------------------------------------------------------------
 | Temporary: proves the Inertia + React pipeline renders. Must sit above the

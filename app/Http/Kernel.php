@@ -17,6 +17,7 @@ use App\Http\Middleware\ManageComments;
 use App\Http\Middleware\ManageGeneralSettings;
 use App\Http\Middleware\ManageMedia;
 use App\Http\Middleware\ManageMenu;
+use App\Http\Middleware\ManageNewsletter;
 use App\Http\Middleware\ManagePages;
 use App\Http\Middleware\ManagePosts;
 use App\Http\Middleware\ManageRoles;
@@ -103,6 +104,7 @@ class Kernel extends HttpKernel
         'manage_menus' => ManageMenu::class,
         'manage_comments' => ManageComments::class,
         'manage_media' => ManageMedia::class,
+        'manage_newsletter' => ManageNewsletter::class,
         'see_admin_panel' => AdminPanelMiddleware::class,
         'manage_categories' => ManageCategories::class,
         'manage_general_settings' => ManageGeneralSettings::class,

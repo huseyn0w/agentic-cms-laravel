@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
         'manage_menus',
         'manage_comments',
         'manage_media',
+        'manage_newsletter',
         'manage_general_settings',
     ];
 

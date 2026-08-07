@@ -17,7 +17,8 @@ export type Ability =
     | 'manage_services'
     | 'manage_menus'
     | 'manage_comments'
-    | 'manage_general_settings';
+    | 'manage_general_settings'
+    | 'manage_newsletter';
 
 export interface SharedProps {
     auth: {

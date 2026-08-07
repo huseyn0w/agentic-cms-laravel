@@ -55,13 +55,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('front/'.config('app.template_name').'/img/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('front/'.config('app.template_name').'/img/favicon-16x16.png') }}">
 
-    {{-- Preload the two critical woff2 weights so text does not shift on LCP.
-         Vite content-hashes the output; resolve the current name from the
-         manifest rather than hardcoding the hash. --}}
+    {{-- Preload the public theme's critical woff2 weight so text does not shift
+         on LCP. The public face is Geist Variable (Inter/Newsreader are no longer
+         used on the front). Vite content-hashes the output; resolve the current
+         name from the manifest rather than hardcoding the hash. --}}
     @php
         $criticalFonts = [
-            'node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2',
-            'node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
+            'node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2',
         ];
     @endphp
     @foreach($criticalFonts as $fontSrc)

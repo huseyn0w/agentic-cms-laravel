@@ -32,16 +32,12 @@ class PublicPagesTest extends TestCase
 
     public function test_home_head_preloads_critical_fonts(): void
     {
-        // DESIGN_SYSTEM §3/§7: the two critical woff2 weights are preloaded so
-        // there is no layout shift on the LCP text.
+        // The public theme's LCP face is Geist Variable — preload its critical
+        // woff2 weight so text does not shift on load.
         $html = $this->get('/')->assertStatus(200)->getContent();
 
         $this->assertMatchesRegularExpression(
-            '/<link rel="preload" href="[^"]*newsreader-latin-wght-normal[^"]*\.woff2"[^>]*as="font"[^>]*type="font\/woff2"[^>]*crossorigin/',
-            $html
-        );
-        $this->assertMatchesRegularExpression(
-            '/<link rel="preload" href="[^"]*inter-latin-wght-normal[^"]*\.woff2"[^>]*as="font"[^>]*type="font\/woff2"[^>]*crossorigin/',
+            '/<link rel="preload" href="[^"]*geist-latin-wght-normal[^"]*\.woff2"[^>]*as="font"[^>]*type="font\/woff2"[^>]*crossorigin/',
             $html
         );
     }

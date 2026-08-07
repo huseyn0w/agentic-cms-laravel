@@ -29,8 +29,6 @@ class AdminNewsletterTest extends TestCase
 
     public function test_panel_user_without_manage_newsletter_is_denied(): void
     {
-        $this->markTestSkipped('route added in Task 7');
-
         $role = UserRoles::create([
             'name' => 'PanelNoNewsletter',
             'permissions' => json_encode(['see_admin_panel' => 1, 'manage_newsletter' => 0]),
@@ -69,5 +67,92 @@ class AdminNewsletterTest extends TestCase
 
         $perms = json_decode(DB::table('user_roles')->find($role->id)->permissions, true);
         $this->assertSame(1, $perms['manage_newsletter']);
+    }
+
+    public function test_index_lists_subscribers_with_props(): void
+    {
+        NewsletterSubscriber::factory()->confirmed()->create(['email' => 'one@example.com']);
+        NewsletterSubscriber::factory()->create(['email' => 'two@example.com', 'status' => 'pending']);
+
+        $this->actingAs($this->adminUser())
+            ->get('/agentic-cms-laravel-admin/newsletter')
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $p) => $p
+                ->component('cpanel/newsletter/List')
+                ->has('subscribers.data', 2));
+    }
+
+    public function test_index_filters_by_status_and_searches(): void
+    {
+        NewsletterSubscriber::factory()->confirmed()->create(['email' => 'keep@example.com']);
+        NewsletterSubscriber::factory()->create(['email' => 'drop@example.com', 'status' => 'pending']);
+
+        $this->actingAs($this->adminUser())
+            ->get('/agentic-cms-laravel-admin/newsletter?status=confirmed')
+            ->assertInertia(fn (AssertableInertia $p) => $p->has('subscribers.data', 1)->where('filters.status', 'confirmed'));
+
+        $this->actingAs($this->adminUser())
+            ->get('/agentic-cms-laravel-admin/newsletter?search=keep')
+            ->assertInertia(fn (AssertableInertia $p) => $p->has('subscribers.data', 1));
+    }
+
+    public function test_store_adds_a_confirmed_admin_subscriber(): void
+    {
+        $this->actingAs($this->adminUser())
+            ->post('/agentic-cms-laravel-admin/newsletter', ['email' => 'manual@example.com'])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('newsletter_subscribers', [
+            'email' => 'manual@example.com', 'status' => 'confirmed', 'source' => 'admin',
+        ]);
+    }
+
+    public function test_store_rejects_duplicate_email(): void
+    {
+        NewsletterSubscriber::factory()->create(['email' => 'exists@example.com']);
+
+        $this->actingAs($this->adminUser())
+            ->post('/agentic-cms-laravel-admin/newsletter', ['email' => 'exists@example.com'])
+            ->assertSessionHasErrors('email');
+    }
+
+    public function test_destroy_removes_a_subscriber(): void
+    {
+        $sub = NewsletterSubscriber::factory()->create();
+
+        $this->actingAs($this->adminUser())
+            ->delete("/agentic-cms-laravel-admin/newsletter/{$sub->id}")
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('newsletter_subscribers', ['id' => $sub->id]);
+    }
+
+    public function test_export_streams_confirmed_csv(): void
+    {
+        NewsletterSubscriber::factory()->confirmed()->create(['email' => 'export@example.com']);
+        NewsletterSubscriber::factory()->create(['email' => 'skip@example.com', 'status' => 'pending']);
+
+        $response = $this->actingAs($this->adminUser())
+            ->get('/agentic-cms-laravel-admin/newsletter/export');
+
+        $response->assertOk();
+        $this->assertStringContainsString('text/csv', $response->headers->get('content-type'));
+        $csv = $response->streamedContent();
+        $this->assertStringContainsString('export@example.com', $csv);
+        $this->assertStringNotContainsString('skip@example.com', $csv);
+    }
+
+    public function test_every_admin_route_is_forbidden_without_permission(): void
+    {
+        $role = UserRoles::create([
+            'name' => 'NoNews',
+            'permissions' => json_encode(['see_admin_panel' => 1, 'manage_newsletter' => 0]),
+        ]);
+        $user = User::factory()->create(['role_id' => $role->id]);
+        $sub = NewsletterSubscriber::factory()->create();
+
+        $this->actingAs($user)->post('/agentic-cms-laravel-admin/newsletter', ['email' => 'x@example.com'])->assertStatus(401);
+        $this->actingAs($user)->delete("/agentic-cms-laravel-admin/newsletter/{$sub->id}")->assertStatus(401);
+        $this->actingAs($user)->get('/agentic-cms-laravel-admin/newsletter/export')->assertStatus(401);
     }
 }

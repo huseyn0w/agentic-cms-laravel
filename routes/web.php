@@ -243,6 +243,13 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::put('/metadata', 'CPanelMediaController@updateMetadata')->name('cpanel_update_media_metadata');
     });
 
+    Route::prefix('newsletter')->middleware('manage_newsletter')->group(function () {
+        Route::get('/', 'CPanelNewsletterController@index')->name('cpanel_newsletter_list');
+        Route::get('/export', 'CPanelNewsletterController@export')->name('cpanel_newsletter_export');
+        Route::post('/', 'CPanelNewsletterController@store')->name('cpanel_newsletter_store');
+        Route::delete('/{id}', 'CPanelNewsletterController@destroy')->name('cpanel_newsletter_destroy')->where('id', '[0-9]+');
+    });
+
 });
 
 /*

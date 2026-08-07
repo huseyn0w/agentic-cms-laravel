@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'widget_heading' => 'Newsletter abonnieren',
+    'widget_subtitle' => 'Gelegentliche Updates. Kein Spam. Jederzeit abbestellbar.',
+    'widget_placeholder' => 'du@example.com',
+    'widget_button' => 'Abonnieren',
+    'widget_submitted' => 'Danke — bitte bestätige dein Abo über den Link in deinem Postfach.',
+    'check_inbox' => 'Falls die Adresse neu ist, bestätige dein Abo über den Link in deinem Postfach.',
+    'email_subject' => 'Bestätige dein Newsletter-Abo',
+    'email_heading' => 'Abo bestätigen',
+    'email_intro' => 'Du (oder jemand mit dieser Adresse) hat unseren Newsletter abonniert. Bestätige unten, um ihn zu erhalten.',
+    'email_button' => 'Abo bestätigen',
+    'email_fallback' => 'Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:',
+    'email_ignore' => 'Falls du das nicht angefragt hast, kannst du diese E-Mail ignorieren.',
+    'confirm_confirmed_title' => 'Abo bestätigt',
+    'confirm_confirmed_body' => 'Danke — dein Abo ist jetzt aktiv.',
+    'confirm_already_title' => 'Bereits bestätigt',
+    'confirm_already_body' => 'Dieses Abo wurde bereits bestätigt. Nichts weiter zu tun.',
+    'confirm_invalid_title' => 'Ungültiger Link',
+    'confirm_invalid_body' => 'Dieser Bestätigungslink ist ungültig. Vielleicht ein Tippfehler.',
+    'unsub_done_title' => 'Du wurdest abgemeldet',
+    'unsub_done_body' => 'Du erhältst den Newsletter nicht mehr. Meinung geändert?',
+    'unsub_resubscribe_button' => 'Erneut abonnieren',
+    'unsub_invalid_title' => 'Ungültiger Link',
+    'unsub_invalid_body' => 'Dieser Abmeldelink ist ungültig.',
+    'unsub_resubmitted' => 'Bitte bestätige dein Abo erneut über den Link in deinem Postfach.',
+];

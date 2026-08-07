@@ -4,7 +4,7 @@ namespace App\Services\CPanel;
 
 use App\Http\Models\NewsletterSubscriber;
 use App\Repositories\NewsletterSubscriberRepository;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**

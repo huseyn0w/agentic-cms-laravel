@@ -7,6 +7,7 @@ vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }
 vi.mock('@inertiajs/react', () => ({
     Link: ({ children, prefetch, cacheFor, ...p }: any) => <a {...p}>{children}</a>,
     usePage: () => ({ props: sharedProps }),
+    useForm: (initial: any) => ({ data: initial ?? {}, setData: () => undefined, post: () => undefined, processing: false, reset: () => undefined, errors: {} }),
 }));
 
 import ChangePassword from './ChangePassword';

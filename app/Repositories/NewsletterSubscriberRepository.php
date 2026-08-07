@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Models\NewsletterSubscriber;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**

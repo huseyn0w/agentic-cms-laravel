@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@inertiajs/react', () => ({
     Link: ({ children, prefetch, cacheFor, ...p }: any) => <a {...p}>{children}</a>,
+    usePage: () => ({ props: {} }),
+    useForm: (initial: any) => ({ data: initial ?? {}, setData: () => undefined, post: () => undefined, processing: false, reset: () => undefined, errors: {} }),
 }));
 
 import { PublicLayout } from './PublicLayout';

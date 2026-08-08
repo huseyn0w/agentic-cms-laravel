@@ -30,6 +30,7 @@ return [
     'membership' => 'Регистрация',
     'email_verification' => 'Требовать подтверждение email для новых пользователей',
     'active_template' => 'Название активного шаблона',
+    'booking_url' => 'Ссылка на запись (Book a call)',
     'no_template' => 'Нет шаблонов',
     'posts_per_page' => 'Количество постов на странице категории',
     'comments_per_page' => 'Количество комментариев на странице поста',

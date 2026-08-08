@@ -32,6 +32,7 @@ class PublicShell
             'general' => [
                 'websiteName' => get_general_settings('website_name') ?: config('app.name'),
                 'membership' => (bool) get_general_settings('membership'),
+                'bookingUrl' => get_general_settings('booking_url') ?: null,
             ],
             'site' => [
                 'copyright' => $siteOptions?->copyright,

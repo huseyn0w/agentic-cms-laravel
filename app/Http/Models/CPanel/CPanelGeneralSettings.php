@@ -22,6 +22,7 @@ class CPanelGeneralSettings extends Model
         'email_verification',
         'comments_per_page',
         'active_template_name',
+        'booking_url',
     ];
 
     protected $casts = [

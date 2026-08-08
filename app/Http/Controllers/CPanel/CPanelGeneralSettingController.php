@@ -26,6 +26,7 @@ class CPanelGeneralSettingController extends CPanelBaseController
                 'membership' => (bool) $settings->membership,
                 'email_verification' => (bool) $settings->email_verification,
                 'active_template_name' => $settings->active_template_name,
+                'booking_url' => $settings->booking_url,
                 'posts_per_page' => (int) $settings->posts_per_page,
                 'comments_per_page' => (int) $settings->comments_per_page,
             ],

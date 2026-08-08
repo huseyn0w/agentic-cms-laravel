@@ -30,6 +30,7 @@ return [
     'membership' => 'Mitgliedschaft',
     'email_verification' => 'E-Mail-Bestätigung für neue Mitglieder erforderlich',
     'active_template' => 'Name der aktiven Vorlage',
+    'booking_url' => 'Buchungslink (Termin buchen)',
     'no_template' => 'Keine Vorlagen',
     'posts_per_page' => 'Beiträge pro Seite',
     'comments_per_page' => 'Kommentare pro Seite',

@@ -86,6 +86,16 @@ describe('PublicLayout', () => {
         expect(screen.queryByRole('link', { name: 'Log in' })).not.toBeInTheDocument();
     });
 
+    it('shows a Book a call button only when a booking URL is set', () => {
+        const { rerender } = render(<PublicLayout shell={makeShell()}>c</PublicLayout>);
+        expect(screen.queryByTestId('header-booking')).not.toBeInTheDocument();
+
+        rerender(
+            <PublicLayout shell={makeShell({ general: { websiteName: 'x', membership: false, bookingUrl: 'https://calendly.com/me' } })}>c</PublicLayout>,
+        );
+        expect(screen.getByTestId('header-booking')).toHaveAttribute('href', 'https://calendly.com/me');
+    });
+
     it('renders legal footer links when the shell provides them', () => {
         render(
             <PublicLayout

@@ -31,6 +31,9 @@ class ValidateGeneralSettings extends FormRequest
         $this->merge([
             'membership' => $this->boolean('membership'),
             'email_verification' => $this->boolean('email_verification'),
+            // An empty booking field means "no booking link" — store NULL, not
+            // an empty string, so the theme's `bookingUrl ? …` check is clean.
+            'booking_url' => trim((string) $this->input('booking_url')) ?: null,
         ]);
     }
 
@@ -45,6 +48,7 @@ class ValidateGeneralSettings extends FormRequest
             'membership' => 'boolean',
             'email_verification' => 'boolean',
             'active_template_name' => 'nullable|string',
+            'booking_url' => 'nullable|url|max:2000',
         ];
     }
 }

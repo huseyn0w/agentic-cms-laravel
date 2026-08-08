@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Site\Providers;
+
+use Illuminate\Support\ServiceProvider;
+
+/**
+ * A fork's entry point into the core boot process.
+ *
+ * Rename this file to SiteServiceProvider.php to activate it. Core registers it
+ * automatically when the class exists (see App\Support\Updater\SiteBootstrap).
+ * Everything under app/Site is site-owned and survives core updates — put your
+ * fork's providers, migrations, seeders, and plugins here instead of editing
+ * core files (which are overwritten on update).
+ */
+class SiteServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        //
+    }
+
+    public function boot(): void
+    {
+        // Site-owned migrations, run alongside core migrations by `migrate`.
+        if (is_dir(database_path('site-migrations'))) {
+            $this->loadMigrationsFrom(database_path('site-migrations'));
+        }
+    }
+}

@@ -49,4 +49,63 @@ return [
         'check_schedule' => env('CMS_UPDATE_CHECK_SCHEDULE', 'daily'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Path ownership manifest
+    |--------------------------------------------------------------------------
+    |
+    | Classifies every repo path so the updater knows what it may overwrite.
+    | Ownership is resolved by longest-prefix match (see App\Support\Updater\
+    | PathManifest), so a nested "site" prefix wins over its "core" parent —
+    | e.g. app/** is core, but app/Site/** is site and is never touched.
+    |
+    |  core     — overwritten on update (the shipped release replaces these)
+    |  site     — a fork's own code/theme; never overwritten
+    |  preserve — runtime state/secrets/uploads; never overwritten
+    |
+    */
+
+    'paths' => [
+
+        'core' => [
+            'app',
+            'bootstrap/app.php',
+            'bootstrap/providers.php',
+            'config',
+            'database/migrations',
+            'database/seeds',
+            'resources/js',
+            'resources/lang',
+            'resources/views',
+            'resources/css',
+            'routes',
+            'public/build',
+            'bootstrap/ssr',
+            'composer.json',
+            'composer.lock',
+            'vendor',
+        ],
+
+        'site' => [
+            'app/Site',
+            'config/site.php',
+            'database/site-migrations',
+            'database/seeders/site',
+            'resources/js/site',
+            'resources/lang/site',
+            'resources/views/site',
+            'routes/site.php',
+            'public/front',
+        ],
+
+        'preserve' => [
+            '.env',
+            'storage',
+            'public/uploads',
+            'public/filemanager',
+            'storage/oauth-private.key',
+            'storage/oauth-public.key',
+        ],
+    ],
+
 ];

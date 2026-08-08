@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 
-export type SettingsTab = 'general' | 'site-options' | 'seo' | 'geo';
+export type SettingsTab = 'general' | 'site-options' | 'seo' | 'geo' | 'aeo';
 
 const ADMIN = '/agentic-cms-laravel-admin';
 const TABS: { key: SettingsTab; href: string; labelKey: string; fallback: string }[] = [
@@ -9,6 +9,7 @@ const TABS: { key: SettingsTab; href: string; labelKey: string; fallback: string
   { key: 'site-options', href: `${ADMIN}/site-options`, labelKey: 'cpanel/settings.tab_site_options', fallback: 'Site options' },
   { key: 'seo', href: `${ADMIN}/seo-settings`, labelKey: 'cpanel/settings.tab_seo', fallback: 'SEO' },
   { key: 'geo', href: `${ADMIN}/geo-settings`, labelKey: 'cpanel/settings.tab_geo', fallback: 'GEO' },
+  { key: 'aeo', href: `${ADMIN}/aeo-settings`, labelKey: 'cpanel/settings.tab_aeo', fallback: 'AEO' },
 ];
 
 /**

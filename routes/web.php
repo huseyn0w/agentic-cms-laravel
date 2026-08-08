@@ -105,6 +105,11 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::post('/', 'CPanelGeoSettingsController@store')->name('cpanel_update_geo_settings');
     });
 
+    Route::prefix('aeo-settings')->middleware('manage_general_settings')->group(function () {
+        Route::get('/', 'CPanelAeoSettingsController@index')->name('cpanel_aeo_settings');
+        Route::post('/', 'CPanelAeoSettingsController@store')->name('cpanel_update_aeo_settings');
+    });
+
     Route::prefix('plugins')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelPluginController@index')->name('cpanel_plugins_list');
         Route::put('/toggle', 'CPanelPluginController@toggle')->name('cpanel_toggle_plugin');

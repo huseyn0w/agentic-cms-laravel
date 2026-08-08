@@ -93,30 +93,9 @@ class SeoSettingsTest extends TestCase
             ->assertSessionHasErrors(['title_separator', 'default_og_image']);
     }
 
-    public function test_seo_page_exposes_the_ai_crawler_catalog_and_current_map(): void
-    {
-        $this->actingAs($this->admin)
-            ->get('/agentic-cms-laravel-admin/seo-settings')
-            ->assertInertia(fn (AssertableInertia $page) => $page
-                ->has('ai_crawler_catalog')
-                ->where('ai_crawler_catalog.0.key', 'gptbot')
-                // every catalog bot defaults to allowed (true) on a fresh install
-                ->where('seo_settings.ai_crawlers.gptbot', true));
-    }
-
-    public function test_ai_crawler_toggles_persist(): void
-    {
-        $this->actingAs($this->admin)
-            ->post('/agentic-cms-laravel-admin/seo-settings', [
-                'title_separator' => '-',
-                'ai_crawlers' => ['gptbot' => false, 'claudebot' => true],
-            ])
-            ->assertSessionHasNoErrors();
-
-        $crawlers = CPanelSeoSettings::first()->ai_crawlers;
-        $this->assertFalse($crawlers['gptbot']);
-        $this->assertTrue($crawlers['claudebot']);
-    }
+    // The AI-crawler (AEO) toggles moved to their own settings tab; their page
+    // render + persistence are covered by Tests\Feature\CPanel\CPanelAeoSettingsTest.
+    // The robots.txt stanza is still exercised here since it is a SEO-feed concern.
 
     public function test_robots_txt_blocks_a_disabled_ai_crawler(): void
     {

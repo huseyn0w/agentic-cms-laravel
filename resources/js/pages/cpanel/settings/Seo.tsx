@@ -19,12 +19,9 @@ interface SeoSettings {
   discourage_search_engines: boolean;
   sitemap_enabled: boolean;
   robots_extra: string;
-  ai_crawlers: Record<string, boolean>;
 }
-interface CrawlerOption { key: string; label: string }
 interface Props {
   seo_settings: SeoSettings;
-  ai_crawler_catalog: CrawlerOption[];
 }
 
 const ENDPOINT = '/agentic-cms-laravel-admin/seo-settings';
@@ -38,12 +35,11 @@ function Card({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-export default function Seo({ seo_settings, ai_crawler_catalog = [] }: Props) {
+export default function Seo({ seo_settings }: Props) {
   const { t } = useTranslation();
   const tr = (k: string, f: string) => (t(k) === k ? f : t(k));
 
   const form = useForm({
-    ai_crawlers: seo_settings.ai_crawlers ?? {},
     title_separator: seo_settings.title_separator ?? '',
     default_meta_description: seo_settings.default_meta_description ?? '',
     default_og_image: seo_settings.default_og_image ?? '',
@@ -63,9 +59,6 @@ export default function Seo({ seo_settings, ai_crawler_catalog = [] }: Props) {
       value={String(form.data[name] ?? '')} error={form.errors[name]}
       onChange={(e) => form.setData(name, e.target.value)} />
   );
-
-  const toggleCrawler = (key: string, allowed: boolean) =>
-    form.setData('ai_crawlers', { ...form.data.ai_crawlers, [key]: allowed });
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -134,22 +127,6 @@ export default function Seo({ seo_settings, ai_crawler_catalog = [] }: Props) {
             </label>
             <textarea id="robots_extra" rows={4} className="field-input w-full font-mono text-sm"
               value={form.data.robots_extra} onChange={(e) => form.setData('robots_extra', e.target.value)} />
-          </div>
-        </Card>
-
-        <Card title={tr('cpanel/settings.seo_ai_crawlers_section', 'AI crawlers')}>
-          <p className="text-xs text-muted">
-            {tr('cpanel/settings.seo_ai_crawlers_help', 'Every bot is allowed by default. Turn one off to add a Disallow rule for it in robots.txt.')}
-          </p>
-          <div className="flex flex-col gap-2.5">
-            {ai_crawler_catalog.map((bot) => (
-              <label key={bot.key} className="flex cursor-pointer items-center gap-2.5 text-sm text-fg">
-                <input type="checkbox" aria-label={`ai_crawler_${bot.key}`}
-                  checked={Boolean(form.data.ai_crawlers[bot.key])}
-                  onChange={(e) => toggleCrawler(bot.key, e.target.checked)} />
-                {bot.label}
-              </label>
-            ))}
           </div>
         </Card>
       </form>

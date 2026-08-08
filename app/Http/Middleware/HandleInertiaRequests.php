@@ -5,7 +5,9 @@ namespace App\Http\Middleware;
 use App\Http\Models\UserRoles;
 use App\Services\Front\PublicShell;
 use App\Support\I18n\TranslationDictionary;
+use App\Support\Updater\UpdateService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -75,9 +77,13 @@ class HandleInertiaRequests extends Middleware
                 'available' => get_languages(),
             ],
             // Core version identity, shared to every page so the admin can show
-            // it and (later) compare it against the release feed.
+            // it and compare it against the release feed.
             'cms' => [
                 'version' => cms_version(),
+                // Version string of an available update (from the cached
+                // background check), or null. Only exposed to admins who can
+                // manage updates — it drives the "update available" banner.
+                'updateAvailable' => fn () => $this->sharedUpdateAvailable($request),
             ],
             'messages' => fn (): array => app(TranslationDictionary::class)
                 ->forLocale(get_current_lang()),
@@ -117,6 +123,24 @@ class HandleInertiaRequests extends Middleware
         }
 
         return app(PublicShell::class)->build();
+    }
+
+    /**
+     * The available-update version string for admins who can manage updates,
+     * read from the cached background check. Null for everyone else. Drives the
+     * admin "update available" banner without a live feed call per request.
+     */
+    private function sharedUpdateAvailable(Request $request): ?string
+    {
+        $user = $request->user();
+
+        if ($user === null || ! $user->can('manage_updates', UserRoles::class)) {
+            return null;
+        }
+
+        $cached = Cache::get(UpdateService::CACHE_KEY);
+
+        return is_array($cached) && isset($cached['version']) ? (string) $cached['version'] : null;
     }
 
     /**

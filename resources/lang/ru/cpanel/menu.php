@@ -26,5 +26,6 @@ return [
     'newsletter' => 'Рассылка',
     'aeo' => 'AEO',
     'mcp' => 'MCP',
+    'updates' => 'Обновления',
 
 ];

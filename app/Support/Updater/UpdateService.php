@@ -4,7 +4,9 @@ namespace App\Support\Updater;
 
 use App\Http\Models\CPanel\CPanelUpdate;
 use App\Repositories\CPanelUpdateRepository;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Process\Process;
 use Throwable;
 
@@ -35,14 +37,55 @@ class UpdateService
         private CPanelUpdateRepository $repository,
     ) {}
 
+    /** Cache key holding the last known available release (or null). */
+    public const CACHE_KEY = 'cms.update.available';
+
     /**
      * The release newer than the installed version, or null when up to date.
+     * Hits the feed live.
      *
      * @return array<string, mixed>|null
      */
     public function checkForUpdate(): ?array
     {
         return $this->feed->available(cms_version());
+    }
+
+    /**
+     * The last known available release from the background check, without
+     * hitting the network. Used by the shared prop + the admin screen.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function cachedAvailable(): ?array
+    {
+        $cached = Cache::get(self::CACHE_KEY);
+
+        return is_array($cached) ? $cached : null;
+    }
+
+    /**
+     * Refresh availability from the feed and cache the result. Called by the
+     * scheduled check and the "Check for updates" button.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function refreshAvailability(): ?array
+    {
+        $release = $this->checkForUpdate();
+        Cache::put(self::CACHE_KEY, $release, now()->addDay());
+
+        return $release;
+    }
+
+    /**
+     * Recent update attempts, newest first (audit history for the admin screen).
+     *
+     * @return Collection<int, CPanelUpdate>
+     */
+    public function history(int $limit = 10): Collection
+    {
+        return $this->repository->recent($limit);
     }
 
     /**

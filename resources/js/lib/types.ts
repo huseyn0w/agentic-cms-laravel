@@ -18,7 +18,8 @@ export type Ability =
     | 'manage_menus'
     | 'manage_comments'
     | 'manage_general_settings'
-    | 'manage_newsletter';
+    | 'manage_newsletter'
+    | 'manage_updates';
 
 export interface SharedProps {
     auth: {
@@ -32,6 +33,8 @@ export interface SharedProps {
     /** Agentic CMS core version (config/cms.php), shown in the admin. */
     cms: {
         version: string;
+        /** Version of an available update (admins with manage_updates only), or null. */
+        updateAvailable?: string | null;
     };
     flash: {
         status: string | null;

@@ -132,6 +132,14 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::get('/', 'CPanelMcpController@index')->name('cpanel_mcp');
     });
 
+    // Core updates: WordPress-style in-admin core update. Shows the current
+    // version + availability and runs the updater. Gated by manage_updates.
+    Route::prefix('updates')->middleware('manage_updates')->group(function () {
+        Route::get('/', 'CPanelUpdateController@index')->name('cpanel_updates');
+        Route::post('/check', 'CPanelUpdateController@check')->name('cpanel_updates_check');
+        Route::post('/run', 'CPanelUpdateController@run')->name('cpanel_updates_run');
+    });
+
     // The profile controller resolves the user from Auth when no id is
     // supplied (see CPanelUserController::editUser), so this route can only
     // ever surface the authenticated user's own profile.

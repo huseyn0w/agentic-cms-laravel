@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@inertiajs/react', () => ({
-    Link: ({ children, prefetch, cacheFor, ...p }: any) => <a {...p}>{children}</a>,
+    Link: ({ children, prefetch, cacheFor, ...p }: any) => <a data-inertia="true" {...p}>{children}</a>,
 }));
 
 import { PublicLayout } from './PublicLayout';
@@ -25,6 +25,29 @@ function makeShell(overrides: Partial<Shell> = {}): Shell {
 }
 
 describe('PublicLayout', () => {
+    it('renders non-current language links as prefetching Inertia links', () => {
+        render(
+            <PublicLayout
+                shell={makeShell({
+                    languages: [
+                        { code: 'EN', url: 'https://example.test', title: 'English', icon: null, current: true },
+                        { code: 'RU', url: 'https://example.test/ru', title: 'Russian', icon: null, current: false },
+                    ],
+                })}
+            >
+                content
+            </PublicLayout>,
+        );
+        const switcher = screen.getByTestId('locale-switcher');
+        // The non-current language is an Inertia <Link> (mock stamps data-inertia).
+        const ru = switcher.querySelector('[data-testid="lang-ru"]');
+        expect(ru).not.toBeNull();
+        expect(ru?.getAttribute('data-inertia')).toBe('true');
+        // The current language is not a navigable link.
+        const en = switcher.querySelector('[data-testid="lang-en"]');
+        expect(en?.getAttribute('data-inertia')).not.toBe('true');
+    });
+
     it('opens a focus-trapped modal drawer from the mobile button', () => {
         render(<PublicLayout shell={makeShell()}>content</PublicLayout>);
 

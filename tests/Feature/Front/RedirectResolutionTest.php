@@ -5,6 +5,7 @@ namespace Tests\Feature\Front;
 use App\Http\Models\Redirect;
 use App\Services\RedirectService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 /**
@@ -82,5 +83,17 @@ class RedirectResolutionTest extends TestCase
         $this->get('/counted');
 
         $this->assertSame(1, Redirect::where('source_path', '/counted')->first()->hits);
+    }
+
+    public function test_resolution_degrades_gracefully_when_the_table_is_absent(): void
+    {
+        // A fresh install (pre-migration) or a DB outage must not 500 the
+        // request through the redirect middleware — the map degrades to empty
+        // and the request falls through. This mirrors the /health liveness
+        // contract, which has no DB dependency.
+        $this->service()->flushCache();
+        Schema::dropIfExists('redirects');
+
+        $this->assertNull($this->service()->resolve('/anything'));
     }
 }

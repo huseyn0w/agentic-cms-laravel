@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Http\Models\Redirect;
 use App\Repositories\RedirectRepository;
+use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use PDOException;
 
 /**
  * Resolves managed redirects (for the middleware) and owns their CRUD + import.
@@ -53,7 +55,17 @@ class RedirectService
      */
     public function cachedMap(): array
     {
-        return Cache::rememberForever(self::CACHE_KEY, fn () => $this->repo->map()->all());
+        // Redirect resolution runs on every front GET (including /health), so a
+        // DB problem here must never 500 the request. Before the table exists
+        // (fresh install, pre-migration) or when the DB is unreachable, degrade
+        // to an empty map and fall through. The failure is NOT cached — the
+        // try/catch sits outside rememberForever, so only a real map is stored
+        // and the next request retries once the DB is back.
+        try {
+            return Cache::rememberForever(self::CACHE_KEY, fn () => $this->repo->map()->all());
+        } catch (QueryException|PDOException) {
+            return [];
+        }
     }
 
     public function flushCache(): void

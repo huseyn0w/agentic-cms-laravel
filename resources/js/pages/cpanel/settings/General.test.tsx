@@ -14,7 +14,8 @@ import General from './General';
 const entity = {
   website_name: 'My Site', tagline: 'Tag', contact_email: 'a@b.io',
   membership: true, email_verification: false,
-  active_template_name: 'default', posts_per_page: 10, comments_per_page: 5,
+  active_template_name: 'default', booking_url: 'https://calendly.com/me',
+  posts_per_page: 10, comments_per_page: 5,
 };
 const props = (over = {}) => ({ general_settings: entity, templates: ['default', 'blog'], ...over });
 
@@ -27,5 +28,10 @@ describe('General settings', () => {
 
     fireEvent.submit(screen.getByTestId('website_name').closest('form')!);
     expect(post).toHaveBeenCalledWith('/agentic-cms-laravel-admin/general-settings', expect.anything());
+  });
+
+  it('prefills the booking link field', () => {
+    render(<General {...props()} />);
+    expect(screen.getByTestId('booking_url')).toHaveValue('https://calendly.com/me');
   });
 });

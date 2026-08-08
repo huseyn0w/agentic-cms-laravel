@@ -23,6 +23,7 @@ export const NAV_GROUPS: NavGroup[] = [
     { key: 'cpanel/menu.services', fallback: 'Services', href: `${A}/services`, component: 'cpanel/services', ability: 'manage_services' },
     { key: 'cpanel/menu.categories', fallback: 'Categories', href: `${A}/categories`, component: 'cpanel/categories', ability: 'manage_post_categories' },
     { key: 'cpanel/menu.comments', fallback: 'Comments', href: `${A}/comments`, component: 'cpanel/comments', ability: 'manage_comments' },
+    { key: 'cpanel/menu.messages', fallback: 'Messages', href: `${A}/contact`, component: 'cpanel/contact', ability: 'manage_messages' },
     { key: 'cpanel/menu.menus', fallback: 'Menus', href: `${A}/menus`, component: 'cpanel/menus', ability: 'manage_menus' },
   ]},
   { labelKey: 'cpanel/menu.settings', fallback: 'Settings', items: [
@@ -31,6 +32,7 @@ export const NAV_GROUPS: NavGroup[] = [
     { key: 'cpanel/menu.users', fallback: 'Users', href: `${A}/users`, component: 'cpanel/users', ability: 'manage_users' },
     { key: 'cpanel/menu.roles', fallback: 'Roles', href: `${A}/roles`, component: 'cpanel/roles', ability: 'manage_user_roles' },
     { key: 'cpanel/menu.newsletter', fallback: 'Newsletter', href: `${A}/newsletter`, component: 'cpanel/newsletter', ability: 'manage_newsletter' },
+    { key: 'cpanel/menu.redirects', fallback: 'Redirects', href: `${A}/redirects`, component: 'cpanel/redirects', ability: 'manage_general_settings' },
     { key: 'cpanel/menu.mcp', fallback: 'MCP', href: `${A}/mcp`, component: 'cpanel/mcp', ability: 'manage_general_settings' },
     { key: 'cpanel/menu.updates', fallback: 'Updates', href: `${A}/updates`, component: 'cpanel/updates', ability: 'manage_updates' },
   ]},

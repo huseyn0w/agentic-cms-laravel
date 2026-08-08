@@ -30,6 +30,7 @@ return [
     'membership' => 'Membership',
     'email_verification' => 'Require email verification for new members',
     'active_template' => 'Active template name',
+    'booking_url' => 'Booking link (Book a call)',
     'no_template' => 'No templates',
     'posts_per_page' => 'Posts per page',
     'comments_per_page' => 'Comments per page',

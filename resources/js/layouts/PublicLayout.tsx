@@ -49,7 +49,7 @@ export interface Shell {
     currentLang: string;
     menu: MenuItem[];
     languages: LanguageLink[];
-    general: { websiteName: string; membership: boolean };
+    general: { websiteName: string; membership: boolean; bookingUrl?: string | null };
     site: { copyright: string | null; linkedinUrl: string | null; githubUrl: string | null };
     legalLinks?: { title: string; url: string }[];
     auth: {
@@ -209,6 +209,18 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                             {isDark ? <SunIcon /> : <MoonIcon />}
                         </button>
 
+                        {shell.general.bookingUrl && (
+                            <a
+                                href={shell.general.bookingUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-accent ml-1 h-9 px-4 text-[14px] font-medium"
+                                data-testid="header-booking"
+                            >
+                                Book a call
+                            </a>
+                        )}
+
                         <div className="ml-1 h-5 w-px bg-[var(--border)]" aria-hidden="true" />
 
                         {auth.user ? (
@@ -275,6 +287,17 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                             <a href={shell.searchUrl} className="rounded-md px-2 py-2 text-sm text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
                                 Search
                             </a>
+                            {shell.general.bookingUrl && (
+                                <a
+                                    href={shell.general.bookingUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn-accent mt-2 h-10 text-sm font-medium"
+                                    data-testid="mobile-booking"
+                                >
+                                    Book a call
+                                </a>
+                            )}
                             {!auth.user && shell.general.membership && auth.registerUrl && (
                                 <a href={auth.registerUrl} className="btn-accent mt-2 h-10 text-sm font-medium">
                                     Register

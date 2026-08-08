@@ -5,8 +5,9 @@ import type { SharedProps } from '@/lib/types';
 
 export function Sidebar({ can }: { can: Record<Ability, boolean> }) {
   const { t } = useTranslation();
-  const { component, props } = usePage<SharedProps>();
+  const { component, props, url } = usePage<SharedProps>();
   const version = props.cms?.version;
+  const contentTypes = props.contentTypes ?? [];
   const label = (key: string, fallback: string) => {
     const s = t(key);
     return s === key ? fallback : s;
@@ -39,6 +40,25 @@ export function Sidebar({ can }: { can: Record<Ability, boolean> }) {
           </div>
         );
       })}
+      {contentTypes.length > 0 && (
+        <div data-testid="content-types-group">
+          <div className="px-2 pt-3 pb-1 text-[10.5px] font-semibold uppercase tracking-wider text-faint">
+            {label('cpanel/menu.content_types', 'Content')}
+          </div>
+          {contentTypes.map((type) => {
+            const href = `/agentic-cms-laravel-admin/content/${type.slug}`;
+            const active = component === 'cpanel/content' && url.includes(`/content/${type.slug}`);
+            return (
+              <Link key={type.slug} href={href} prefetch="mount" cacheFor="15s"
+                className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors ${
+                  active ? 'bg-primary font-semibold text-primary-contrast' : 'text-muted hover:bg-black/[.035] hover:text-fg'
+                }`}>
+                {type.label}
+              </Link>
+            );
+          })}
+        </div>
+      )}
       {version && (
         <div
           data-testid="admin-version"

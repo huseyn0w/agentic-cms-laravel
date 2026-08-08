@@ -14,9 +14,11 @@ use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\Localization;
 use App\Http\Middleware\ManageCategories;
 use App\Http\Middleware\ManageComments;
+use App\Http\Middleware\ManageContent;
 use App\Http\Middleware\ManageGeneralSettings;
 use App\Http\Middleware\ManageMedia;
 use App\Http\Middleware\ManageMenu;
+use App\Http\Middleware\ManageMessages;
 use App\Http\Middleware\ManageNewsletter;
 use App\Http\Middleware\ManagePages;
 use App\Http\Middleware\ManagePosts;
@@ -26,6 +28,7 @@ use App\Http\Middleware\ManageUpdates;
 use App\Http\Middleware\ManageUsers;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RequireTwoFactorEnrollment;
+use App\Http\Middleware\ResolveRedirects;
 use App\Http\Middleware\RestrictAdminByIp;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TrimStrings;
@@ -75,6 +78,9 @@ class Kernel extends HttpKernel
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
+            // Managed 301/302 redirects for old URLs (WP permalinks post-migration).
+            // Runs before the front catch-all so a mapped path short-circuits.
+            ResolveRedirects::class,
             Localization::class,
             // Decides whether this request gets server-rendered. Must run before
             // Inertia builds the response, which is what reads the flag it writes.
@@ -104,8 +110,10 @@ class Kernel extends HttpKernel
         'manage_services' => ManageServices::class,
         'manage_menus' => ManageMenu::class,
         'manage_comments' => ManageComments::class,
+        'manage_content' => ManageContent::class,
         'manage_media' => ManageMedia::class,
         'manage_newsletter' => ManageNewsletter::class,
+        'manage_messages' => ManageMessages::class,
         'manage_updates' => ManageUpdates::class,
         'see_admin_panel' => AdminPanelMiddleware::class,
         'manage_categories' => ManageCategories::class,

@@ -19,6 +19,8 @@ export type Ability =
     | 'manage_comments'
     | 'manage_general_settings'
     | 'manage_newsletter'
+    | 'manage_messages'
+    | 'manage_content'
     | 'manage_updates';
 
 export interface SharedProps {
@@ -36,6 +38,8 @@ export interface SharedProps {
         /** Version of an available update (admins with manage_updates only), or null. */
         updateAvailable?: string | null;
     };
+    /** Enabled-plugin content types the user may manage (dynamic sidebar items). */
+    contentTypes?: { slug: string; label: string }[];
     flash: {
         status: string | null;
         success: string | null;

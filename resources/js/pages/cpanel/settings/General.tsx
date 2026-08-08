@@ -13,6 +13,7 @@ interface GeneralSettings {
   membership: boolean;
   email_verification: boolean;
   active_template_name: string;
+  booking_url: string | null;
   posts_per_page: number;
   comments_per_page: number;
 }
@@ -34,6 +35,7 @@ export default function General({ general_settings, templates }: Props) {
     membership: Boolean(general_settings.membership),
     email_verification: Boolean(general_settings.email_verification),
     active_template_name: general_settings.active_template_name ?? '',
+    booking_url: general_settings.booking_url ?? '',
     posts_per_page: general_settings.posts_per_page ?? 10,
     comments_per_page: general_settings.comments_per_page ?? 10,
   });
@@ -102,6 +104,12 @@ export default function General({ general_settings, templates }: Props) {
               ))}
             </select>
           </div>
+
+          <TextField name="booking_url" type="url" data-testid="booking_url"
+            label={tr('cpanel/settings.booking_url', 'Booking link (Book a call)')}
+            placeholder="https://calendly.com/you/30min"
+            value={form.data.booking_url} error={form.errors.booking_url}
+            onChange={(e) => form.setData('booking_url', e.target.value)} />
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextField name="posts_per_page" type="number" min={1}

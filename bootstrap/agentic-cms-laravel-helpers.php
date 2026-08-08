@@ -1012,9 +1012,14 @@ function get_post_comments_count($post_id): int
     return $result;
 }
 
-function get_contact_email(): string
+function get_contact_email(): ?string
 {
-    return get_general_settings('contact_email');
+    // Null when unset (fresh DB / not configured); callers fall back to
+    // config('mail.contact_address'). Typed ?string so an unconfigured site
+    // doesn't 500 on the contact form.
+    $email = get_general_settings('contact_email');
+
+    return is_string($email) && $email !== '' ? $email : null;
 }
 
 function get_comments_count_per_page(): int

@@ -45,6 +45,7 @@ const props = (over: Record<string, unknown> = {}) => ({
         title: 'Introducing the CMS',
         content: '<p>Body copy.</p>',
         thumbnail: null,
+        coverSeed: 'introducing-the-cms',
         date: '01.01.2026',
         dateIso: '2026-01-01T00:00:00+00:00',
         likes: 2,
@@ -54,7 +55,7 @@ const props = (over: Record<string, unknown> = {}) => ({
         category: { title: 'News', url: '/category/news' },
         tags: [{ name: 'launch', url: '/tag/launch' }],
     },
-    related: [{ title: 'Another', url: '/posts/another', excerpt: 'x', date: '2026-01-02', image: '/b.png' }],
+    related: [{ title: 'Another', url: '/posts/another', excerpt: 'x', date: '2026-01-02', thumbnail: null, coverSeed: 'another' }],
     comments: {
         total: 1,
         currentPage: 1,

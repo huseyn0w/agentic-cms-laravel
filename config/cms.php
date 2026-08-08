@@ -51,6 +51,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Release building (CI only)
+    |--------------------------------------------------------------------------
+    |
+    | Used by `php artisan cms:build-release` in the CI release job. The signing
+    | key is the base64 Ed25519 secret whose public half sites trust via
+    | update.public_key. Never set on a running site — only in CI secrets.
+    |
+    */
+
+    'release' => [
+        'sign_key' => env('CMS_RELEASE_SIGN_KEY', ''),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Path ownership manifest
     |--------------------------------------------------------------------------
     |

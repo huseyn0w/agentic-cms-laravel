@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { PreviewBanner } from '@/components/PreviewBanner';
-import { PostCover } from '@/components/public/PostCover';
+import { PostImage } from '@/components/public/PostImage';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface Author {
@@ -102,11 +102,16 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
                 </div>
 
                 <figure className="mt-10 overflow-hidden rounded-xl bg-[var(--surface-2)]">
-                    {post.thumbnail ? (
-                        <img src={post.thumbnail} alt={post.title} width={1280} height={720} className="aspect-[16/9] w-full object-cover" />
-                    ) : (
-                        <PostCover seed={post.coverSeed} title={post.title} className="aspect-[16/9] w-full" />
-                    )}
+                    <PostImage
+                        thumbnail={post.thumbnail}
+                        coverSeed={post.coverSeed}
+                        title={post.title}
+                        alt={post.title}
+                        width={1280}
+                        height={720}
+                        imgClassName="aspect-[16/9] w-full object-cover"
+                        coverClassName="aspect-[16/9] w-full"
+                    />
                 </figure>
 
                 <div className="article-prose mt-10" dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -143,11 +148,13 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
                             {related.map((r) => (
                                 <Link key={r.url} href={r.url} prefetch="hover" cacheFor="30s" className="group block overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--accent)]">
                                     <div className="overflow-hidden bg-[var(--surface-2)]">
-                                        {r.thumbnail ? (
-                                            <img src={r.thumbnail} alt="" className="aspect-[16/9] w-full object-cover transition duration-300 group-hover:scale-105" />
-                                        ) : (
-                                            <PostCover seed={r.coverSeed} title={r.title} className="aspect-[16/9] w-full" />
-                                        )}
+                                        <PostImage
+                                            thumbnail={r.thumbnail}
+                                            coverSeed={r.coverSeed}
+                                            title={r.title}
+                                            imgClassName="aspect-[16/9] w-full object-cover transition duration-300 group-hover:scale-105"
+                                            coverClassName="aspect-[16/9] w-full"
+                                        />
                                     </div>
                                     <div className="p-4">
                                     <p className="font-mono text-xs text-[var(--text-faint)]">{r.date}</p>

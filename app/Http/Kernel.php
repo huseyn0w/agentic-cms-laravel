@@ -22,6 +22,7 @@ use App\Http\Middleware\ManagePages;
 use App\Http\Middleware\ManagePosts;
 use App\Http\Middleware\ManageRoles;
 use App\Http\Middleware\ManageServices;
+use App\Http\Middleware\ManageUpdates;
 use App\Http\Middleware\ManageUsers;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RequireTwoFactorEnrollment;
@@ -105,6 +106,7 @@ class Kernel extends HttpKernel
         'manage_comments' => ManageComments::class,
         'manage_media' => ManageMedia::class,
         'manage_newsletter' => ManageNewsletter::class,
+        'manage_updates' => ManageUpdates::class,
         'see_admin_panel' => AdminPanelMiddleware::class,
         'manage_categories' => ManageCategories::class,
         'manage_general_settings' => ManageGeneralSettings::class,

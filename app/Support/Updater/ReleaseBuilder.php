@@ -92,12 +92,14 @@ class ReleaseBuilder
         $phar = new PharData($tarPath);
 
         foreach ($files as $file) {
-            $phar->addFile($file['abs'], $file['rel']);
+            // addFromString (not addFile) so the file's contents are written
+            // into the archive eagerly and reliably.
+            $phar->addFromString($file['rel'], (string) file_get_contents($file['abs']));
         }
 
         // The manifest travels inside the archive so the updater can validate
         // extracted files against it before applying.
-        $phar->addFile($manifestPath, 'release-manifest.json');
+        $phar->addFromString('release-manifest.json', (string) file_get_contents($manifestPath));
 
         $phar->compress(\Phar::GZ);
 

@@ -38,6 +38,7 @@ class HandleInertiaRequests extends Middleware
         'manage_media',
         'manage_newsletter',
         'manage_general_settings',
+        'manage_updates',
     ];
 
     /**

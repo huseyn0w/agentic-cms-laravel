@@ -33,6 +33,13 @@ class Kernel extends ConsoleKernel
         // subdomain, and no publicly reachable render endpoint. A no-op when SSR
         // is off or already answering.
         $schedule->command('ssr:keepalive')->everyFiveMinutes()->withoutOverlapping();
+
+        // Refresh the cached core-update availability so the admin sees an
+        // "update available" banner. Cadence is configurable (hourly/daily).
+        $checkUpdates = $schedule->command('cms:check-updates')->withoutOverlapping();
+        config('cms.update.check_schedule') === 'hourly'
+            ? $checkUpdates->hourly()
+            : $checkUpdates->daily();
     }
 
     /**

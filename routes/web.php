@@ -110,6 +110,11 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::post('/', 'CPanelAeoSettingsController@store')->name('cpanel_update_aeo_settings');
     });
 
+    Route::prefix('theme-settings')->middleware('manage_general_settings')->group(function () {
+        Route::get('/', 'CPanelThemeSettingsController@index')->name('cpanel_theme_settings');
+        Route::post('/', 'CPanelThemeSettingsController@store')->name('cpanel_update_theme_settings');
+    });
+
     Route::prefix('plugins')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelPluginController@index')->name('cpanel_plugins_list');
         Route::put('/toggle', 'CPanelPluginController@toggle')->name('cpanel_toggle_plugin');
@@ -125,6 +130,14 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
     // 2.1 with dynamic client registration, so no manual tokens are issued here.
     Route::prefix('mcp')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelMcpController@index')->name('cpanel_mcp');
+    });
+
+    // Core updates: WordPress-style in-admin core update. Shows the current
+    // version + availability and runs the updater. Gated by manage_updates.
+    Route::prefix('updates')->middleware('manage_updates')->group(function () {
+        Route::get('/', 'CPanelUpdateController@index')->name('cpanel_updates');
+        Route::post('/check', 'CPanelUpdateController@check')->name('cpanel_updates_check');
+        Route::post('/run', 'CPanelUpdateController@run')->name('cpanel_updates_run');
     });
 
     // The profile controller resolves the user from Auth when no id is

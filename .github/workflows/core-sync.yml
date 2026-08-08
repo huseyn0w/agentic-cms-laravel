@@ -1,0 +1,56 @@
+name: Core sync
+
+# For TIER-2 FORKS ONLY. Opens a pull request with upstream core's latest
+# changes on a schedule, so a fork that carries its own code can still pull core
+# improvements, review the merge, and then let its own release workflow build a
+# new release.
+#
+# Disabled by default (manual trigger only). To enable in a fork:
+#   1. Add the `schedule` trigger below (uncomment).
+#   2. Set the repo variable UPSTREAM_REPO to the core repo URL, e.g.
+#      https://github.com/<core-owner>/agentic-cms-laravel.git
+#
+# Core itself never needs this — it IS the upstream.
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 6 * * 1'   # Mondays 06:00 UTC
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    name: Open PR from upstream core
+    runs-on: ubuntu-latest
+    if: ${{ vars.UPSTREAM_REPO != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch upstream and create a sync branch
+        run: |
+          git config user.name  "core-sync[bot]"
+          git config user.email "core-sync@users.noreply.github.com"
+          git remote add upstream "${{ vars.UPSTREAM_REPO }}"
+          git fetch upstream main
+          BRANCH="core-sync/$(git rev-parse --short upstream/main)"
+          git checkout -b "$BRANCH"
+          # Merge upstream; on conflicts, still push so a human resolves them in the PR.
+          git merge --no-edit upstream/main || true
+          git push -u origin "$BRANCH"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+
+      - name: Open the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "Core sync: merge upstream/main" \
+            --body "Automated merge of upstream core. Review, resolve any conflicts, then merge — your release workflow will build a new fork release." \
+            || echo "A PR for this branch may already exist."

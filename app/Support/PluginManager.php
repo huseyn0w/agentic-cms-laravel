@@ -20,7 +20,15 @@ class PluginManager
     {
         $plugins = [];
 
-        foreach (glob(app_path('Plugins/*/*Plugin.php')) ?: [] as $file) {
+        // Scan both the core plugin dir and the site-owned dir. The site zone
+        // (app/Site) is never overwritten by a core update, so a fork can add
+        // plugins there and keep them across updates.
+        $files = [
+            ...glob(app_path('Plugins/*/*Plugin.php')) ?: [],
+            ...glob(app_path('Site/Plugins/*/*Plugin.php')) ?: [],
+        ];
+
+        foreach ($files as $file) {
             $class = $this->classFromFile($file);
 
             if ($class !== null && is_subclass_of($class, PluginInterface::class)) {

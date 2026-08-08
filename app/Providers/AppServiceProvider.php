@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Support\Hooks;
 use App\Support\I18n\TranslationDictionary;
+use App\Support\Updater\PathManifest;
+use App\Support\Updater\SiteBootstrap;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +25,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Hooks::class, fn ($app) => new Hooks($app['events']));
         $this->app->alias(Hooks::class, 'hooks');
         $this->app->singleton(TranslationDictionary::class);
+
+        // The updater's path-ownership manifest, seeded from config/cms.php, so
+        // ReleaseBuilder and the updater services can type-hint it.
+        $this->app->singleton(
+            PathManifest::class,
+            fn () => new PathManifest(config('cms.paths', []))
+        );
+
+        // Register a fork's site zone provider when present (never present on a
+        // stock install). The site zone survives core updates.
+        SiteBootstrap::register($this->app);
     }
 
     /**

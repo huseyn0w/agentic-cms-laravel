@@ -1,10 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { NAV_GROUPS, type Ability } from '@/lib/admin-nav';
+import type { SharedProps } from '@/lib/types';
 
 export function Sidebar({ can }: { can: Record<Ability, boolean> }) {
   const { t } = useTranslation();
-  const { component } = usePage();
+  const { component, props } = usePage<SharedProps>();
+  const version = props.cms?.version;
   const label = (key: string, fallback: string) => {
     const s = t(key);
     return s === key ? fallback : s;
@@ -37,6 +39,14 @@ export function Sidebar({ can }: { can: Record<Ability, boolean> }) {
           </div>
         );
       })}
+      {version && (
+        <div
+          data-testid="admin-version"
+          className="mt-auto px-2.5 pt-3 text-[11px] font-medium tabular-nums text-faint"
+        >
+          v{version}
+        </div>
+      )}
     </aside>
   );
 }

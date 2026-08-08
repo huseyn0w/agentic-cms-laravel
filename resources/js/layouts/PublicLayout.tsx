@@ -218,9 +218,9 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                                     </a>
                                 )}
                                 {auth.logoutUrl && (
-                                    <a href={auth.logoutUrl} className="ml-1 rounded-md px-3 py-2 text-[14px] text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
+                                    <Link href={auth.logoutUrl} method="post" as="button" className="ml-1 rounded-md px-3 py-2 text-[14px] text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
                                         Log out
-                                    </a>
+                                    </Link>
                                 )}
                             </>
                         ) : (

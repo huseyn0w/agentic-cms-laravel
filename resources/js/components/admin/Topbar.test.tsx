@@ -18,4 +18,16 @@ describe('Topbar', () => {
     render(<Topbar />);
     expect(screen.getByText('?')).toBeInTheDocument();
   });
+
+  it('links to the public site home', () => {
+    render(<Topbar />);
+    expect(screen.getByText('View site').closest('a')).toHaveAttribute('href', '/');
+  });
+
+  it('offers a logout control that posts to /logout', () => {
+    render(<Topbar />);
+    const logout = screen.getByText('Log out');
+    expect(logout).toHaveAttribute('href', '/logout');
+    expect(logout).toHaveAttribute('method', 'post');
+  });
 });

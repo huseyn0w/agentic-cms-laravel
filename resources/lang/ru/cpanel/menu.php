@@ -26,6 +26,7 @@ return [
     'security' => 'Безопасность',
     'newsletter' => 'Рассылка',
     'aeo' => 'AEO',
+    'redirects' => 'Редиректы',
     'mcp' => 'MCP',
     'updates' => 'Обновления',
 

@@ -27,6 +27,7 @@ use App\Http\Middleware\ManageUpdates;
 use App\Http\Middleware\ManageUsers;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RequireTwoFactorEnrollment;
+use App\Http\Middleware\ResolveRedirects;
 use App\Http\Middleware\RestrictAdminByIp;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TrimStrings;
@@ -76,6 +77,9 @@ class Kernel extends HttpKernel
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
+            // Managed 301/302 redirects for old URLs (WP permalinks post-migration).
+            // Runs before the front catch-all so a mapped path short-circuits.
+            ResolveRedirects::class,
             Localization::class,
             // Decides whether this request gets server-rendered. Must run before
             // Inertia builds the response, which is what reads the flag it writes.

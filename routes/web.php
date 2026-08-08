@@ -275,6 +275,13 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::delete('/{id}', 'CPanelNewsletterController@destroy')->name('cpanel_newsletter_destroy')->where('id', '[0-9]+');
     });
 
+    // Managed redirects (301/302) for old URLs — SEO-safe migration.
+    Route::prefix('redirects')->middleware('manage_general_settings')->group(function () {
+        Route::get('/', 'CPanelRedirectController@index')->name('cpanel_redirects');
+        Route::post('/', 'CPanelRedirectController@store')->name('cpanel_redirects_store');
+        Route::delete('/{id}', 'CPanelRedirectController@destroy')->name('cpanel_redirects_destroy')->where('id', '[0-9]+');
+    });
+
     // Contact-form inbox: stored submissions from the public contact form.
     Route::prefix('contact')->middleware('manage_messages')->group(function () {
         Route::get('/', 'CPanelContactSubmissionController@index')->name('cpanel_contact_list');

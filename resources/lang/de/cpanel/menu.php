@@ -22,5 +22,6 @@ return [
     'menus' => 'Menüs',
     'users' => 'Benutzer',
     'security' => 'Sicherheit',
+    'newsletter' => 'Newsletter',
 
 ];

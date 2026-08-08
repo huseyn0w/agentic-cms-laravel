@@ -90,6 +90,11 @@ class UserPolicy
         return $this->has('manage_media');
     }
 
+    public function manage_newsletter(): bool
+    {
+        return $this->has('manage_newsletter');
+    }
+
     public function see_admin_panel(): bool
     {
         return $this->has('see_admin_panel');

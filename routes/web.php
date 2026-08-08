@@ -47,6 +47,22 @@ Route::get('/health/ready', 'HealthController@ready')->name('health_ready');
 
 /*
 |--------------------------------------------------------------------------
+| Newsletter (Phase 1): public double opt-in
+|--------------------------------------------------------------------------
+| Registered before the front catch-all ({locale?}/{slug?}) so /newsletter/*
+| is not swallowed. Outside site_lockdown so unsubscribe links always work.
+*/
+Route::prefix('newsletter')->group(function () {
+    Route::post('/subscribe', 'NewsletterController@subscribe')
+        ->middleware('throttle:5,1')->name('newsletter.subscribe');
+    Route::get('/confirm/{token}', 'NewsletterController@confirm')->name('newsletter.confirm');
+    Route::get('/unsubscribe/{token}', 'NewsletterController@unsubscribe')->name('newsletter.unsubscribe');
+    Route::post('/resubscribe', 'NewsletterController@resubscribe')
+        ->middleware('throttle:5,1')->name('newsletter.resubscribe');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Inertia smoke route (Phase 0 of the Blade -> Inertia migration)
 |--------------------------------------------------------------------------
 | Temporary: proves the Inertia + React pipeline renders. Must sit above the
@@ -225,6 +241,13 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         // Per-asset media metadata (FEATURE_MATRIX §7): read + edit alt/title/caption.
         Route::get('/metadata', 'CPanelMediaController@metadata')->name('cpanel_media_metadata');
         Route::put('/metadata', 'CPanelMediaController@updateMetadata')->name('cpanel_update_media_metadata');
+    });
+
+    Route::prefix('newsletter')->middleware('manage_newsletter')->group(function () {
+        Route::get('/', 'CPanelNewsletterController@index')->name('cpanel_newsletter_list');
+        Route::get('/export', 'CPanelNewsletterController@export')->name('cpanel_newsletter_export');
+        Route::post('/', 'CPanelNewsletterController@store')->name('cpanel_newsletter_store');
+        Route::delete('/{id}', 'CPanelNewsletterController@destroy')->name('cpanel_newsletter_destroy')->where('id', '[0-9]+');
     });
 
 });

@@ -8,6 +8,7 @@ const del = vi.fn();
 vi.mock('@inertiajs/react', () => ({
     Link: ({ children, prefetch, cacheFor, preserveScroll, ...p }: any) => <a {...p}>{children}</a>,
     router: { put: (...a: any[]) => put(...a), delete: (...a: any[]) => del(...a) },
+    usePage: () => ({ props: {} }),
     useForm: (initial: any) => ({
         data: initial,
         errors: {},

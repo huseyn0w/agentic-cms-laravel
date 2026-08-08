@@ -26,6 +26,7 @@ class UserPermissionsSeeder extends Seeder
                 ['name' => 'manage_menus'],
                 ['name' => 'manage_comments'],
                 ['name' => 'manage_media'],
+                ['name' => 'manage_newsletter'],
                 ['name' => 'see_admin_panel'],
             ]
         );

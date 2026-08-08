@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
+import { NewsletterSubscribe } from '@/components/public/NewsletterSubscribe';
 
 const THEME_KEY = 'agentic-cms-theme';
 
@@ -286,6 +287,9 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
 
             <footer className="mt-24 border-t border-[var(--border)] bg-[var(--surface-2)]" data-testid="public-footer">
                 <div className="mx-auto max-w-[76rem] px-5 py-14 sm:px-8">
+                    <div className="mb-10 border-b border-[var(--border)] pb-10">
+                        <NewsletterSubscribe />
+                    </div>
                     <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <a href={shell.homeUrl} className="inline-flex" data-testid="footer-wordmark">

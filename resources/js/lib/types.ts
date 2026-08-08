@@ -17,7 +17,8 @@ export type Ability =
     | 'manage_services'
     | 'manage_menus'
     | 'manage_comments'
-    | 'manage_general_settings';
+    | 'manage_general_settings'
+    | 'manage_newsletter';
 
 export interface SharedProps {
     auth: {
@@ -32,6 +33,7 @@ export interface SharedProps {
         status: string | null;
         success: string | null;
         error: string | null;
+        newsletter_status: string | null;
     };
     /** Flat UI-string dictionary for the current locale (react-i18next resources). */
     messages: Record<string, string>;

@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
         'manage_menus',
         'manage_comments',
         'manage_media',
+        'manage_newsletter',
         'manage_general_settings',
     ];
 
@@ -82,6 +83,7 @@ class HandleInertiaRequests extends Middleware
                 'status' => fn () => $request->session()->get('status'),
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
+                'newsletter_status' => fn () => $request->session()->get('newsletter_status'),
             ],
         ];
     }

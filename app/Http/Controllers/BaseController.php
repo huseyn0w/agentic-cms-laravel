@@ -15,6 +15,14 @@ class BaseController extends Controller
 
     protected $data;
 
+    /**
+     * Configured language prefixes (e.g. ['en', 'de', 'ru']). Used by the
+     * catch-all slug/locale disambiguation.
+     *
+     * @var array<int, string>
+     */
+    protected $lang_prefixes = [];
+
     public function __construct()
     {
         $this->lang_prefixes = get_lang_prefixes();

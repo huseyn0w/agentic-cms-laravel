@@ -33,4 +33,14 @@ class SeoSettingsService extends BaseCrudService
     {
         return $this->repo->saveSingleton($request);
     }
+
+    /**
+     * Persist only the AEO / AI-crawler allow map (owned by the AEO settings tab).
+     *
+     * @param  array<string, bool>  $crawlers
+     */
+    public function saveAiCrawlers(array $crawlers)
+    {
+        return $this->repo->saveAiCrawlers($crawlers);
+    }
 }

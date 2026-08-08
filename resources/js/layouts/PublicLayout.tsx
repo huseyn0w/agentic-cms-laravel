@@ -51,6 +51,7 @@ export interface Shell {
     languages: LanguageLink[];
     general: { websiteName: string; membership: boolean };
     site: { copyright: string | null; linkedinUrl: string | null; githubUrl: string | null };
+    legalLinks?: { title: string; url: string }[];
     auth: {
         user: { name: string } | null;
         canSeeAdmin: boolean;
@@ -218,9 +219,9 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                                     </a>
                                 )}
                                 {auth.logoutUrl && (
-                                    <a href={auth.logoutUrl} className="ml-1 rounded-md px-3 py-2 text-[14px] text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
+                                    <Link href={auth.logoutUrl} method="post" as="button" className="ml-1 rounded-md px-3 py-2 text-[14px] text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]">
                                         Log out
-                                    </a>
+                                    </Link>
                                 )}
                             </>
                         ) : (
@@ -331,6 +332,20 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                             </div>
                         )}
                     </div>
+
+                    {shell.legalLinks && shell.legalLinks.length > 0 && (
+                        <nav className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-[var(--border)] pt-6" data-testid="footer-legal" aria-label="Legal">
+                            {shell.legalLinks.map((link) => (
+                                <a
+                                    key={link.url}
+                                    href={link.url}
+                                    className="text-[13px] text-[var(--text-subtle)] transition-colors hover:text-[var(--text)]"
+                                >
+                                    {link.title}
+                                </a>
+                            ))}
+                        </nav>
+                    )}
                 </div>
             </footer>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Services\Front;
 
 use App\Http\Models\Menu;
+use App\Http\Models\PageTranslation;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -37,8 +38,40 @@ class PublicShell
                 'linkedinUrl' => $siteOptions?->linkedin_url,
                 'githubUrl' => $siteOptions?->github_url,
             ],
+            'legalLinks' => $this->legalLinks(),
             'auth' => $this->auth(),
         ];
+    }
+
+    /**
+     * Known legal/compliance pages (Impressum, Datenschutz, …) surfaced in the
+     * footer. Each is a normal published page; a link is emitted only for the
+     * ones that actually exist in the current locale, in a stable order.
+     *
+     * @return array<int, array{title: string, url: string}>
+     */
+    private function legalLinks(): array
+    {
+        $order = ['impressum', 'datenschutz', 'agb', 'widerruf'];
+        $locale = get_current_lang();
+
+        $rows = PageTranslation::query()
+            ->where('locale', $locale)
+            ->where('status', 1)
+            ->whereIn('slug', $order)
+            ->pluck('title', 'slug');
+
+        $base = rtrim(config('app.url'), '/');
+        $prefix = $locale === default_lang() ? '' : $locale.'/';
+
+        $links = [];
+        foreach ($order as $slug) {
+            if (isset($rows[$slug])) {
+                $links[] = ['title' => $rows[$slug], 'url' => $base.'/'.$prefix.$slug];
+            }
+        }
+
+        return $links;
     }
 
     /**

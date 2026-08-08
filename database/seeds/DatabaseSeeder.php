@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CPanelGeneralSettingsSeeder::class,
             UsersTableSeeder::class,
             CPanelPagesSeeder::class,
+            LegalPagesSeeder::class,
             CPanelCategorySeeder::class,
             CPanelPostsSeeder::class,
             CPanelPostCategorySeeder::class,

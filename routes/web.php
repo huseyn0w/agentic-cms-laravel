@@ -105,6 +105,11 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::post('/', 'CPanelGeoSettingsController@store')->name('cpanel_update_geo_settings');
     });
 
+    Route::prefix('aeo-settings')->middleware('manage_general_settings')->group(function () {
+        Route::get('/', 'CPanelAeoSettingsController@index')->name('cpanel_aeo_settings');
+        Route::post('/', 'CPanelAeoSettingsController@store')->name('cpanel_update_aeo_settings');
+    });
+
     Route::prefix('plugins')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelPluginController@index')->name('cpanel_plugins_list');
         Route::put('/toggle', 'CPanelPluginController@toggle')->name('cpanel_toggle_plugin');
@@ -113,6 +118,13 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
     Route::prefix('security')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelSecurityController@index')->name('cpanel_security');
         Route::post('/settings', 'CPanelSecurityController@updateSettings')->name('cpanel_update_security_settings');
+    });
+
+    // MCP connection guide: shows the server endpoint + OAuth discovery URL so
+    // an admin can wire an MCP client (e.g. Claude) to the site. Auth is OAuth
+    // 2.1 with dynamic client registration, so no manual tokens are issued here.
+    Route::prefix('mcp')->middleware('manage_general_settings')->group(function () {
+        Route::get('/', 'CPanelMcpController@index')->name('cpanel_mcp');
     });
 
     // The profile controller resolves the user from Auth when no id is

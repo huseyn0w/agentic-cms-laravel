@@ -41,4 +41,18 @@ class CPanelSeoSettingsRepository extends BaseRepository
 
         return (bool) $instance->save();
     }
+
+    /**
+     * Persist only the AEO / AI-crawler allow map on the singleton, leaving the
+     * rest of the SEO settings untouched (the AEO settings tab owns this field).
+     *
+     * @param  array<string, bool>  $crawlers
+     */
+    public function saveAiCrawlers(array $crawlers): bool
+    {
+        $instance = $this->model::firstOrNew(['id' => 1]);
+        $instance->ai_crawlers = $crawlers;
+
+        return (bool) $instance->save();
+    }
 }

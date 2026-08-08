@@ -11,8 +11,12 @@ class CPanelLanguageController extends CPanelBaseController
 
     public function index($lang)
     {
-        $this->setLang($lang);
+        if (lang_exist($lang)) {
+            \Session::put('locale', $lang);
+        }
 
-        return redirect()->route('cpanel_home');
+        // Stay on the page the switch was triggered from; fall back to the
+        // dashboard when there is no referer.
+        return redirect()->back(302, [], route('cpanel_home'));
     }
 }

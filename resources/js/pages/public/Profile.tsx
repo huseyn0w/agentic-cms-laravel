@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
+import { Avatar } from '@/components/public/Avatar';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface ProfileProps {
@@ -33,7 +34,7 @@ export default function Profile({ shell, profile }: ProfileProps) {
             <section className="mx-auto max-w-[1080px] px-5 py-16 sm:px-8 sm:py-24">
                 <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
                     <div className="flex flex-col items-center gap-5 lg:items-start">
-                        <img src={profile.avatar} alt={profile.displayName} width={96} height={96} className="h-24 w-24 shrink-0 rounded-2xl object-cover shadow-card ring-1 ring-[var(--border-strong)]" />
+                        <Avatar src={profile.avatar} name={profile.displayName} className="h-24 w-24 shrink-0 rounded-2xl object-cover shadow-card ring-1 ring-[var(--border-strong)]" />
                         <div className="text-center lg:text-left">
                             <h1 className="text-2xl font-medium tracking-[-0.01em] text-[var(--text)]">{profile.displayName}</h1>
                             <p className="mt-1 font-mono text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">@{profile.username}</p>

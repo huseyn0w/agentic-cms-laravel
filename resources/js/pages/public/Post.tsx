@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { PreviewBanner } from '@/components/PreviewBanner';
 import { PostImage } from '@/components/public/PostImage';
+import { Avatar } from '@/components/public/Avatar';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface Author {
@@ -90,7 +91,7 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
                 </h1>
 
                 <div className="mt-6 flex items-center gap-3 border-b border-[var(--border)] pb-6">
-                    <img src={post.author.avatar} alt={post.author.name} width={44} height={44} className="h-11 w-11 rounded-full object-cover ring-1 ring-[var(--border)]" />
+                    <Avatar src={post.author.avatar} name={post.author.name} className="h-11 w-11 rounded-full object-cover ring-1 ring-[var(--border)]" />
                     <div className="min-w-0">
                         <a href={post.author.url} className="text-base font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]">
                             {post.author.name}
@@ -288,7 +289,7 @@ function CommentCard({
 
     return (
         <article className="flex gap-4" data-testid={isReply ? 'comment-reply' : 'comment-card'}>
-            <img src={comment.user.avatar} alt={comment.user.name} width={40} height={40} className="h-10 w-10 shrink-0 rounded-full object-cover ring-1 ring-[var(--border)]" />
+            <Avatar src={comment.user.avatar} name={comment.user.name} className="h-10 w-10 shrink-0 rounded-full object-cover ring-1 ring-[var(--border)]" />
             <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <a href={comment.user.url} className="text-base font-medium text-[var(--text)] transition-colors hover:text-[var(--accent)]">

@@ -64,8 +64,9 @@ export interface Shell {
 
 /** The gradient wordmark: a small gradient tile + the site name in Geist. */
 function Wordmark({ shell }: { shell: Shell }) {
-    if (shell.logoUrl) {
-        return <img src={shell.logoUrl} alt="" height={32} className="h-8 w-auto" />;
+    const [logoFailed, setLogoFailed] = useState(false);
+    if (shell.logoUrl && !logoFailed) {
+        return <img src={shell.logoUrl} alt="" height={32} className="h-8 w-auto" onError={() => setLogoFailed(true)} />;
     }
     return (
         <span className="flex items-center gap-2.5">

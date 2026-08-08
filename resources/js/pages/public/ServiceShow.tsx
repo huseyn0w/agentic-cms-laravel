@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
+import { PostImage } from '@/components/public/PostImage';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface ServiceShowProps {
@@ -49,7 +50,16 @@ export default function ServiceShow({ shell, indexUrl, service, crumbs }: Servic
             <article className="mx-auto max-w-[720px] px-5 py-14 sm:px-8 sm:py-16">
                 {service.thumbnail && (
                     <figure className="mb-10 overflow-hidden rounded-xl bg-[var(--surface-2)]">
-                        <img src={service.thumbnail} alt={service.title} width={1280} height={720} className="aspect-[16/9] w-full object-cover" />
+                        <PostImage
+                            thumbnail={service.thumbnail}
+                            coverSeed={service.title}
+                            title={service.title}
+                            alt={service.title}
+                            width={1280}
+                            height={720}
+                            imgClassName="aspect-[16/9] w-full object-cover"
+                            coverClassName="aspect-[16/9] w-full"
+                        />
                     </figure>
                 )}
 

@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { PreviewBanner } from '@/components/PreviewBanner';
 import { PostImage } from '@/components/public/PostImage';
+import { Avatar } from '@/components/public/Avatar';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface PostCard {
@@ -36,7 +38,8 @@ interface HomeProps {
  * deliberately renders no <Head>, so exactly one <title> reaches the page.
  */
 export default function Home({ shell, preview = false, page, hero, postsSection, about }: HomeProps) {
-    const hasImage = Boolean(hero.background);
+    const [heroFailed, setHeroFailed] = useState(false);
+    const hasImage = Boolean(hero.background) && !heroFailed;
 
     return (
         <PublicLayout shell={shell}>
@@ -47,7 +50,7 @@ export default function Home({ shell, preview = false, page, hero, postsSection,
             <section className="relative overflow-hidden border-b border-[var(--border)]" id="home">
                 {hasImage ? (
                     <div className="absolute inset-0 -z-10">
-                        <img src={hero.background as string} alt="" width={1920} height={1080} className="h-full w-full object-cover" />
+                        <img src={hero.background as string} alt="" width={1920} height={1080} className="h-full w-full object-cover" onError={() => setHeroFailed(true)} />
                         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.55)] via-[rgba(10,10,10,0.4)] to-[rgba(10,10,10,0.8)]" />
                     </div>
                 ) : (
@@ -149,11 +152,9 @@ export default function Home({ shell, preview = false, page, hero, postsSection,
                                         className="group rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-center transition-colors hover:border-[var(--border-strong)]"
                                     >
                                         <div className="relative mx-auto mb-4 aspect-square w-full max-w-[140px] overflow-hidden rounded-[var(--radius-md)] bg-[var(--surface-2)]">
-                                            <img
+                                            <Avatar
                                                 src={author.image}
-                                                alt={author.name}
-                                                width={280}
-                                                height={280}
+                                                name={author.name}
                                                 className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                                             />
                                         </div>

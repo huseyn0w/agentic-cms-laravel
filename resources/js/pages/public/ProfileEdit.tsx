@@ -2,6 +2,7 @@ import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
+import { Avatar } from '@/components/public/Avatar';
 import type { Shell } from '@/layouts/PublicLayout';
 import type { SharedProps } from '@/lib/types';
 
@@ -88,7 +89,7 @@ export default function ProfileEdit({ shell, title, crumbs, action, csrfToken, c
                     <input type="hidden" name="_token" value={csrfToken} />
 
                     <div className="flex items-center gap-6">
-                        <img src={preview} alt={profile.username ?? ''} width={96} height={96} className="h-24 w-24 rounded-2xl object-cover ring-1 ring-[var(--border-strong)]" />
+                        <Avatar src={preview} name={profile.username ?? ''} className="h-24 w-24 rounded-2xl object-cover ring-1 ring-[var(--border-strong)]" />
                         <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-[var(--border-strong)] bg-[var(--surface)] px-4 py-2.5 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--surface-2)]">
                             {tr('default/profile.edit', 'Edit')}
                             <input

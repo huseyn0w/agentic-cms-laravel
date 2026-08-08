@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import type { AnchorHTMLAttributes } from 'react';
-import List from './List';
+import List, { type Row } from './List';
 
 vi.mock('@inertiajs/react', () => ({
   Head: () => null,
@@ -14,7 +14,7 @@ vi.mock('@inertiajs/react', () => ({
 // back to the English fallback string — assert those visible labels.
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
 
-const paginator = (rows: unknown[]) => ({ data: rows, current_page: 1, last_page: 1, total: rows.length });
+const paginator = (rows: Row[]) => ({ data: rows, current_page: 1, last_page: 1, total: rows.length });
 
 describe('cpanel newsletter List', () => {
   it('renders a row per subscriber with the right status pill', () => {

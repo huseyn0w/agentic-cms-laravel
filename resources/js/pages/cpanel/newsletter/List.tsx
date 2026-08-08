@@ -7,7 +7,7 @@ import type { PillTone } from '@/components/admin/StatusPill';
 import type { Paginator } from '@/lib/types';
 import type { FormEvent, ReactElement } from 'react';
 
-interface Row {
+export interface Row {
   id: number;
   email: string;
   status: 'pending' | 'confirmed' | 'unsubscribed';

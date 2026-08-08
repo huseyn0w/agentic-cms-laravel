@@ -20,26 +20,15 @@ class BaseController extends Controller
         $this->lang_prefixes = get_lang_prefixes();
     }
 
-    protected function setLang($lang)
-    {
-        \Session::put('locale', $lang);
-
-        return redirect()->refresh();
-    }
-
     protected function index(string $slug, ?string $locale = null)
     {
         if (is_null($locale)) {
             $locale = get_current_lang();
         }
 
-        $modified_slug = $this->modifyTranslatedSlug($locale, $slug);
+        $slug = $this->modifyTranslatedSlug($locale, $slug);
 
-        if (! is_string($modified_slug)) {
-            return $modified_slug;
-        }
-
-        $this->data = $this->service->resolveBySlug($modified_slug);
+        $this->data = $this->service->resolveBySlug($slug);
 
         if (is_null($this->data)) {
             throwNotFound();
@@ -50,12 +39,15 @@ class BaseController extends Controller
         return true;
     }
 
+    /**
+     * Catch-all disambiguation for /{locale?}/{slug?}: when the first segment is
+     * NOT a language prefix and no slug was given, treat that segment as the slug
+     * (a default-locale page like /about). The locale itself is already resolved
+     * from the URL by the Localization middleware, so there is no language
+     * switch or redirect here.
+     */
     protected function modifyTranslatedSlug($locale, $slug)
     {
-        if (in_array($locale, $this->lang_prefixes) && $locale !== get_current_lang()) {
-            return $this->setLang($locale);
-        }
-
         if (! in_array($locale, $this->lang_prefixes) && $slug === '/') {
             $slug = $locale;
         }

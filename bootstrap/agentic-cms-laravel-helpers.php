@@ -416,7 +416,7 @@ function render_menu($menu_data, $params)
 
     $locale = get_current_lang();
 
-    if ($locale === config('app.locale')) {
+    if ($locale === default_lang()) {
         $locale = null;
     } else {
         $locale .= '/';
@@ -488,13 +488,22 @@ function render_menu($menu_data, $params)
 
 function get_current_lang()
 {
-    $lang = Session::get('locale');
+    // The Localization middleware sets the app locale per request: from the URL
+    // prefix on the public front, from the session in the admin panel. Reading
+    // the app locale here (instead of the session) keeps the front locale
+    // URL-driven, so switching/prefetching a language never depends on session.
+    return app()->getLocale();
+}
 
-    if (is_null($lang) || empty($lang)) {
-        $lang = app()->getLocale();
-    }
-
-    return $lang;
+function default_lang(): string
+{
+    // The site's default locale. IMPORTANT: this must be a STABLE value that is
+    // independent of the current request locale. Laravel's App::setLocale() also
+    // rewrites config('app.locale'), so comparing get_current_lang() against
+    // config('app.locale') is a tautology (both equal the current locale) and
+    // would never produce a URL prefix for a non-default page. fallback_locale is
+    // not touched by setLocale(), so it is the reliable "default".
+    return config('app.fallback_locale');
 }
 
 function set_current_lang(string $string)
@@ -989,7 +998,7 @@ function get_translation_links()
     $result = [];
     $route_name = request()->route()->getName();
     $slug = request()->route('slug');
-    $default_locale = app()->getLocale();
+    $default_locale = default_lang();
     $page_locale = request()->route('locale');
 
     if (! in_array($page_locale, $language_prefixes) && (is_null($slug) || $slug === '/')) {
@@ -1044,7 +1053,14 @@ function get_translation_links()
             continue;
         }
 
-        $entity_id = $model->select($field_name)->where('slug', $slug)->first();
+        // Scope the lookup to the CURRENT locale: the slug in the URL belongs to
+        // the page's locale, and the same slug string can exist for a different
+        // entity in another locale. Without this scope the wrong entity_id could
+        // be picked, producing a broken alternate URL (and wrong hreflang).
+        $entity_id = $model->select($field_name)
+            ->where('slug', $slug)
+            ->where('locale', get_current_lang())
+            ->first();
 
         if (is_null($entity_id)) {
             $result[$key]['url'] = '/'.$key;
@@ -1082,7 +1098,7 @@ function get_current_lang_prefix()
 {
     $current_lang = get_current_lang();
 
-    if ($current_lang === config('app.locale')) {
+    if ($current_lang === default_lang()) {
         $current_lang = null;
     } else {
         $current_lang .= '/';

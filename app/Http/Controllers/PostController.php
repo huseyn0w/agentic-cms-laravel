@@ -58,7 +58,7 @@ class PostController extends BaseController
     private function renderPostPage(bool $preview = false): Response
     {
         $post = $this->data;
-        $localePrefix = get_current_lang() === config('app.locale') ? '' : get_current_lang().'/';
+        $localePrefix = get_current_lang() === default_lang() ? '' : get_current_lang().'/';
         $base = rtrim(config('app.url'), '/');
 
         return Inertia::render('public/Post', [

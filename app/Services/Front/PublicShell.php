@@ -100,7 +100,7 @@ class PublicShell
 
         $base = rtrim(config('app.url'), '/');
 
-        $localePrefix = get_current_lang() === config('app.locale')
+        $localePrefix = get_current_lang() === default_lang()
             ? ''
             : get_current_lang().'/';
 

@@ -20,7 +20,7 @@ class PublicArchive
     public function build(string $title, LengthAwarePaginator $posts, string $pageBaseUrl, string $emptyText): array
     {
         $base = rtrim(config('app.url'), '/');
-        $localePrefix = get_current_lang() === config('app.locale') ? '' : get_current_lang().'/';
+        $localePrefix = get_current_lang() === default_lang() ? '' : get_current_lang().'/';
         $home = get_general_settings('website_name') ?: config('app.name');
 
         return [

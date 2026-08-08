@@ -79,6 +79,14 @@
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.tsx'])
 
+    {{-- Tier-1 theming: override the public design tokens from the theme_settings
+         singleton with no rebuild. Placed AFTER the stylesheet so equal-specificity
+         rules (.theme-default) win the cascade. Empty when nothing is configured. --}}
+    @php($themeCss = theme_css_variables())
+    @if($themeCss !== '')
+    <style id="cms-theme-vars">{!! $themeCss !!}</style>
+    @endif
+
     @include(config('app.template_name').'.partials.analytics')
 
     @inertiaHead

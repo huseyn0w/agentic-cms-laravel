@@ -15,6 +15,7 @@ use App\Http\Models\CPanel\CPanelGeoSettings;
 use App\Http\Models\CPanel\CPanelSecuritySettings;
 use App\Http\Models\CPanel\CPanelSeoSettings;
 use App\Http\Models\CPanel\CPanelSiteOptions;
+use App\Http\Models\CPanel\CPanelThemeSettings;
 use App\Http\Models\Menu;
 use App\Http\Models\Page;
 use App\Http\Models\PageTranslation;
@@ -691,6 +692,83 @@ function get_geo_settings($key = null)
     }
 
     return $settings->$key ?? null;
+}
+
+if (! function_exists('get_theme_settings')) {
+    /**
+     * Read the tier-1 theme settings singleton (row id = 1). Returns the model,
+     * a single field's value, or null on a fresh DB. Mirrors get_geo_settings().
+     *
+     * @return CPanelThemeSettings|string|int|null
+     */
+    function get_theme_settings($key = null)
+    {
+        try {
+            $settings = CPanelThemeSettings::first();
+        } catch (Throwable $e) {
+            $settings = null;
+        }
+
+        if (is_null($settings)) {
+            return null;
+        }
+
+        if (is_null($key)) {
+            return $settings;
+        }
+
+        return $settings->$key ?? null;
+    }
+}
+
+if (! function_exists('theme_css_variables')) {
+    /**
+     * Build the inline CSS that overrides the public theme's design tokens from
+     * the theme_settings singleton (tier-1 theming, no rebuild). Returns an
+     * empty string when nothing is configured, so the shipped defaults stand.
+     *
+     * The values are validated on save (ValidateThemeSettings) to a hex colour,
+     * a safe font charset, and an integer, so they are safe to inline here.
+     */
+    function theme_css_variables(): string
+    {
+        $theme = get_theme_settings();
+
+        if ($theme === null) {
+            return '';
+        }
+
+        $themeRules = [];
+        $rootRules = [];
+
+        $accent = $theme->accent_color;
+        if (is_string($accent) && preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', $accent)) {
+            $themeRules[] = "--accent:{$accent}";
+            $themeRules[] = "--accent-hover:{$accent}";
+            $themeRules[] = "--ring:{$accent}";
+        }
+
+        $font = $theme->font_family;
+        if (is_string($font) && $font !== '' && preg_match('/^[a-zA-Z0-9 ,\'"\-]+$/', $font)) {
+            $themeRules[] = "font-family:{$font}";
+        }
+
+        $radius = $theme->radius;
+        if (is_int($radius) || (is_string($radius) && $radius !== '')) {
+            $radius = (int) $radius;
+            $rootRules[] = "--radius-md:{$radius}px";
+        }
+
+        $css = '';
+        if ($rootRules !== []) {
+            $css .= ':root{'.implode(';', $rootRules).';}';
+        }
+        if ($themeRules !== []) {
+            $css .= '.theme-default{'.implode(';', $themeRules).';}';
+        }
+
+        return $css;
+    }
 }
 
 /**

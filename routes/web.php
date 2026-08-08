@@ -110,6 +110,11 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::post('/', 'CPanelAeoSettingsController@store')->name('cpanel_update_aeo_settings');
     });
 
+    Route::prefix('theme-settings')->middleware('manage_general_settings')->group(function () {
+        Route::get('/', 'CPanelThemeSettingsController@index')->name('cpanel_theme_settings');
+        Route::post('/', 'CPanelThemeSettingsController@store')->name('cpanel_update_theme_settings');
+    });
+
     Route::prefix('plugins')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelPluginController@index')->name('cpanel_plugins_list');
         Route::put('/toggle', 'CPanelPluginController@toggle')->name('cpanel_toggle_plugin');

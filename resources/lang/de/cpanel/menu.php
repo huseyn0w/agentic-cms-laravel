@@ -19,6 +19,7 @@ return [
     'services' => 'Leistungen',
     'categories' => 'Kategorien',
     'comments' => 'Kommentare',
+    'messages' => 'Nachrichten',
     'menus' => 'Menüs',
     'users' => 'Benutzer',
     'roles' => 'Rollen',

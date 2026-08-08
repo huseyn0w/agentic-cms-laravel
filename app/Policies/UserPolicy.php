@@ -100,6 +100,11 @@ class UserPolicy
         return $this->has('manage_updates');
     }
 
+    public function manage_messages(): bool
+    {
+        return $this->has('manage_messages');
+    }
+
     public function see_admin_panel(): bool
     {
         return $this->has('see_admin_panel');

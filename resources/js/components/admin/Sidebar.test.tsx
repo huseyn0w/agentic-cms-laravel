@@ -19,7 +19,7 @@ const can = (overrides = {}) => ({
   see_admin_panel: true, manage_posts: true, manage_pages: true, manage_services: true,
   manage_post_categories: true, manage_comments: true, manage_menus: true,
   manage_general_settings: true, manage_users: true, manage_user_roles: true,
-  manage_newsletter: true, manage_updates: true, ...overrides,
+  manage_newsletter: true, manage_messages: true, manage_updates: true, ...overrides,
 });
 
 describe('Sidebar', () => {
@@ -46,7 +46,7 @@ describe('Sidebar', () => {
   });
 
   it('hides the group label when every item in the group is filtered out', () => {
-    render(<Sidebar can={can({ manage_general_settings: false, manage_users: false, manage_user_roles: false, manage_newsletter: false, manage_updates: false })} />);
+    render(<Sidebar can={can({ manage_general_settings: false, manage_users: false, manage_user_roles: false, manage_newsletter: false, manage_messages: false, manage_updates: false })} />);
     expect(screen.queryByText('Settings')).not.toBeInTheDocument();
     expect(screen.getByText('Content')).toBeInTheDocument();
   });

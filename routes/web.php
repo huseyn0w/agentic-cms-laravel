@@ -275,6 +275,13 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::delete('/{id}', 'CPanelNewsletterController@destroy')->name('cpanel_newsletter_destroy')->where('id', '[0-9]+');
     });
 
+    // Contact-form inbox: stored submissions from the public contact form.
+    Route::prefix('contact')->middleware('manage_messages')->group(function () {
+        Route::get('/', 'CPanelContactSubmissionController@index')->name('cpanel_contact_list');
+        Route::get('/{id}', 'CPanelContactSubmissionController@show')->name('cpanel_contact_show')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'CPanelContactSubmissionController@destroy')->name('cpanel_contact_destroy')->where('id', '[0-9]+');
+    });
+
 });
 
 /*

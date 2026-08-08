@@ -19,6 +19,7 @@ export type Ability =
     | 'manage_comments'
     | 'manage_general_settings'
     | 'manage_newsletter'
+    | 'manage_messages'
     | 'manage_updates';
 
 export interface SharedProps {

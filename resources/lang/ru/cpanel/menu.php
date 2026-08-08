@@ -19,6 +19,7 @@ return [
     'services' => 'Услуги',
     'categories' => 'Категории',
     'comments' => 'Комментарии',
+    'messages' => 'Сообщения',
     'menus' => 'Меню',
     'users' => 'Пользователи',
     'roles' => 'Роли',

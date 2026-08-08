@@ -6,7 +6,8 @@ const shared = {
   auth: { user: { id: 1, name: 'Elman Admin', email: 'a@b.com' },
     can: { see_admin_panel: true, manage_posts: true, manage_pages: true, manage_services: true,
       manage_post_categories: true, manage_comments: true, manage_menus: true,
-      manage_general_settings: true, manage_users: true, manage_user_roles: true, manage_newsletter: true } },
+      manage_general_settings: true, manage_users: true, manage_user_roles: true, manage_newsletter: true,
+      manage_messages: true, manage_updates: true } },
   locale: { current: 'en', available: { en: 'English', de: 'Deutsch', ru: 'Russian' } },
   flash: { success: 'Saved' },
 };

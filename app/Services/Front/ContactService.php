@@ -3,19 +3,22 @@
 namespace App\Services\Front;
 
 use App\Mail\ContactMail;
+use App\Repositories\ContactSubmissionRepository;
 use Illuminate\Support\Facades\Mail;
 
 /**
- * Contact-form orchestration: builds the mail payload, resolves the recipient
- * (admin-configured contact email, falling back to config), and sends the
- * message. The mail send is the primary user action of the contact form (not a
- * side effect of a DB write), so it lives in the service rather than an
- * observer. No data access is involved beyond the get_contact_email() helper.
+ * Contact-form orchestration: persists the submission (so nothing is lost if
+ * mail fails and the admin gets a searchable inbox), then emails the configured
+ * recipient. Persistence goes through the repository — the service never touches
+ * the ORM directly (arch LayeringTest). Replaces the WP Contact Form 7 +
+ * Flamingo pairing.
  */
 class ContactService
 {
+    public function __construct(private ContactSubmissionRepository $submissions) {}
+
     /**
-     * Send a contact-form submission to the configured recipient.
+     * Store a contact-form submission and send it to the configured recipient.
      */
     public function send($request): void
     {
@@ -26,6 +29,12 @@ class ContactService
             'email' => $request->email,
             'message' => $request->message,
         ];
+
+        // Persist first so a failed mail send never loses the message.
+        $this->submissions->create($data + [
+            'ip' => $request->ip(),
+            'user_agent' => substr((string) $request->userAgent(), 0, 255),
+        ]);
 
         $contact_mail = get_contact_email();
 

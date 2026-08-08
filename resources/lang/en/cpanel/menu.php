@@ -19,6 +19,7 @@ return [
     'services' => 'Services',
     'categories' => 'Categories',
     'comments' => 'Comments',
+    'messages' => 'Messages',
     'menus' => 'Menus',
     'users' => 'Users',
     'roles' => 'Roles',

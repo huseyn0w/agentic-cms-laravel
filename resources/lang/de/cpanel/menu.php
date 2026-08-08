@@ -21,7 +21,10 @@ return [
     'comments' => 'Kommentare',
     'menus' => 'Menüs',
     'users' => 'Benutzer',
+    'roles' => 'Rollen',
     'security' => 'Sicherheit',
     'newsletter' => 'Newsletter',
+    'aeo' => 'AEO',
+    'mcp' => 'MCP',
 
 ];

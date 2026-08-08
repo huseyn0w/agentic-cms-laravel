@@ -29,6 +29,7 @@ export const NAV_GROUPS: NavGroup[] = [
     { key: 'cpanel/menu.settings', fallback: 'Settings', href: `${A}/general-settings`, component: 'cpanel/settings', ability: 'manage_general_settings' },
     { key: 'cpanel/menu.security', fallback: 'Security', href: `${A}/security`, component: 'cpanel/security', ability: 'manage_general_settings' },
     { key: 'cpanel/menu.users', fallback: 'Users', href: `${A}/users`, component: 'cpanel/users', ability: 'manage_users' },
+    { key: 'cpanel/menu.roles', fallback: 'Roles', href: `${A}/roles`, component: 'cpanel/roles', ability: 'manage_user_roles' },
     { key: 'cpanel/menu.newsletter', fallback: 'Newsletter', href: `${A}/newsletter`, component: 'cpanel/newsletter', ability: 'manage_newsletter' },
   ]},
 ];

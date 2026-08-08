@@ -21,7 +21,10 @@ return [
     'comments' => 'Комментарии',
     'menus' => 'Меню',
     'users' => 'Пользователи',
+    'roles' => 'Роли',
     'security' => 'Безопасность',
     'newsletter' => 'Рассылка',
+    'aeo' => 'AEO',
+    'mcp' => 'MCP',
 
 ];

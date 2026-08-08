@@ -25,6 +25,7 @@ describe('Sidebar', () => {
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(screen.getByText('Categories')).toBeInTheDocument();
     expect(screen.getByText('Users')).toBeInTheDocument();
+    expect(screen.getByText('Roles')).toBeInTheDocument();
   });
 
   it('hides items the user lacks permission for', () => {
@@ -41,7 +42,7 @@ describe('Sidebar', () => {
   });
 
   it('hides the group label when every item in the group is filtered out', () => {
-    render(<Sidebar can={can({ manage_general_settings: false, manage_users: false, manage_newsletter: false })} />);
+    render(<Sidebar can={can({ manage_general_settings: false, manage_users: false, manage_user_roles: false, manage_newsletter: false })} />);
     expect(screen.queryByText('Settings')).not.toBeInTheDocument();
     expect(screen.getByText('Content')).toBeInTheDocument();
   });

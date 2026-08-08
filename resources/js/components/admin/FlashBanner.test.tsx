@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { FlashBanner } from './FlashBanner';
 
@@ -28,5 +28,12 @@ describe('FlashBanner', () => {
     const { getByRole, queryByRole } = render(<FlashBanner />);
     expect(getByRole('status')).toHaveTextContent('Saved');
     expect(queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('can be dismissed with the close button', () => {
+    flash = { success: 'Saved' };
+    const { getByLabelText, queryByRole } = render(<FlashBanner />);
+    fireEvent.click(getByLabelText('Dismiss'));
+    expect(queryByRole('status')).not.toBeInTheDocument();
   });
 });

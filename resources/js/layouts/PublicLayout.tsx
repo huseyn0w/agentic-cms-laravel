@@ -157,22 +157,41 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
 
                         {shell.languages.length > 0 && (
                             <div className="flex items-center gap-0.5" data-testid="locale-switcher">
-                                {shell.languages.map((lang) => (
-                                    <a
-                                        key={lang.code}
-                                        href={lang.url}
-                                        data-testid={`lang-${lang.code.toLowerCase()}`}
-                                        aria-current={lang.current ? 'true' : undefined}
-                                        className={
-                                            'rounded-md px-2 py-1 font-mono text-xs uppercase tracking-[0.06em] transition-colors ' +
-                                            (lang.current
-                                                ? 'text-[var(--accent)]'
-                                                : 'text-[var(--text-subtle)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]')
-                                        }
-                                    >
-                                        {lang.code}
-                                    </a>
-                                ))}
+                                {shell.languages.map((lang) => {
+                                    const className =
+                                        'rounded-md px-2 py-1 font-mono text-xs uppercase tracking-[0.06em] transition-colors ' +
+                                        (lang.current
+                                            ? 'text-[var(--accent)]'
+                                            : 'text-[var(--text-subtle)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]');
+
+                                    // The current locale has no target URL — render a plain span.
+                                    // Other locales are real Inertia pages now (URL-driven locale),
+                                    // so prefetch them on hover for instant switching.
+                                    if (lang.current) {
+                                        return (
+                                            <span
+                                                key={lang.code}
+                                                data-testid={`lang-${lang.code.toLowerCase()}`}
+                                                aria-current="true"
+                                                className={className}
+                                            >
+                                                {lang.code}
+                                            </span>
+                                        );
+                                    }
+
+                                    return (
+                                        <Link
+                                            key={lang.code}
+                                            href={lang.url}
+                                            prefetch="hover"
+                                            data-testid={`lang-${lang.code.toLowerCase()}`}
+                                            className={className}
+                                        >
+                                            {lang.code}
+                                        </Link>
+                                    );
+                                })}
                             </div>
                         )}
 

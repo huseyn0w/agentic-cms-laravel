@@ -35,11 +35,13 @@ class HelpersTest extends TestCase
         $this->assertSame(app()->getLocale(), get_current_lang());
     }
 
-    public function test_get_current_lang_honours_session_locale(): void
+    public function test_get_current_lang_reflects_app_locale(): void
     {
-        \Session::put('locale', 'ru');
+        // Locale is now URL-driven: the Localization middleware sets the app
+        // locale per request, and get_current_lang() reads it (not the session).
+        app()->setLocale('ru');
         $this->assertSame('ru', get_current_lang());
-        \Session::forget('locale');
+        app()->setLocale('en');
     }
 
     public function test_set_current_lang_changes_app_locale(): void
@@ -58,9 +60,13 @@ class HelpersTest extends TestCase
 
     public function test_get_current_lang_prefix_appends_slash_for_non_default(): void
     {
-        \Session::put('locale', 'ru');
+        // The "default" is the stable fallback locale (setLocale rewrites
+        // config('app.locale'), so it can't be used to detect the default).
+        app()->setLocale('ru');
         $this->assertSame('ru/', get_current_lang_prefix());
-        \Session::forget('locale');
+        app()->setLocale(default_lang());
+        $this->assertNull(get_current_lang_prefix());
+        app()->setLocale('en');
     }
 
     public function test_get_post_list_returns_qualified_join_results(): void

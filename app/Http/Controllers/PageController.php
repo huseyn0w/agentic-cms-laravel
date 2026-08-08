@@ -171,7 +171,8 @@ class PageController extends BaseController
                 $posts[] = [
                     'title' => $post->title,
                     'url' => rtrim(config('app.url'), '/').'/posts/'.$post->slug,
-                    'image' => image_src($post->thumbnail),
+                    'thumbnail' => $post->thumbnail ?: null,
+                    'coverSeed' => $post->slug,
                     'excerpt' => strip_tags((string) $post->preview),
                     'date' => Carbon::parse($post->updated_at)->format('d M Y'),
                 ];

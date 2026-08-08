@@ -1,12 +1,14 @@
 import { Link } from '@inertiajs/react';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { PreviewBanner } from '@/components/PreviewBanner';
+import { PostCover } from '@/components/public/PostCover';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface PostCard {
     title: string;
     url: string;
-    image: string;
+    thumbnail: string | null;
+    coverSeed: string;
     excerpt: string;
     date: string;
 }
@@ -101,11 +103,15 @@ export default function Home({ shell, preview = false, page, hero, postsSection,
                                 className="group flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--accent)] hover:shadow-[0_8px_30px_rgba(9,9,11,0.08)]"
                             >
                                 <div className="aspect-[16/10] overflow-hidden bg-[var(--surface-2)]">
-                                    <img
-                                        src={post.image}
-                                        alt=""
-                                        className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
-                                    />
+                                    {post.thumbnail ? (
+                                        <img
+                                            src={post.thumbnail}
+                                            alt=""
+                                            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
+                                        />
+                                    ) : (
+                                        <PostCover seed={post.coverSeed} title={post.title} className="h-full w-full transition duration-300 group-hover:scale-[1.04]" />
+                                    )}
                                 </div>
                                 <div className="flex flex-1 flex-col p-5">
                                     <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--text-faint)]">{post.date}</p>

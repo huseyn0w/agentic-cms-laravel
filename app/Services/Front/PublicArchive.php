@@ -20,7 +20,7 @@ class PublicArchive
     public function build(string $title, LengthAwarePaginator $posts, string $pageBaseUrl, string $emptyText): array
     {
         $base = rtrim(config('app.url'), '/');
-        $localePrefix = get_current_lang() === config('app.locale') ? '' : get_current_lang().'/';
+        $localePrefix = get_current_lang() === default_lang() ? '' : get_current_lang().'/';
         $home = get_general_settings('website_name') ?: config('app.name');
 
         return [
@@ -33,7 +33,8 @@ class PublicArchive
                 'title' => $post->title,
                 'url' => $base.'/'.$localePrefix.'posts/'.$post->slug,
                 'excerpt' => strip_tags((string) $post->preview),
-                'image' => image_src($post->thumbnail),
+                'thumbnail' => $post->thumbnail ?: null,
+                'coverSeed' => $post->slug,
                 'date' => Carbon::parse($post->updated_at)->format('Y-m-d'),
             ])->values()->all(),
             'currentPage' => $posts->currentPage(),

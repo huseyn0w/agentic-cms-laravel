@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { PreviewBanner } from '@/components/PreviewBanner';
+import { PostCover } from '@/components/public/PostCover';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface Author {
@@ -37,6 +38,7 @@ interface PostProps {
         title: string;
         content: string;
         thumbnail: string | null;
+        coverSeed: string;
         date: string;
         dateIso: string;
         likes: number;
@@ -46,7 +48,7 @@ interface PostProps {
         category: { title: string; url: string } | null;
         tags: { name: string; url: string }[];
     };
-    related: { title: string; url: string; excerpt: string; date: string; image: string }[];
+    related: { title: string; url: string; excerpt: string; date: string; thumbnail: string | null; coverSeed: string }[];
     comments: { total: number; data: CommentNode[]; currentPage: number; lastPage: number; currentUserId: number | null };
     commentForm: {
         postUrl: string;
@@ -99,11 +101,13 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
                     </div>
                 </div>
 
-                {post.thumbnail && (
-                    <figure className="mt-10 overflow-hidden rounded-xl bg-[var(--surface-2)]">
+                <figure className="mt-10 overflow-hidden rounded-xl bg-[var(--surface-2)]">
+                    {post.thumbnail ? (
                         <img src={post.thumbnail} alt={post.title} width={1280} height={720} className="aspect-[16/9] w-full object-cover" />
-                    </figure>
-                )}
+                    ) : (
+                        <PostCover seed={post.coverSeed} title={post.title} className="aspect-[16/9] w-full" />
+                    )}
+                </figure>
 
                 <div className="article-prose mt-10" dangerouslySetInnerHTML={{ __html: post.content }} />
 
@@ -137,10 +141,19 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
                         <h2 className="text-2xl font-semibold tracking-[-0.02em] text-[var(--text)]">{tr('default/post.related_posts', 'Related posts')}</h2>
                         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {related.map((r) => (
-                                <Link key={r.url} href={r.url} prefetch="hover" cacheFor="30s" className="group block rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 transition duration-200 hover:-translate-y-0.5 hover:border-[var(--accent)]">
+                                <Link key={r.url} href={r.url} prefetch="hover" cacheFor="30s" className="group block overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--accent)]">
+                                    <div className="overflow-hidden bg-[var(--surface-2)]">
+                                        {r.thumbnail ? (
+                                            <img src={r.thumbnail} alt="" className="aspect-[16/9] w-full object-cover transition duration-300 group-hover:scale-105" />
+                                        ) : (
+                                            <PostCover seed={r.coverSeed} title={r.title} className="aspect-[16/9] w-full" />
+                                        )}
+                                    </div>
+                                    <div className="p-4">
                                     <p className="font-mono text-xs text-[var(--text-faint)]">{r.date}</p>
                                     <h3 className="mt-1 text-lg font-semibold tracking-[-0.01em] text-[var(--text)] transition-colors group-hover:text-[var(--accent)]">{r.title}</h3>
                                     {r.excerpt && <p className="mt-1 line-clamp-2 text-sm text-[var(--text-subtle)]">{r.excerpt}</p>}
+                                    </div>
                                 </Link>
                             ))}
                         </div>

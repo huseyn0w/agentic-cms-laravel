@@ -58,7 +58,7 @@ class PostController extends BaseController
     private function renderPostPage(bool $preview = false): Response
     {
         $post = $this->data;
-        $localePrefix = get_current_lang() === config('app.locale') ? '' : get_current_lang().'/';
+        $localePrefix = get_current_lang() === default_lang() ? '' : get_current_lang().'/';
         $base = rtrim(config('app.url'), '/');
 
         return Inertia::render('public/Post', [
@@ -69,6 +69,7 @@ class PostController extends BaseController
                 'title' => $post->title,
                 'content' => app('hooks')->filter('the_content', $post->content),
                 'thumbnail' => $post->thumbnail ?: null,
+                'coverSeed' => $post->slug ?? (string) $post->id,
                 'date' => Carbon::parse($post->updated_at)->format('d.m.Y'),
                 'dateIso' => Carbon::parse($post->updated_at)->toIso8601String(),
                 'likes' => (int) $post->likes,
@@ -94,7 +95,8 @@ class PostController extends BaseController
                 'url' => $base.'/'.$localePrefix.'posts/'.$r->slug,
                 'excerpt' => strip_tags((string) $r->preview),
                 'date' => Carbon::parse($r->updated_at)->format('Y-m-d'),
-                'image' => image_src($r->thumbnail),
+                'thumbnail' => $r->thumbnail ?: null,
+                'coverSeed' => $r->slug,
             ])->values()->all(),
             'comments' => $this->shapeComments(),
             'commentForm' => [

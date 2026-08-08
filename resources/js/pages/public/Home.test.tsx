@@ -32,7 +32,7 @@ const baseProps = {
         headline: 'Latest',
         description: 'Recent writing',
         posts: [
-            { title: 'First post', url: 'https://example.test/posts/first', image: '/img/a.jpg', excerpt: 'An excerpt', date: '01 Jan 2026' },
+            { title: 'First post', url: 'https://example.test/posts/first', thumbnail: '/img/a.jpg', coverSeed: 'first', excerpt: 'An excerpt', date: '01 Jan 2026' },
         ],
     },
     about: {

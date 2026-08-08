@@ -24,11 +24,6 @@ parameters:
 			count: 1
 			path: app/Http/Controllers/Auth/LoginController.php
 
-		-
-			message: '#^Access to an undefined property App\\Http\\Controllers\\BaseController\:\:\$lang_prefixes\.$#'
-			identifier: property.notFound
-			count: 3
-			path: app/Http/Controllers/BaseController.php
 
 		-
 			message: '#^Property App\\Http\\Controllers\\CPanel\\CPanelRoleController\:\:\$countries is never read, only written\.$#'

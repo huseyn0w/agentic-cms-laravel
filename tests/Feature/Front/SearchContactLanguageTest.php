@@ -7,6 +7,7 @@ use App\Mail\ContactMail;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 /**
@@ -77,11 +78,10 @@ class SearchContactLanguageTest extends TestCase
 
     public function test_language_switch_route_sets_locale_and_renders(): void
     {
-        // The {locale?}/{slug?} front route switches the session locale and
-        // redirects when given a known language prefix.
-        $this->get('/ru')->assertStatus(302);
-
-        // After the redirect the home page must still render in the new locale.
-        $this->followingRedirects()->get('/ru')->assertStatus(200);
+        // The {locale?}/{slug?} front route is URL-driven: a known language
+        // prefix renders directly in that locale (no session redirect).
+        $this->get('/ru')
+            ->assertStatus(200)
+            ->assertInertia(fn (AssertableInertia $p) => $p->where('locale.current', 'ru'));
     }
 }

@@ -1,12 +1,14 @@
 import { Link } from '@inertiajs/react';
 import { PublicLayout } from '@/layouts/PublicLayout';
+import { PostCover } from '@/components/public/PostCover';
 import type { Shell } from '@/layouts/PublicLayout';
 
 interface ArchivePost {
     title: string;
     url: string;
     excerpt: string;
-    image: string;
+    thumbnail: string | null;
+    coverSeed: string;
     date: string;
 }
 
@@ -68,7 +70,11 @@ export default function Archive({ shell, archive }: ArchiveProps) {
                                     className="group flex flex-col overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface)] transition hover:border-[var(--border-strong)] hover:shadow-card"
                                 >
                                     <div className="aspect-[16/9] overflow-hidden bg-[var(--surface-2)]">
-                                        <img src={post.image} alt="" className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                                        {post.thumbnail ? (
+                                            <img src={post.thumbnail} alt="" className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                                        ) : (
+                                            <PostCover seed={post.coverSeed} title={post.title} className="h-full w-full transition duration-300 group-hover:scale-105" />
+                                        )}
                                     </div>
                                     <div className="flex flex-1 flex-col p-5">
                                         <p className="font-mono text-xs uppercase tracking-[0.06em] text-[var(--text-muted)]">{post.date}</p>

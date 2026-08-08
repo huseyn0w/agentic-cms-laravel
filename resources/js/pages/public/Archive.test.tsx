@@ -28,8 +28,8 @@ const archive = (over: Record<string, unknown> = {}) => ({
         { label: 'Announcements', url: null },
     ],
     posts: [
-        { title: 'First post', url: 'https://example.test/posts/first', excerpt: 'Excerpt', image: '/a.png', date: '2026-01-01' },
-        { title: 'Second post', url: 'https://example.test/posts/second', excerpt: '', image: '/b.png', date: '2026-01-02' },
+        { title: 'First post', url: 'https://example.test/posts/first', excerpt: 'Excerpt', thumbnail: '/a.png', coverSeed: 'first', date: '2026-01-01' },
+        { title: 'Second post', url: 'https://example.test/posts/second', excerpt: '', thumbnail: null, coverSeed: 'second', date: '2026-01-02' },
     ],
     currentPage: 1,
     lastPage: 3,

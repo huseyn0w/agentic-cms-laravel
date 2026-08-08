@@ -17,16 +17,11 @@ class ServiceController extends BaseController
     }
 
     /**
-     * Public services grid (published, ordered by sort_order). Honours an
-     * optional locale prefix by switching the session locale (mirrors the
-     * BaseController slug-locale handling).
+     * Public services grid (published, ordered by sort_order). The locale is
+     * resolved from the optional URL prefix by the Localization middleware.
      */
     public function listing(?string $locale = null): Response|HttpResponse
     {
-        if (! is_null($locale) && in_array($locale, get_lang_prefixes()) && $locale !== get_current_lang()) {
-            return $this->setLang($locale);
-        }
-
         $services = $this->service->publishedOrdered();
 
         // Synthetic entity for the seo-meta partial (title/description/canonical

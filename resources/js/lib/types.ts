@@ -29,6 +29,10 @@ export interface SharedProps {
         current: string;
         available: Record<string, string> | string[];
     };
+    /** Agentic CMS core version (config/cms.php), shown in the admin. */
+    cms: {
+        version: string;
+    };
     flash: {
         status: string | null;
         success: string | null;

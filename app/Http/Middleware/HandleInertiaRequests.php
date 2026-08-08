@@ -73,6 +73,11 @@ class HandleInertiaRequests extends Middleware
                 'current' => get_current_lang(),
                 'available' => get_languages(),
             ],
+            // Core version identity, shared to every page so the admin can show
+            // it and (later) compare it against the release feed.
+            'cms' => [
+                'version' => cms_version(),
+            ],
             'messages' => fn (): array => app(TranslationDictionary::class)
                 ->forLocale(get_current_lang()),
             // Public site chrome (header menu, languages, footer, auth links).

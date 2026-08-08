@@ -1212,3 +1212,15 @@ if (! function_exists('image_fallback')) {
         return 'onerror="this.onerror=null;this.src=\''.e($placeholder).'\'"';
     }
 }
+
+if (! function_exists('cms_version')) {
+    /**
+     * The Agentic CMS core version (from config/cms.php), independent of the
+     * Laravel framework version. Shown in the admin and used by the updater to
+     * compare against the release feed.
+     */
+    function cms_version(): string
+    {
+        return (string) config('cms.version', '0.0.0');
+    }
+}

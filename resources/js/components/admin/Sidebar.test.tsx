@@ -8,7 +8,11 @@ vi.mock('@inertiajs/react', () => ({
   Link: ({ children, prefetch, cacheFor, ...p }: any) => (
     <a data-prefetch={String(prefetch)} data-cache-for={String(cacheFor)} {...p}>{children}</a>
   ),
-  usePage: () => ({ url: '/agentic-cms-laravel-admin/categories', component: 'cpanel/categories/List' }),
+  usePage: () => ({
+    url: '/agentic-cms-laravel-admin/categories',
+    component: 'cpanel/categories/List',
+    props: { cms: { version: '1.0.0' } },
+  }),
 }));
 
 const can = (overrides = {}) => ({
@@ -45,6 +49,11 @@ describe('Sidebar', () => {
     render(<Sidebar can={can({ manage_general_settings: false, manage_users: false, manage_user_roles: false, manage_newsletter: false })} />);
     expect(screen.queryByText('Settings')).not.toBeInTheDocument();
     expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('shows the core version from the shared cms prop', () => {
+    render(<Sidebar can={can()} />);
+    expect(screen.getByTestId('admin-version')).toHaveTextContent('v1.0.0');
   });
 
   it('nav links prefetch on mount and cache for 15s (instant navigation)', () => {

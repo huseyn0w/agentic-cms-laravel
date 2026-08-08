@@ -85,4 +85,24 @@ describe('PublicLayout', () => {
         expect(screen.getByRole('link', { name: 'Log out' })).toBeInTheDocument();
         expect(screen.queryByRole('link', { name: 'Log in' })).not.toBeInTheDocument();
     });
+
+    it('renders legal footer links when the shell provides them', () => {
+        render(
+            <PublicLayout
+                shell={makeShell({
+                    legalLinks: [
+                        { title: 'Imprint', url: 'https://example.test/impressum' },
+                        { title: 'Privacy Policy', url: 'https://example.test/datenschutz' },
+                    ],
+                })}
+            >
+                c
+            </PublicLayout>,
+        );
+
+        const legal = screen.getByTestId('footer-legal');
+        expect(legal).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Imprint' })).toHaveAttribute('href', 'https://example.test/impressum');
+        expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute('href', 'https://example.test/datenschutz');
+    });
 });

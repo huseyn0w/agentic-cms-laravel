@@ -20,6 +20,7 @@ return [
     'categories' => 'Категории',
     'comments' => 'Комментарии',
     'messages' => 'Сообщения',
+    'content_types' => 'Контент',
     'menus' => 'Меню',
     'users' => 'Пользователи',
     'roles' => 'Роли',

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Http\Models\UserRoles;
 use App\Services\Front\PublicShell;
+use App\Support\Content\ContentTypeRegistry;
 use App\Support\I18n\TranslationDictionary;
 use App\Support\Updater\UpdateService;
 use Illuminate\Http\Request;
@@ -40,6 +41,7 @@ class HandleInertiaRequests extends Middleware
         'manage_media',
         'manage_newsletter',
         'manage_messages',
+        'manage_content',
         'manage_general_settings',
         'manage_updates',
     ];
@@ -86,6 +88,10 @@ class HandleInertiaRequests extends Middleware
                 // manage updates — it drives the "update available" banner.
                 'updateAvailable' => fn () => $this->sharedUpdateAvailable($request),
             ],
+            // Content types contributed by enabled plugins that the current user
+            // may manage — drives the dynamic sidebar items. Empty for guests and
+            // when no content-type plugin is enabled.
+            'contentTypes' => fn (): array => $this->sharedContentTypes($request),
             'messages' => fn (): array => app(TranslationDictionary::class)
                 ->forLocale(get_current_lang()),
             // Public site chrome (header menu, languages, footer, auth links).
@@ -142,6 +148,32 @@ class HandleInertiaRequests extends Middleware
         $cached = Cache::get(UpdateService::CACHE_KEY);
 
         return is_array($cached) && isset($cached['version']) ? (string) $cached['version'] : null;
+    }
+
+    /**
+     * Enabled-plugin content types the current user may manage, as {slug,label}
+     * for the current locale. Drives the dynamic sidebar items. Never build the
+     * registry for guests.
+     *
+     * @return list<array{slug: string, label: string}>
+     */
+    private function sharedContentTypes(Request $request): array
+    {
+        $user = $request->user();
+
+        if ($user === null) {
+            return [];
+        }
+
+        $types = [];
+
+        foreach (app(ContentTypeRegistry::class)->all() as $type) {
+            if ($user->can($type->permission, UserRoles::class)) {
+                $types[] = ['slug' => $type->slug, 'label' => $type->label(get_current_lang())];
+            }
+        }
+
+        return $types;
     }
 
     /**

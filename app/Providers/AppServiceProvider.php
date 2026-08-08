@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Support\Content\ContentTypeRegistry;
 use App\Support\Hooks;
 use App\Support\I18n\TranslationDictionary;
 use App\Support\Updater\PathManifest;
@@ -33,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
             fn () => new PathManifest(config('cms.paths', []))
         );
 
+        // Registry of content types contributed by enabled plugins (booted lazily
+        // once per request). One instance so the boot happens once.
+        $this->app->singleton(ContentTypeRegistry::class);
+
         // Register a fork's site zone provider when present (never present on a
         // stock install). The site zone survives core updates.
         SiteBootstrap::register($this->app);
@@ -49,6 +54,16 @@ class AppServiceProvider extends ServiceProvider
         // paginator so ->links() (and the pretty_url()/pretty_search_url()
         // helpers that wrap it) emit Tailwind markup instead of Bootstrap.
         Paginator::useTailwind();
+
+        // Content-type plugins ship their table migration in their own dir; load
+        // every plugin's migrations/ folder so `migrate` creates the tables. The
+        // plugin's content type only appears in the admin when it's enabled.
+        foreach (array_merge(
+            glob(app_path('Plugins/*/migrations'), GLOB_ONLYDIR) ?: [],
+            glob(app_path('Site/Plugins/*/migrations'), GLOB_ONLYDIR) ?: [],
+        ) as $migrationPath) {
+            $this->loadMigrationsFrom($migrationPath);
+        }
 
         // P9: render a named plugin render-region, e.g. @hook('footer').
         Blade::directive('hook', fn ($expression) => "<?php echo app('hooks')->region({$expression}); ?>");

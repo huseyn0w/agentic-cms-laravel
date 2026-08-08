@@ -275,6 +275,18 @@ Route::prefix('agentic-cms-laravel-admin')->middleware(['restrict_admin_ip', 'au
         Route::delete('/{id}', 'CPanelNewsletterController@destroy')->name('cpanel_newsletter_destroy')->where('id', '[0-9]+');
     });
 
+    // Generic CRUD for plugin content types. One route group serves every
+    // registered type by {type} slug; the controller resolves it from the
+    // registry (404 if not registered / plugin disabled).
+    Route::prefix('content/{type}')->middleware('manage_content')->group(function () {
+        Route::get('/', 'CPanelContentController@index')->name('cpanel_content_index');
+        Route::get('/create', 'CPanelContentController@createForm')->name('cpanel_content_create');
+        Route::post('/', 'CPanelContentController@store')->name('cpanel_content_store');
+        Route::get('/{id}/edit', 'CPanelContentController@editForm')->name('cpanel_content_edit')->where('id', '[0-9]+');
+        Route::put('/{id}', 'CPanelContentController@updateItem')->name('cpanel_content_update')->where('id', '[0-9]+');
+        Route::delete('/{id}', 'CPanelContentController@destroy')->name('cpanel_content_destroy')->where('id', '[0-9]+');
+    })->where('type', '[a-z0-9-]+');
+
     // Managed redirects (301/302) for old URLs — SEO-safe migration.
     Route::prefix('redirects')->middleware('manage_general_settings')->group(function () {
         Route::get('/', 'CPanelRedirectController@index')->name('cpanel_redirects');

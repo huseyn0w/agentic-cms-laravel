@@ -20,6 +20,7 @@ return [
     'categories' => 'Kategorien',
     'comments' => 'Kommentare',
     'messages' => 'Nachrichten',
+    'content_types' => 'Inhalte',
     'menus' => 'Menüs',
     'users' => 'Benutzer',
     'roles' => 'Rollen',

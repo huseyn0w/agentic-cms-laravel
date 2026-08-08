@@ -14,6 +14,7 @@ use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\Localization;
 use App\Http\Middleware\ManageCategories;
 use App\Http\Middleware\ManageComments;
+use App\Http\Middleware\ManageContent;
 use App\Http\Middleware\ManageGeneralSettings;
 use App\Http\Middleware\ManageMedia;
 use App\Http\Middleware\ManageMenu;
@@ -109,6 +110,7 @@ class Kernel extends HttpKernel
         'manage_services' => ManageServices::class,
         'manage_menus' => ManageMenu::class,
         'manage_comments' => ManageComments::class,
+        'manage_content' => ManageContent::class,
         'manage_media' => ManageMedia::class,
         'manage_newsletter' => ManageNewsletter::class,
         'manage_messages' => ManageMessages::class,

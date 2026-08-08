@@ -20,6 +20,7 @@ return [
     'categories' => 'Categories',
     'comments' => 'Comments',
     'messages' => 'Messages',
+    'content_types' => 'Content',
     'menus' => 'Menus',
     'users' => 'Users',
     'roles' => 'Roles',

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Topbar } from './Topbar';
 
@@ -8,9 +8,17 @@ const can = {
   manage_general_settings: true, manage_users: true, manage_user_roles: true,
 };
 
+const visit = vi.fn();
+
 vi.mock('@inertiajs/react', () => ({
   Link: ({ children, ...p }: any) => <a {...p}>{children}</a>,
-  usePage: () => ({ props: { auth: { user: null, can } } }),
+  router: { visit: (...args: unknown[]) => visit(...args) },
+  usePage: () => ({
+    props: {
+      auth: { user: null, can },
+      locale: { current: 'en', available: { en: 'English', de: 'Deutsch', ru: 'Russian' } },
+    },
+  }),
 }));
 
 describe('Topbar', () => {
@@ -29,5 +37,11 @@ describe('Topbar', () => {
     const logout = screen.getByText('Log out');
     expect(logout).toHaveAttribute('href', '/logout');
     expect(logout).toHaveAttribute('method', 'post');
+  });
+
+  it('switches the admin language through the locale route', () => {
+    render(<Topbar />);
+    fireEvent.change(screen.getByLabelText('Language'), { target: { value: 'de' } });
+    expect(visit).toHaveBeenCalledWith('/agentic-cms-laravel-admin/locale/de');
   });
 });

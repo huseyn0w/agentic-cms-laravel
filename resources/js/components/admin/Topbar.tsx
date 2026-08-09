@@ -38,7 +38,7 @@ export function Topbar({ breadcrumb }: { breadcrumb?: ReactNode }) {
               // does not consistently re-sync react-i18next.
               window.location.href = `${ADMIN}/locale/${e.target.value}`;
             }}
-            className="h-8 cursor-pointer appearance-none rounded-md border border-[color:var(--border)] bg-surface pl-2.5 pr-7 text-[12px] font-medium text-muted transition-colors hover:border-[color:var(--border-strong)] hover:text-fg"
+            className="h-8 cursor-pointer appearance-none rounded-md border border-[color:var(--border)] bg-surface bg-none pl-2.5 pr-7 text-[12px] font-medium text-muted transition-colors hover:border-[color:var(--border-strong)] hover:text-fg"
           >
             {codes.map((code) => (
               <option key={code} value={code}>

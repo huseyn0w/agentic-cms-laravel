@@ -44,6 +44,21 @@ class CPanelUserRepository extends BaseRepository
         $this->model = $model;
     }
 
+    /**
+     * The admin user list reads $user->role->name per row. Eager-load the role
+     * so the listing is one extra query instead of one per user (N+1).
+     */
+    protected function nonTranslatedOnly($count)
+    {
+        try {
+            return $this->model::select($this->select_fields)
+                ->with('role')
+                ->paginate($count);
+        } catch (QueryException|\PDOException|\Error $e) {
+            throwAbort();
+        }
+    }
+
     /** Total number of registered users. */
     public function countAll(): int
     {

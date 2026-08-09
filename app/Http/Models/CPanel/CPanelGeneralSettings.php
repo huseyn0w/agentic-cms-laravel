@@ -2,12 +2,14 @@
 
 namespace App\Http\Models\CPanel;
 
+use App\Http\Models\Concerns\FlushesSettingsSingletonCache;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class CPanelGeneralSettings extends Model
 {
     use Cachable;
+    use FlushesSettingsSingletonCache;
 
     protected $table = 'general_settings';
 

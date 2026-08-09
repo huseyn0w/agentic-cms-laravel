@@ -2,6 +2,7 @@
 
 namespace App\Http\Models\CPanel;
 
+use App\Http\Models\Concerns\FlushesSettingsSingletonCache;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 class CPanelSecuritySettings extends Model
 {
     use Cachable;
+    use FlushesSettingsSingletonCache;
 
     public $timestamps = false;
 

@@ -90,6 +90,9 @@ class CategoryRepository extends BaseRepository
         $translated_table_name = 'post_translations';
         $join_column = 'post_id';
 
+        // updated_at is required by PublicArchive (the "date" field). Without it
+        // in the select, accessing $post->updated_at makes astrotomic lazy-load
+        // each post's translation row — an N+1 that scales with the page size.
         $select_fields = [
             'id',
             'title',
@@ -98,6 +101,7 @@ class CategoryRepository extends BaseRepository
             'preview',
             'likes',
             'created_at',
+            'updated_at',
         ];
 
         $select = $this->generateSelectFieldsArray($select_fields, $main_table_name, $translated_table_name);

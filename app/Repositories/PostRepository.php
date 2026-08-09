@@ -259,6 +259,11 @@ class PostRepository extends BaseRepository
             return null;
         }
 
+        // Batch-load the tag/category translations the detail view reads
+        // ($tag->title, $category->title). Without this, astrotomic lazy-loads
+        // each tag's and category's translation row one by one (N+1).
+        $data->load(['categories.translations', 'tags.translations']);
+
         $data->setRelation('comments', $data->comments()->with('replies')->with('user')->orderBy('id', 'DESC')->paginate($comments_per_page));
 
         return $data;

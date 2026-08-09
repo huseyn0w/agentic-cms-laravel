@@ -125,14 +125,16 @@ export function PublicLayout({ shell, children }: { shell: Shell; children: Reac
                 data-testid="public-header"
             >
                 <div className="mx-auto flex h-16 max-w-[76rem] items-center justify-between gap-4 px-5 sm:px-8">
-                    <a
+                    <Link
                         href={shell.homeUrl}
+                        prefetch="hover"
+                        cacheFor="30s"
                         className="flex shrink-0 items-center"
                         aria-label={shell.general.websiteName}
                         data-testid="header-wordmark"
                     >
                         <Wordmark shell={shell} />
-                    </a>
+                    </Link>
 
                     <nav
                         className="hidden flex-1 items-center justify-center gap-1 lg:flex"

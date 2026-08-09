@@ -607,33 +607,76 @@ function get_page_templates_list()
 
 }
 
-function get_site_options($key = null)
+/**
+ * Request-scoped cache for the settings singletons (general/site/seo/geo/theme/
+ * security). Each is a single row read many times per request — the public
+ * header/footer, the seo-meta partial and several controllers all call the
+ * accessors below. Without this, every call re-queries (the query log showed
+ * general_settings hit 3x and site_options 2x on the homepage alone).
+ *
+ * Reads the WHOLE row once so any $key is served from the same cache entry
+ * (the old select($key) made one cache entry per column). Safe under PHP-FPM
+ * (one process per request); a settings write happens in a separate admin POST,
+ * so there is no stale-within-request risk. Under a persistent worker (Octane)
+ * this static would need a per-request reset.
+ *
+ * @template T of \Illuminate\Database\Eloquent\Model
+ *
+ * @param  class-string<T>  $model
+ * @return T|null
+ */
+function cms_settings_singleton(string $model)
 {
+    // The cache lives in a container-scoped ArrayObject (bound in
+    // AppServiceProvider) so it resets on every fresh container: one per request
+    // under PHP-FPM, one per Octane request, and one per test (the app is
+    // rebuilt in setUp) — no static-leak across requests or tests. Falls back to
+    // a direct read if the binding is unavailable (very early boot).
+    $store = app()->bound('cms.settings.singletons') ? app('cms.settings.singletons') : null;
 
-    $data = null;
-    if (is_null($key)) {
-        $data = CPanelSiteOptions::first();
-    } else {
-        $row = CPanelSiteOptions::select($key)->first();
-        $data = $row?->$key;
+    if ($store instanceof ArrayObject && $store->offsetExists($model)) {
+        return $store[$model];
     }
 
-    return $data;
+    try {
+        $value = $model::first();
+    } catch (Throwable $e) {
+        $value = null;
+    }
+
+    if ($store instanceof ArrayObject) {
+        $store[$model] = $value;
+    }
+
+    return $value;
+}
+
+/**
+ * Drop one settings singleton from the request-scoped cache after it is written,
+ * so a later read in the same request re-queries the fresh row. Called from the
+ * FlushesSettingsSingletonCache trait on the settings models.
+ */
+function cms_forget_settings_singleton(string $model): void
+{
+    $store = app()->bound('cms.settings.singletons') ? app('cms.settings.singletons') : null;
+
+    if ($store instanceof ArrayObject && $store->offsetExists($model)) {
+        $store->offsetUnset($model);
+    }
+}
+
+function get_site_options($key = null)
+{
+    $data = cms_settings_singleton(CPanelSiteOptions::class);
+
+    return is_null($key) ? $data : ($data?->$key ?? null);
 }
 
 function get_general_settings($key = null)
 {
+    $data = cms_settings_singleton(CPanelGeneralSettings::class);
 
-    $data = null;
-    if (is_null($key)) {
-        $data = CPanelGeneralSettings::first();
-    } else {
-        $row = CPanelGeneralSettings::select($key)->first();
-
-        $data = $row?->$key;
-    }
-
-    return $data;
+    return is_null($key) ? $data : ($data?->$key ?? null);
 }
 
 /**
@@ -648,24 +691,13 @@ function get_general_settings($key = null)
  */
 function get_seo_settings($key = null)
 {
-    // Reads go through the model-caching package (Cachable on the model): cached
-    // in production, fresh in tests where the cache is disabled. No local
-    // static cache — that would leak stale state across requests in-process.
-    try {
-        $settings = CPanelSeoSettings::first();
-    } catch (Throwable $e) {
-        $settings = null;
-    }
+    $settings = cms_settings_singleton(CPanelSeoSettings::class);
 
     if (is_null($settings)) {
         return null;
     }
 
-    if (is_null($key)) {
-        return $settings;
-    }
-
-    return $settings->$key ?? null;
+    return is_null($key) ? $settings : ($settings->$key ?? null);
 }
 
 /**
@@ -677,21 +709,13 @@ function get_seo_settings($key = null)
  */
 function get_geo_settings($key = null)
 {
-    try {
-        $settings = CPanelGeoSettings::first();
-    } catch (Throwable $e) {
-        $settings = null;
-    }
+    $settings = cms_settings_singleton(CPanelGeoSettings::class);
 
     if (is_null($settings)) {
         return null;
     }
 
-    if (is_null($key)) {
-        return $settings;
-    }
-
-    return $settings->$key ?? null;
+    return is_null($key) ? $settings : ($settings->$key ?? null);
 }
 
 if (! function_exists('get_theme_settings')) {
@@ -703,21 +727,13 @@ if (! function_exists('get_theme_settings')) {
      */
     function get_theme_settings($key = null)
     {
-        try {
-            $settings = CPanelThemeSettings::first();
-        } catch (Throwable $e) {
-            $settings = null;
-        }
+        $settings = cms_settings_singleton(CPanelThemeSettings::class);
 
         if (is_null($settings)) {
             return null;
         }
 
-        if (is_null($key)) {
-            return $settings;
-        }
-
-        return $settings->$key ?? null;
+        return is_null($key) ? $settings : ($settings->$key ?? null);
     }
 }
 
@@ -782,21 +798,13 @@ if (! function_exists('theme_css_variables')) {
  */
 function get_security_settings($key = null)
 {
-    try {
-        $settings = CPanelSecuritySettings::first();
-    } catch (Throwable $e) {
-        $settings = null;
-    }
+    $settings = cms_settings_singleton(CPanelSecuritySettings::class);
 
     if (is_null($settings)) {
         return null;
     }
 
-    if (is_null($key)) {
-        return $settings;
-    }
-
-    return $settings->$key ?? null;
+    return is_null($key) ? $settings : ($settings->$key ?? null);
 }
 
 /**
@@ -1074,6 +1082,16 @@ function get_lang_prefixes()
 
 function get_translation_links()
 {
+    // Built once per request: the public header's language switcher and the
+    // seo-meta hreflang block both call this, and each call ran 2 queries per
+    // alternate locale. The result depends only on the current route/slug, so
+    // memoize it on the Request instance — naturally one cache per HTTP request
+    // (a fresh Request per dispatch), with no cross-request leak.
+    $attributes = request()->attributes;
+
+    if ($attributes->has('cms.translation_links')) {
+        return $attributes->get('cms.translation_links');
+    }
 
     $languages = get_languages();
     $language_prefixes = get_lang_prefixes();
@@ -1173,6 +1191,8 @@ function get_translation_links()
         $result[$key]['url'] = config('app.url').'/'.$updated_key.$type.$translated_slug;
 
     }
+
+    $attributes->set('cms.translation_links', $result);
 
     return $result;
 }

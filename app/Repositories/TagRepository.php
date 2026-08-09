@@ -94,8 +94,10 @@ class TagRepository extends BaseRepository
         $translated_table_name = 'post_translations';
         $join_column = 'post_id';
 
+        // updated_at is needed by PublicArchive; selecting it here avoids an
+        // astrotomic per-post translation lazy-load (N+1) on the listing.
         $select = $this->generateSelectFieldsArray(
-            ['id', 'title', 'slug', 'thumbnail', 'preview', 'likes', 'created_at'],
+            ['id', 'title', 'slug', 'thumbnail', 'preview', 'likes', 'created_at', 'updated_at'],
             $main_table_name,
             $translated_table_name
         );

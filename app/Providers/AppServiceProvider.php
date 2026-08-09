@@ -38,6 +38,12 @@ class AppServiceProvider extends ServiceProvider
         // once per request). One instance so the boot happens once.
         $this->app->singleton(ContentTypeRegistry::class);
 
+        // Request-scoped cache for the settings singletons (see
+        // cms_settings_singleton()): one ArrayObject per fresh container, so the
+        // header/footer/seo-meta don't re-query the same singleton row per call.
+        // Writes clear their entry via the FlushesSettingsSingletonCache trait.
+        $this->app->scoped('cms.settings.singletons', fn () => new \ArrayObject);
+
         // Register a fork's site zone provider when present (never present on a
         // stock install). The site zone survives core updates.
         SiteBootstrap::register($this->app);
@@ -78,10 +84,5 @@ class AppServiceProvider extends ServiceProvider
         Passport::tokensExpireIn(now()->addDays(15));
         Passport::refreshTokensExpireIn(now()->addDays(30));
         Passport::personalAccessTokensExpireIn(now()->addMonths(6));
-
-        view()->composer('*', function ($view) {
-            $view->with('current_user', \Auth::user());
-            $view->with('home_page_data', get_data(1, 'page', ['slug', 'title']));
-        });
     }
 }

@@ -32,9 +32,13 @@ class PluginServiceProvider extends ServiceProvider
                 return;
             }
 
-            $manager = $app->make(PluginManager::class);
-            $manager->sync();
-            $manager->loadEnabled($hooks);
+            // Only load the ENABLED plugins' hooks. Do NOT sync() here — that
+            // does a firstOrCreate per discovered plugin (a SELECT, plus an
+            // INSERT the first time) on EVERY request, including public GETs.
+            // Syncing new plugin rows into the table is an admin/deploy concern:
+            // CPanelPluginService::listForAdmin() and toggle() already ensure the
+            // rows exist when the admin actually manages plugins.
+            $app->make(PluginManager::class)->loadEnabled($hooks);
         });
     }
 }

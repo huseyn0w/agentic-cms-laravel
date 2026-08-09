@@ -85,7 +85,6 @@ return [
         'core' => [
             'app',
             'bootstrap/app.php',
-            'bootstrap/providers.php',
             'config',
             'database/migrations',
             'database/seeds',

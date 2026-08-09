@@ -60,6 +60,7 @@ class ProjectsPlugin implements PluginInterface, RegistersContentTypes
                         'draft' => 'Draft',
                     ]),
                 ],
+                isPublic: true,
             ),
         ];
     }

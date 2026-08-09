@@ -16,6 +16,9 @@ class ContentType
      * @param  string  $table  Backing table name.
      * @param  list<Field>  $fields  Field schema.
      * @param  string  $permission  Ability gating admin access (default manage_content).
+     * @param  bool  $isPublic  Whether the type has a public front-end (index +
+     *                          detail rendered by the core generic renderer). Off
+     *                          by default: most types are admin/data only.
      */
     public function __construct(
         public string $slug,
@@ -23,7 +26,20 @@ class ContentType
         public string $table,
         public array $fields,
         public string $permission = 'manage_content',
+        public bool $isPublic = false,
     ) {}
+
+    /** Does the schema have a richtext field, i.e. is a detail page meaningful? */
+    public function hasDetail(): bool
+    {
+        foreach ($this->fields as $field) {
+            if ($field->type === Field::RICHTEXT) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * The label for the given locale, falling back to English then any value.

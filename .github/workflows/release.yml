@@ -67,3 +67,40 @@ jobs:
             build-release/release-*.tar.gz.sha256
             build-release/release-*.tar.gz.sig
             build-release/release-manifest.json
+
+      # Update the flat releases.json feed that each fleet site's update channel
+      # reads. Lives on an orphan `releases` branch; the step bootstraps it on
+      # the first release so no manual setup is needed.
+      - name: Publish release feed
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          REPO="${{ github.repository }}"
+          SERVER="${{ github.server_url }}"
+          FEED_DIR="$RUNNER_TEMP/feed"
+          AUTH="https://x-access-token:${GITHUB_TOKEN}@${SERVER#https://}/${REPO}.git"
+
+          if git ls-remote --exit-code --heads "$AUTH" releases >/dev/null 2>&1; then
+            git clone --depth 1 --branch releases "$AUTH" "$FEED_DIR"
+          else
+            echo "releases branch missing — bootstrapping it"
+            git clone --depth 1 "$AUTH" "$FEED_DIR"
+            git -C "$FEED_DIR" checkout --orphan releases
+            git -C "$FEED_DIR" reset --hard
+            git -C "$FEED_DIR" clean -fdx
+            echo '{"releases":[]}' > "$FEED_DIR/releases.json"
+          fi
+
+          php artisan cms:build-feed "$VERSION" \
+            --dir="$GITHUB_WORKSPACE/build-release" \
+            --repo-url="$SERVER/$REPO" \
+            --feed="$FEED_DIR/releases.json"
+
+          cd "$FEED_DIR"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add releases.json
+          git commit -m "chore(feed): publish release $VERSION" || { echo "feed unchanged"; exit 0; }
+          git push "$AUTH" HEAD:releases

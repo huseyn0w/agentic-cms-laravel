@@ -64,12 +64,16 @@ behaves identically either way.
 
 ## Set up a fleet site
 
-1. Point the site at a channel and trust the signing key:
+1. Point the site at the release feed and trust the signing key. The feed is a
+   `releases.json` published on the repo's `releases` branch (see "Cut a
+   release" below), served raw:
 
    ```env
-   CMS_UPDATE_CHANNEL=https://github.com/<owner>/<repo>/releases/download/releases.json
+   CMS_UPDATE_CHANNEL=https://raw.githubusercontent.com/<owner>/<repo>/releases/releases.json
    CMS_UPDATE_PUBLIC_KEY=<base64 ed25519 public key>
    ```
+
+   A signature is mandatory in production, so also set `APP_ENV=production`.
 
 2. Add one cron entry so the scheduler runs (drives the background check and
    surfaces the "update available" banner):
@@ -90,16 +94,21 @@ behaves identically either way.
 1. Generate a signing keypair once:
 
    ```bash
-   php artisan tinker --execute="print_r(App\Support\Updater\Signer::generateKeypair());"
+   php artisan cms:generate-keys
    ```
 
-   Put `secret` in the repo's CI secret `CMS_RELEASE_SIGN_KEY`; give `public`
-   to each site as `CMS_UPDATE_PUBLIC_KEY`.
+   Put the secret key in the repo's CI secret `CMS_RELEASE_SIGN_KEY`; give the
+   public key to each site as `CMS_UPDATE_PUBLIC_KEY`.
 
 2. Bump `version` in `config/cms.php`, tag `vX.Y.Z`, and push the tag. The
    `release` workflow installs prod deps, builds the front-end, runs
    `php artisan cms:build-release`, and publishes the archive + manifest +
    sha256 + signature to a GitHub Release.
+
+3. The same workflow then runs `php artisan cms:build-feed` and pushes the new
+   entry to `releases.json` on the `releases` branch — the file each site's
+   `CMS_UPDATE_CHANNEL` reads. The branch is created automatically on the first
+   release; no manual setup.
 
 ## Tier-2 forks: track core
 

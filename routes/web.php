@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
+use App\Support\Content\PublicContentTypes;
 use Inertia\Inertia;
 
 /*
@@ -368,6 +369,32 @@ Route::group(['middleware' => 'site_lockdown'], function () {
 
     Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->where('provider', 'google');
     Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->where('provider', 'google');
+
+    // Public content types (Projects, Experience, …), rendered generically by
+    // PublicContentController. Discovered on the filesystem (enable-agnostic, no
+    // DB) so the routes are stable and cacheable; the controller 404s when the
+    // plugin is disabled. Each type gets its own LITERAL slug URI (distinct URIs
+    // so they don't overwrite each other in the route collection); the type is
+    // carried as a route default and read by the controller. The plain variants
+    // come before the optional-locale ones and both precede the catch-all (same
+    // {locale?}/{slug?} quirk as /services).
+    foreach (PublicContentTypes::discover() as $contentSlug => $contentHasDetail) {
+        if ($contentHasDetail) {
+            Route::get('/'.$contentSlug.'/{id}', 'PublicContentController@show')
+                ->defaults('type', $contentSlug)->where('id', '[0-9]+')
+                ->name('content_'.$contentSlug.'_show');
+        }
+        Route::get('/'.$contentSlug, 'PublicContentController@index')
+            ->defaults('type', $contentSlug)
+            ->name('content_'.$contentSlug.'_index');
+
+        if ($contentHasDetail) {
+            Route::get('/{locale}/'.$contentSlug.'/{id}', 'PublicContentController@show')
+                ->defaults('type', $contentSlug)->where(['locale' => '[a-z]{2}', 'id' => '[0-9]+']);
+        }
+        Route::get('/{locale}/'.$contentSlug, 'PublicContentController@index')
+            ->defaults('type', $contentSlug)->where('locale', '[a-z]{2}');
+    }
 
     Route::get('/{locale?}/{slug?}', 'PageController@languageIndex')->name('front_pages');
 

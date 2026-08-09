@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -475,10 +476,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
         $fields_array = [];
 
-        $main_table_columns = $this->model->getConnection()->getSchemaBuilder()->getColumnListing($main_table_name);
+        $main_table_columns = $this->cachedColumnListing($main_table_name);
 
         if (! empty($translated_table_name)) {
-            $translated_table_columns = $this->model->getConnection()->getSchemaBuilder()->getColumnListing($translated_table_name);
+            $translated_table_columns = $this->cachedColumnListing($translated_table_name);
         }
 
         foreach ($fields as $field) {
@@ -490,6 +491,25 @@ abstract class BaseRepository implements BaseRepositoryInterface
         }
 
         return $fields_array;
+    }
+
+    /**
+     * Column listing for a table, cached forever. The schema is static at
+     * runtime — introspecting information_schema on every request (this ran
+     * twice per listing/detail query, main + translated table) is pure waste.
+     * A deploy that changes the schema runs migrations + cache:clear, which
+     * drops these keys, so they never go stale in practice.
+     *
+     * @return array<int, string>
+     */
+    protected function cachedColumnListing(string $table): array
+    {
+        $connection = $this->model->getConnection();
+
+        return Cache::rememberForever(
+            'cms.schema.columns.'.$connection->getName().'.'.$table,
+            fn () => $connection->getSchemaBuilder()->getColumnListing($table)
+        );
     }
 
     protected function getSearchedTable($column)

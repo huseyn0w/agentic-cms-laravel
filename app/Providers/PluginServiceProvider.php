@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Support\Hooks;
 use App\Support\PluginManager;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,8 +29,17 @@ class PluginServiceProvider extends ServiceProvider
             }
             $primed = true;
 
-            if (! Schema::hasTable('plugins')) {
-                return;
+            // hasTable() hits information_schema on every request. The table
+            // only ever goes from absent -> present (a migration), so cache the
+            // positive result forever; a fresh install keeps re-checking until
+            // the table exists. A deploy's cache:clear resets it.
+            $hasPluginsTable = Cache::get('cms.schema.has_plugins_table') === true;
+
+            if (! $hasPluginsTable) {
+                if (! Schema::hasTable('plugins')) {
+                    return;
+                }
+                Cache::forever('cms.schema.has_plugins_table', true);
             }
 
             // Only load the ENABLED plugins' hooks. Do NOT sync() here — that

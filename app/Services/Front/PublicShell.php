@@ -4,7 +4,9 @@ namespace App\Services\Front;
 
 use App\Http\Models\Menu;
 use App\Http\Models\PageTranslation;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use PDOException;
 
 /**
  * Builds the data the public header and footer need, shaped for the React
@@ -32,7 +34,7 @@ class PublicShell
             'general' => [
                 'websiteName' => get_general_settings('website_name') ?: config('app.name'),
                 'membership' => (bool) get_general_settings('membership'),
-                'bookingUrl' => get_general_settings('booking_url') ?: null,
+                'bookingUrl' => $this->bookingUrl(),
             ],
             'site' => [
                 'copyright' => $siteOptions?->copyright,
@@ -42,6 +44,22 @@ class PublicShell
             'legalLinks' => $this->legalLinks(),
             'auth' => $this->auth(),
         ];
+    }
+
+    /**
+     * The "Book a call" link. Tolerant of the deploy window on an existing
+     * install where the code is live but the booking_url migration has not run
+     * yet: get_general_settings('booking_url') does a column-select that throws
+     * 1054 when the column is absent. A missing column must never 500 the public
+     * homepage, so degrade to null (no button) until the migration catches up.
+     */
+    private function bookingUrl(): ?string
+    {
+        try {
+            return get_general_settings('booking_url') ?: null;
+        } catch (QueryException|PDOException) {
+            return null;
+        }
     }
 
     /**

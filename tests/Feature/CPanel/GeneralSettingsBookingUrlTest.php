@@ -7,6 +7,7 @@ use App\Services\Front\PublicShell;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -102,5 +103,18 @@ class GeneralSettingsBookingUrlTest extends TestCase
         $shell = app(PublicShell::class)->build();
 
         $this->assertSame('https://calendly.com/elman', $shell['general']['bookingUrl']);
+    }
+
+    public function test_public_shell_survives_the_column_missing_before_migration(): void
+    {
+        // Simulates an existing install where the code is live but the
+        // booking_url migration has not run yet — the homepage must not 500.
+        Schema::table('general_settings', function ($table) {
+            $table->dropColumn('booking_url');
+        });
+
+        $shell = app(PublicShell::class)->build();
+
+        $this->assertNull($shell['general']['bookingUrl']);
     }
 }

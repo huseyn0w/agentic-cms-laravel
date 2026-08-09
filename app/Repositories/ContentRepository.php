@@ -39,6 +39,31 @@ class ContentRepository
     }
 
     /**
+     * Public listing: rows ordered by $orderColumn then id, optionally filtered
+     * to status=published (types without a status column show everything).
+     *
+     * @return list<ContentRecord>
+     */
+    public function publicList(string $table, string $orderColumn, bool $onlyPublished): array
+    {
+        return ContentRecord::forTable($table)->newQuery()
+            ->when($onlyPublished, fn ($q) => $q->where('status', 'published'))
+            ->orderBy($orderColumn)
+            ->orderBy('id')
+            ->get()
+            ->all();
+    }
+
+    /** A single public row by id, subject to the same published filter. */
+    public function publicFind(string $table, int $id, bool $onlyPublished): ?ContentRecord
+    {
+        return ContentRecord::forTable($table)->newQuery()
+            ->when($onlyPublished, fn ($q) => $q->where('status', 'published'))
+            ->whereKey($id)
+            ->first();
+    }
+
+    /**
      * @param  array<string, mixed>  $data
      */
     public function create(string $table, array $data): ContentRecord

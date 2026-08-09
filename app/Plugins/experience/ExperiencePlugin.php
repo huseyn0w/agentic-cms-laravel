@@ -54,6 +54,7 @@ class ExperiencePlugin implements PluginInterface, RegistersContentTypes
                     new Field('description', 'Description', Field::RICHTEXT, ['nullable', 'string']),
                     new Field('sort_order', 'Sort order', Field::NUMBER, ['nullable', 'integer', 'min:0']),
                 ],
+                isPublic: true,
             ),
         ];
     }

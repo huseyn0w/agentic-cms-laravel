@@ -3,6 +3,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
 import { initI18n, syncI18n } from '@/lib/i18n';
+import { installProgress } from '@/lib/progress';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import type { SharedProps } from '@/lib/types';
 
@@ -29,6 +30,7 @@ createInertiaApp({
     setup({ el, App, props }) {
         const shared = props.initialPage.props as unknown as SharedProps;
         initI18n(shared.locale.current, shared.messages);
+        installProgress(router);
 
         router.on('navigate', (event) => {
             const next = event.detail.page.props as unknown as SharedProps;
@@ -45,11 +47,7 @@ createInertiaApp({
             );
         }
     },
-    progress: {
-        // Vercel-blue top loading bar; show quickly on real navigations.
-        // Cache-hit (prefetched) visits resolve instantly and skip it by design.
-        color: '#0070f3',
-        delay: 120,
-        showSpinner: false,
-    },
+    // Inertia's built-in bar skips fast (cache-hit) visits; installProgress()
+    // above drives a custom bar with a guaranteed-visible minimum instead.
+    progress: false,
 });

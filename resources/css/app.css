@@ -238,19 +238,6 @@
 }
 
 /*
- | Inertia top loading bar (NProgress). Inertia injects the base CSS and sets
- | the bar colour from createInertiaApp({ progress }); here we make it a touch
- | thicker with a soft glow so page loads are clearly visible on both themes.
- */
-#nprogress .bar {
-    height: 3px !important;
-    z-index: 10000;
-}
-#nprogress .peg {
-    box-shadow: 0 0 10px #0070f3, 0 0 6px #0070f3 !important;
-}
-
-/*
  |----------------------------------------------------------------------------
  | Public theme helpers (Geist + violet gradient). Scoped to `.theme-default`.
  |----------------------------------------------------------------------------

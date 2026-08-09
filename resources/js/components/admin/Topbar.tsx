@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link, router, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import type { SharedProps } from '@/lib/types';
 
@@ -31,8 +31,14 @@ export function Topbar({ breadcrumb }: { breadcrumb?: ReactNode }) {
           <select
             aria-label={tr('cpanel/topbar.language', 'Language')}
             value={locale.current}
-            onChange={(e) => router.visit(`${ADMIN}/locale/${e.target.value}`)}
-            className="h-8 cursor-pointer appearance-none rounded-md bg-transparent pl-2.5 pr-7 text-[12px] font-medium text-muted transition-colors hover:bg-black/[.04] hover:text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+            onChange={(e) => {
+              // Full reload: the route sets the session locale and redirects
+              // back, so the whole admin (incl. the i18n dictionary) comes back
+              // in the new language reliably — an SPA visit to a redirect-back
+              // does not consistently re-sync react-i18next.
+              window.location.href = `${ADMIN}/locale/${e.target.value}`;
+            }}
+            className="h-8 cursor-pointer appearance-none rounded-md border border-[color:var(--border)] bg-surface pl-2.5 pr-7 text-[12px] font-medium text-muted transition-colors hover:border-[color:var(--border-strong)] hover:text-fg"
           >
             {codes.map((code) => (
               <option key={code} value={code}>

@@ -39,9 +39,14 @@ describe('Topbar', () => {
     expect(logout).toHaveAttribute('method', 'post');
   });
 
-  it('switches the admin language through the locale route', () => {
+  it('switches the admin language via a full reload to the locale route', () => {
+    const original = window.location;
+    Object.defineProperty(window, 'location', { configurable: true, writable: true, value: { href: '' } });
+
     render(<Topbar />);
     fireEvent.change(screen.getByLabelText('Language'), { target: { value: 'de' } });
-    expect(visit).toHaveBeenCalledWith('/agentic-cms-laravel-admin/locale/de');
+    expect(window.location.href).toBe('/agentic-cms-laravel-admin/locale/de');
+
+    Object.defineProperty(window, 'location', { configurable: true, writable: true, value: original });
   });
 });

@@ -110,6 +110,7 @@ export default function Post({ shell, preview = false, currentUserId, post, rela
                         alt={post.title}
                         width={1280}
                         height={720}
+                        priority
                         imgClassName="aspect-[16/9] w-full object-cover"
                         coverClassName="aspect-[16/9] w-full"
                     />
